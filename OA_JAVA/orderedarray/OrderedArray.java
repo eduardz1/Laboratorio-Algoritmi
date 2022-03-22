@@ -22,11 +22,34 @@ public class OrderedArray <T> {
 	 * @param comparator: comparator implementing previous relation between T elements
 	 * @throws OrderedArrayException throws an Exception when comparator is null
 	 */
-	public OrderedArray(Comparator <? super T> comparator) 
-	throws OrderedArrayException {
+	public OrderedArray(Comparator <? super T> comparator) throws OrderedArrayException {
 		if (comparator == null)
 			throw new OrderedArrayException("OrderedArray Constructor:" + " parameter comparator cannot be null");
 		this.array = new ArrayList();
 		this.comparator = comparator;
+	}
+	
+	/**
+	 * @return TRUE if this.ordered array is empty
+	 */
+	public boolean isEmpty() { // cannot be null because of how the constructor is declared
+		return this.array.isEmpty();
+	}
+	
+	/**
+	 * @return number of elements in this.array
+	 */
+	public int size() {
+		return this.array.size();
+	}
+	
+	/**
+	 * @param i index of the element requested
+	 * @return element at i position in the ArrayList
+	 */
+	public T getElementAt(int i) throws OrderedArrayException {
+		if((i < 0) || (i >= this.array.size())
+			throw new OrderedArrayException("OrderedArray getElementAt" + " index of array out of bound");
+		return this.array.get(i);
 	}
 }
