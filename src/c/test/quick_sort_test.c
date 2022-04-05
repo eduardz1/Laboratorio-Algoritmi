@@ -1,23 +1,69 @@
 #include "unity/unity.h"
 #include "../ex1/headers/quick_sort.h"
 
-void setUp(void) {
-    printf("Hello World!");
+void test_null_array(void) {
 }
 
-void tearDown(void) {
-    printf("Hello World! 33333");
+void test_empty_array(void) {
+
 }
 
-void abdullah(void) {
-    printf("Hello World! 44444");
+void test_int_array(void) {
+
+}
+
+void test_string_array(void) {
+
+}
+
+void test_float_array(void) {
+
+}
+
+void test_char_array(void) {
+
+}
+
+void test_double_array(void) {
+
+}
+
+void test_long_array(void) {
+
+}
+
+void test_array_with_only_duplicated_elements(void) {
+
+}
+
+void test_already_sorted_array(void) {
+
+}
+
+void test_invalid_array(void) {
+
+}
+
+void test_negative_int_array(void) {
+
 }
 
 int main(int argc, char const *argv[])
 {
-    UNITY_BEGIN();
-    printf("Hello World! 222222");
-    RUN_TEST(abdullah);
-    RUN_TEST(abdullah);
-    return UNITY_END();
+  UNITY_BEGIN();
+    
+  RUN_TEST(test_null_array);
+  RUN_TEST(test_empty_array);
+  RUN_TEST(test_int_array);
+  RUN_TEST(test_string_array);
+  RUN_TEST(test_float_array);
+  RUN_TEST(test_char_array);
+  RUN_TEST(test_double_array);
+  RUN_TEST(test_long_array);
+  RUN_TEST(test_array_with_only_duplicated_elements);
+  RUN_TEST(test_already_sorted_array);
+  RUN_TEST(test_invalid_array);
+  RUN_TEST(test_negative_int_array);
+  
+  return UNITY_END();
 }
