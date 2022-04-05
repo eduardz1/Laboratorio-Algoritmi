@@ -5,7 +5,7 @@ package orderedarray;
  * @author:
  */
 public class OrderedArrayException extends Exception {
-	public OrderedArrayExcpetion (String message) {
+	public OrderedArrayException (String message) {
 		super(message);
 	}
 }
