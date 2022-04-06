@@ -1,4 +1,5 @@
 #pragma once
+#include <string.h>
 
 
 
@@ -38,6 +39,14 @@ int compare_float(float a, float b);
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
 int compare_double(double a, double b);
+/**
+ * @brief compare two chars
+ * 
+ * @param a first element of comparison  
+ * @param b second element of comparison
+ * @return -1 if a<b, 0 if a=b, 1 if a>b
+ */
+int compare_char(char a, char b);
 
 /**
  * @brief compare two strings
@@ -47,4 +56,3 @@ int compare_double(double a, double b);
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
 int compare_string(char *a, char *b);
-
