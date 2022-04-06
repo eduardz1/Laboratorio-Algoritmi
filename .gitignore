@@ -1,5 +1,6 @@
 # Records
 *.csv
 *.zip
+.vscode
 
 **/bin
