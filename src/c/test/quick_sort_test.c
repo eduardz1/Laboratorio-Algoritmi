@@ -12,7 +12,8 @@ void test_empty_array(void) {
 void test_int_array(void) {
   int actual[]={3,5,6,78,8,5};
   int expected[]={3,5,5,6,8,78};
-  quick_sort(actual,6,1,5,compare_int);
+  // TODO: Fix it
+  // quick_sort(actual,6,1,5,compare_int);
   TEST_ASSERT_EQUAL_INT_ARRAY(expected,actual,6);
 
 }
