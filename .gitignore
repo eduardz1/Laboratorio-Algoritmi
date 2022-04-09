@@ -2,5 +2,9 @@
 *.csv
 *.zip
 .vscode
+.obsidian
+.idea
+.iml
 
 **/bin
+**/obj
