@@ -15,7 +15,7 @@ test-shared:
 	$(CC) $(CFLAGS) $(OBJECTS) src/c/test/shared_test.c src/c/test/unity/unity.c -o bin/testshd
 
 test-quick-sort:
-	$(CC) $(CFLAGS) src/c/test/quick_sort_test.c src/c/test/unity/unity.c -o bin/testqs
+	$(CC) $(CFLAGS) $(OBJECTS) src/c/test/quick_sort_test.c src/c/test/unity/unity.c src/c/ex1/quick_sort.c -o bin/testqs
 
 test-binary-insert-sort:
 	$(CC) $(CFLAGS) src/c/test/binary_insert_sort_test.c src/c/test/unity/unity.c -o bin/testbis
