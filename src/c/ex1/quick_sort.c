@@ -13,8 +13,7 @@ void quick_sort(void* array, size_t size, int p, int r, int (*comp)(void*, void*
 
 int partition(void* array, size_t size, int p, int r, int (*comp)(void*, void*))
 {
-  void *pivot = &array[r]; // alternative &array[RAND(p, r)]
-  void *tmp;
+  void *pivot = &array[r*size]; // alternative &array[RAND(p, r)]
   int i = p-1;
 
   /**
@@ -25,13 +24,13 @@ int partition(void* array, size_t size, int p, int r, int (*comp)(void*, void*))
    */
   for(int j=p; j<r; j++)
   {
-    if(comp(&array[j],pivot)<=0)
+    if(comp(&array[j*size],pivot)<=0)
     {
       i=i+1;
-      swap(&array[i], &array[j], size);
+      swap(&array[i*size], &array[j*size], size);
     }
   }
-  swap(&array[i+1], &array[r],size);
+  swap(&array[(i+1)*size], &array[r*size],size);
   return i+1;
 }
 

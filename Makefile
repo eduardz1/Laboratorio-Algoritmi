@@ -1,8 +1,15 @@
 CC=gcc
-CFLAGS=-Wall -g -O2
+CFLAGS=-Wall -g -O2 -DUNITY_INCLUDE_DOUBLE
 
 # Dependencies
-OBJECTS= src/c/shared/common.c src/c/shared/record.c
+SHARED=src/c/shared/*.c
+UNITY=src/c/test/unity/unity.c
+OBJS:=$(SHARED:.c=.o)
+
+# Directories
+BINDIR=bin
+SRCDIR=src
+OBJDIR=obj
 
 # TODO: ex1 build
 
@@ -11,16 +18,16 @@ ex2: # skip_list.c
 
 testall: test-quick-sort test-binary-insert-sort test-shared
 
-test-shared:
-	$(CC) $(CFLAGS) $(OBJECTS) src/c/test/shared_test.c src/c/test/unity/unity.c -o bin/testshd
+test-shared: $(BINDIR)/$(OBJS) 
+	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/shared_test.c -o $(BINDIR)/testshd
 
-test-quick-sort:
-	$(CC) $(CFLAGS) $(OBJECTS) src/c/test/quick_sort_test.c src/c/test/unity/unity.c src/c/ex1/quick_sort.c -o bin/testqs
+test-quick-sort: $(BINDIR)/$(OBJS)
+	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/quick_sort_test.c src/c/ex1/quick_sort.c -o $(BINDIR)/testqs
 
-test-binary-insert-sort:
-	$(CC) $(CFLAGS) src/c/test/binary_insert_sort_test.c src/c/test/unity/unity.c -o bin/testbis
+test-binary-insert-sort: $(BINDIR)/$(OBJS)
+	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c -o $(BINDIR)/testbis
 
 
 
 clean:
-	rm -f $(OBJECTS) *.o *~
+	rm -f $(BINDIR)/* $(OBJDIR)/* *~

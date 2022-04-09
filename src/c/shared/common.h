@@ -55,3 +55,5 @@ int compare_char(void *a, void *b);
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
 int compare_string(void *a, void *b);
+
+int is_null(void *a, void *b, int *res);

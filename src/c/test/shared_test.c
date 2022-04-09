@@ -123,11 +123,11 @@ void test_compare_string(void) {
   
   // Greater
   result = compare_string(&member1, &member2);
-  TEST_ASSERT_EQUAL_INT(1, result);
+  TEST_ASSERT_TRUE(result > 0);
 
   // Lower
   result = compare_string(&member2, &member1);
-  TEST_ASSERT_EQUAL_INT(-1, result);
+  TEST_ASSERT_TRUE(result < 0);
 }
 
 void test_compare_record(void) {
@@ -153,9 +153,9 @@ void test_compare_record(void) {
   // Greater and lower by first field
   r1.field1 = "abc\0"; r2.field1 = "zyx\0";
   result = compare_records(r1, r2);
-  TEST_ASSERT_EQUAL_INT(-1, result);
+  TEST_ASSERT_TRUE(result < 0);
   result = compare_records(r2, r1);
-  TEST_ASSERT_EQUAL_INT(1, result);
+  TEST_ASSERT_TRUE(result > 0);
 
   // Greater and lower by second field
   r1.field1 = "abc\0"; r2.field1 = "abc\0";
