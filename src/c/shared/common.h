@@ -9,7 +9,7 @@
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_int(int a, int b);
+int compare_int(void *a, void *b);
 
 /**
  * @brief compare two longs
@@ -18,7 +18,7 @@ int compare_int(int a, int b);
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_long(long a, long b);
+int compare_long(void *a, void *b);
 
 /**
  * @brief compare two floats
@@ -27,7 +27,7 @@ int compare_long(long a, long b);
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_float(float a, float b);
+int compare_float(void *a, void *b);
 
 /**
  * @brief compare two doubles
@@ -36,7 +36,8 @@ int compare_float(float a, float b);
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_double(double a, double b);
+int compare_double(void *a, void *b);
+
 /**
  * @brief compare two chars
  * 
@@ -44,7 +45,7 @@ int compare_double(double a, double b);
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_char(char a, char b);
+int compare_char(void *a, void *b);
 
 /**
  * @brief compare two strings
@@ -53,4 +54,4 @@ int compare_char(char a, char b);
  * @param b second element of comparison
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  */
-int compare_string(char *a, char *b);
+int compare_string(void *a, void *b);

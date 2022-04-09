@@ -9,7 +9,7 @@ void test_compare_int(void) {
   // Equal
   member1 = 0;
   member2 = 0;
-  result = compare_int(member1, member2);
+  result = compare_int(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(member1, member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
@@ -17,11 +17,11 @@ void test_compare_int(void) {
   member2 = INT_MIN;
 
   // Greater
-  result = compare_int(member1, member2);
+  result = compare_int(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_int(member2, member1);
+  result = compare_int(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
@@ -31,18 +31,18 @@ void test_compare_long(void) {
   // Equal
   member1 = 0;
   member2 = 0;
-  result = compare_long(member1, member2);
+  result = compare_long(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   member1 = LONG_MAX;
   member2 = LONG_MIN;
   // Greater
 
-  result = compare_long(member1, member2);
+  result = compare_long(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_long(member2, member1);
+  result = compare_long(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
@@ -52,18 +52,18 @@ void test_compare_float(void) {
   // Equal
   member1 = 0.0f;
   member2 = 0.0f;
-  result = compare_float(member1, member2);
+  result = compare_float(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   member1 = 0.9f;
   member2 = 0.0f;
   // Greater
 
-  result = compare_float(member1, member2);
+  result = compare_float(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_float(member2, member1);
+  result = compare_float(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
@@ -73,18 +73,18 @@ void test_compare_double(void) {
   // Equal
   member1 = 0.0000f;
   member2 = 0.0000f;
-  result = compare_float(member1, member2);
+  result = compare_float(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   member1 = 0.9584f;
-  member2 = 0;
-  // Greater
+  member2 = 0.0000f;
 
-  result = compare_float(member1, member2);
+  // Greater
+  result = compare_double(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_float(member2, member1);
+  result = compare_double(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
@@ -94,18 +94,18 @@ void test_compare_char(void) {
   // Equal
   member1 = 'a';
   member2 = 'a';
-  result = compare_char(member1, member2);
+  result = compare_char(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   member1 = 'z';
   member2 = 'a';
   // Greater
 
-  result = compare_char(member1, member2);
+  result = compare_char(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_char(member2, member1);
+  result = compare_char(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
@@ -115,18 +115,18 @@ void test_compare_string(void) {
   // Equal
   member1 = "aaa\0";
   member2 = "aaa\0";
-  result = compare_string(member1, member2);
+  result = compare_string(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   member1 = "zyx\0";
   member2 = "abc\0";
   
   // Greater
-  result = compare_string(member1, member2);
+  result = compare_string(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Lower
-  result = compare_string(member2, member1);
+  result = compare_string(&member2, &member1);
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
