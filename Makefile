@@ -1,33 +1,36 @@
 CC=gcc
-CFLAGS=-Wall -g -O2 -DUNITY_INCLUDE_DOUBLE
+CFLAGS=-Wall -O2 -DUNITY_INCLUDE_DOUBLE
 
 # Dependencies
-SHARED=src/c/shared/*.c
-UNITY=src/c/test/unity/unity.c
-OBJS:=$(SHARED:.c=.o)
+SHARED  := src/c/shared/*.c
+UNITY   := src/c/test/unity/unity.c
+OBJECTS := $(src/c/shared/:.c=.o)
 
 # Directories
-BINDIR=bin
-SRCDIR=src
-OBJDIR=obj
+BIN := bin
+SRC := src
+OBJ := obj
 
-# TODO: ex1 build
+ex1: 
+	$(CC) $(UNITY) -o $(BIN)/ex1 $(SHARED) src/c/ex1/ex1.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
 
-ex2: # skip_list.c
-	$(CC) $(CFLAGS) src/c/ex2/skip_list.c -o src/c/ex2/build/main_ex2
+# ex2: # skip_list.c
+#	$(CC) $(CFLAGS) src/c/ex2/skip_list.c -o src/c/ex2/build/main_ex2
 
-testall: test-quick-sort test-binary-insert-sort test-shared
+# TODO: fix OBJECTS dependency
+$(OBJ)/%.o : src/c/shared/%.c 
+	$(CC) $(CFLAGS) -c $< -o $@
 
-test-shared: $(BINDIR)/$(OBJS) 
-	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/shared_test.c -o $(BINDIR)/testshd
+testall: testshd testqs testbis
 
-test-quick-sort: $(BINDIR)/$(OBJS)
-	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/quick_sort_test.c src/c/ex1/quick_sort.c -o $(BINDIR)/testqs
+testshd: $(OBJECTS) 
+	$(CC) $(CFLAGS) -o $(BIN)/testshd $(SHARED) $(UNITY) src/c/test/shared_test.c 
 
-test-binary-insert-sort: $(BINDIR)/$(OBJS)
-	$(CC) $(CFLAGS) $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c -o $(BINDIR)/testbis
+testqs: $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(BIN)/testqs  $(SHARED) $(UNITY) src/c/test/quick_sort_test.c src/c/ex1/quick_sort.c 
 
-
+testbis: $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(BIN)/testbis $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c src/c/ex1/binary_insert_sot.c 
 
 clean:
 	rm -f $(BINDIR)/* $(OBJDIR)/* *~

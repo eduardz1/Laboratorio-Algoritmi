@@ -1,5 +1,8 @@
 #pragma once
 #include <string.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdint.h>
 
 /**
 
@@ -56,4 +59,12 @@ int compare_char(void *a, void *b);
  */
 int compare_string(void *a, void *b);
 
+/**
+ * @brief checks if two pointer have value null and sets res accordingly
+ * 
+ * @param a first element of comparison 
+ * @param b second element of comparison
+ * @param res set to -1 if a is null, 1 if b is null, 0 if both are null
+ * @return 1 if a or b are null, 0 otherwise 
+ */
 int is_null(void *a, void *b, int *res);

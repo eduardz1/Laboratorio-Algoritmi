@@ -20,4 +20,4 @@ struct _record
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  * 
  */
-int compare_records(struct _record a,struct _record b);
+int compare_records(void *a,void *b);

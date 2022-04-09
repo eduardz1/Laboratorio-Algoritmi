@@ -2,8 +2,8 @@
 #include "../shared/common.h"
 #include "../shared/record.h"
 
-void test_compare_int(void) {
-  
+void test_compare_int(void)
+{
   int member1, member2, result;
 
   // Equal
@@ -25,7 +25,8 @@ void test_compare_int(void) {
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
-void test_compare_long(void) {
+void test_compare_long(void)
+{
   long member1, member2, result;
 
   // Equal
@@ -46,7 +47,8 @@ void test_compare_long(void) {
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
-void test_compare_float(void) {
+void test_compare_float(void)
+{
   float member1, member2, result;
 
   // Equal
@@ -67,7 +69,8 @@ void test_compare_float(void) {
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
-void test_compare_double(void) {
+void test_compare_double(void)
+{
   double member1, member2, result;
 
   // Equal
@@ -88,7 +91,8 @@ void test_compare_double(void) {
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
-void test_compare_char(void) {
+void test_compare_char(void)
+{
   char member1, member2, result;
 
   // Equal
@@ -109,7 +113,8 @@ void test_compare_char(void) {
   TEST_ASSERT_EQUAL_INT(-1, result);
 }
 
-void test_compare_string(void) {
+void test_compare_string(void)
+{
   char *member1, *member2, result;
 
   // Equal
@@ -130,8 +135,8 @@ void test_compare_string(void) {
   TEST_ASSERT_TRUE(result < 0);
 }
 
-void test_compare_record(void) {
-
+void test_compare_record(void) 
+{
   struct _record r1;
   struct _record r2;
   int result;
@@ -147,33 +152,32 @@ void test_compare_record(void) {
   r2.field2 = 0;
   r2.field3 = 0.0001f;
 
-  result = compare_records(r1, r2);
+  result = compare_records(&r1, &r2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
   // Greater and lower by first field
   r1.field1 = "abc\0"; r2.field1 = "zyx\0";
-  result = compare_records(r1, r2);
+  result = compare_records(&r1, &r2);
   TEST_ASSERT_TRUE(result < 0);
-  result = compare_records(r2, r1);
+  result = compare_records(&r2, &r1);
   TEST_ASSERT_TRUE(result > 0);
 
   // Greater and lower by second field
   r1.field1 = "abc\0"; r2.field1 = "abc\0";
   r1.field2 = 0; r2.field2 = INT_MAX;
-  result = compare_records(r1, r2);
+  result = compare_records(&r1, &r2);
   TEST_ASSERT_EQUAL_INT(-1, result);
-  result = compare_records(r2, r1);
+  result = compare_records(&r2, &r1);
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Greater and lower by third field
   r1.field1 = "abc\0"; r2.field1 = "abc\0";
   r1.field2 = 0; r2.field2 = 0;
   r1.field3 = 0.1245f; r2.field3 = 0.9289f;
-  result = compare_records(r1, r2);
+  result = compare_records(&r1, &r2);
   TEST_ASSERT_EQUAL_INT(-1, result);
-  result = compare_records(r2, r1);
+  result = compare_records(&r2, &r1);
   TEST_ASSERT_EQUAL_INT(1, result);
-
 }
 
 
