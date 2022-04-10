@@ -24,13 +24,14 @@ void load_array(const char* file_name, struct _record *array, int size)
     exit(EXIT_FAILURE);
   }
 
-  printf("Loading array from file %s\n", file_name);
+  printf("Loading array from file \033[1m%s\033[22m \0337\033[5m...\n", file_name);
   char buffer[128];
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL && i < size; i++)
   {
     array[i].field1 = malloc(64);
     sscanf(buffer, "%d,%s,%d,%lf", &array[i].id, array[i].field1, &array[i].field2, &array[i].field3);
   }
+  printf("\033[25m\0338\033[32mdone\033[0m\n");
   
   fclose(fp);
 }
@@ -47,10 +48,13 @@ int main(int argc, char const *argv[])
   {
     printf("Usage: ordered_array_main <file_name> <num_records>\n");
     exit(EXIT_FAILURE);
-  }   
+  }
+
+  printf("Choose a sorting algorithm: [qsort]/[binssort]\n");
+  char input[10];
+  scanf("%s", input);
   
-  struct _record *arr = malloc(sizeof(struct _record) * atoi(argv[2]));
-  
+  struct _record *arr = malloc(sizeof(struct _record) * atoi(argv[2])); 
   load_array(argv[1], arr, atoi(argv[2]));
 
 #ifdef PRINT_RECORDS
@@ -58,14 +62,14 @@ int main(int argc, char const *argv[])
   print_records(arr, atoi(argv[2]));
 #endif
 
-  printf("\nChoose a sorting algorithm: [qsort]/[binssort]\n");
-  char input[10];
-  scanf("%s", input);
   if(strcmp(input, "qsort") == 0) 
   {
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
   } 
   else if(strcmp(input, "binssort") == 0) 
