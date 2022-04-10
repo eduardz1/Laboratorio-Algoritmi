@@ -30,7 +30,7 @@ testqs: $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(BIN)/testqs  $(SHARED) $(UNITY) src/c/test/quick_sort_test.c src/c/ex1/quick_sort.c 
 
 testbis: $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(BIN)/testbis $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c src/c/ex1/binary_insert_sot.c 
+	$(CC) $(CFLAGS) -o $(BIN)/testbis $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c src/c/ex1/binary_insert_sort.c 
 
 clean:
 	rm -f $(BINDIR)/* $(OBJDIR)/* *~

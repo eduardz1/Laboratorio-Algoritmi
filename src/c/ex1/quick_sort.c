@@ -1,18 +1,47 @@
 #include "headers/quick_sort.h"
 
-void quick_sort(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
-{
-  if (p >= r)
-    return;
+#define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
-  int q = partition(array, size, p, r, comp);
-  quick_sort(array, size, p, q - 1, comp);
-  quick_sort(array, size, q + 1, r, comp);
+/**
+ * Private implementation of #quick_sort()
+ */
+void _qsort (void* v, size_t size, int left, int right, int (*comp)(void*, void*), enum pivot_selector selector);
+
+void quick_sort_pivot_selection (void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
+{
+  _qsort(array, size, p, r, comp, selector);
 }
 
-int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+void quick_sort(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
 {
-  void *pivot = array + r * size; // alternative &array[RAND(p, r)]
+  _qsort(array, size, p, r, comp, RANDOM);
+}
+
+void _qsort( 
+  void* array, 
+  size_t size, 
+  int p, 
+  int r, 
+  int (*comp)(void*, void*), 
+  enum pivot_selector selector
+) 
+{
+  if (p >= r) return;
+
+  int q = partition(array, size, p, r, comp, selector);
+  _qsort(array, size, p, q - 1, comp, selector);
+  _qsort(array, size, q + 1, r, comp, selector);
+}
+
+int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector)
+{
+  void *pivot = (selector == RANDOM)? array + RAND(p, r) * size : 
+                (selector == FIRST)? array + p * size :
+                (selector == MIDDLE)? array + ((p + r) / 2) * size :
+                array + r * size; /* (selector == LAST)? */
+  swap(pivot, array + r * size, size);
+  pivot = array + r * size;
+  
   int i = p - 1;
 
   /**

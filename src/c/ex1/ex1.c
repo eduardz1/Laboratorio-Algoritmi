@@ -63,7 +63,10 @@ int main(int argc, char const *argv[])
   scanf("%s", input);
   if(strcmp(input, "qsort") == 0) 
   {
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records));
+    TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
+    TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
+    TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
+    TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
