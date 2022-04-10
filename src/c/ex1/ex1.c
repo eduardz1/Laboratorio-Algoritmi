@@ -53,8 +53,10 @@ int main(int argc, char const *argv[])
   
   load_array(argv[1], arr, atoi(argv[2]));
 
+#ifdef PRINT_RECORDS
   printf("\nUnsorted records:\n");
   print_records(arr, atoi(argv[2]));
+#endif
 
   printf("\nChoose a sorting algorithm: [qsort]/[binssort]\n");
   char input[10];
@@ -73,8 +75,10 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
+#ifdef PRINT_RECORDS
   printf("\nSorted records:\n");
   print_records(arr, atoi(argv[2]));
+#endif
   
   return (EXIT_SUCCESS);
 }
