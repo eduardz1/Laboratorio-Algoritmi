@@ -8,8 +8,19 @@ enum pivot_selector {
   RANDOM,
   FIRST,
   MIDDLE,
-  LAST
+  LAST,
+  MEDIAN3
 };
+
+/**
+ * Private implementation of #quick_sort()
+ */
+void _qsort(void* v, size_t size, int left, int right, int (*comp)(void*, void*), enum pivot_selector selector);
+
+/**
+ * Private implementation of #partition()
+ */
+int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector);
 
 /**
  * @brief wrap of #quick_sort method that allows choose of pivot selection algorithm

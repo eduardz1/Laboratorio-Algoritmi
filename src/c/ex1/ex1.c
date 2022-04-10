@@ -64,6 +64,8 @@ int main(int argc, char const *argv[])
 
   if(strcmp(input, "qsort") == 0) 
   {
+    TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MEDIAN3));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
     load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort_pivot_selection(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
