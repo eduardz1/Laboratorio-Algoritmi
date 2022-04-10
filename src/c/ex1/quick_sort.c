@@ -14,11 +14,23 @@ void quick_sort(void *array, size_t size, int p, int r, int (*comp)(void *, void
 
 void _qsort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
 {
-  if (p >= r) return;
-
-  int q = _part(array, size, p, r, comp, selector);
-  _qsort(array, size, p, q - 1, comp, selector);
-  _qsort(array, size, q + 1, r, comp, selector);
+  // removing one _qsort call improves constant time complexity, calling the 
+  // function recursively only on the smaller sub-array reduces the call stack
+  // depth in the worst case to log(n)
+  while (p < r)
+  {
+    int q = _part(array, size, p, r, comp, selector);
+    if(q - p < r - q)
+    {
+      _qsort(array, size, p, q - 1, comp, selector);
+      p = q + 1;
+    }
+    else
+    {
+      _qsort(array, size, q + 1, r, comp, selector);
+      r = q - 1;
+    }
+  }
 }
 
 int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector)
