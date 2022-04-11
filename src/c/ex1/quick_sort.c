@@ -12,12 +12,12 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
     int q = _part(array, size, p, r, comp, selector);
     if(q - p < r - q)
     {
-      _qsort(array, size, p, q - 1, comp, selector);
+      quick_sort(array, size, p, q - 1, comp, selector);
       p = q + 1;
     }
     else
     {
-      _qsort(array, size, q + 1, r, comp, selector);
+      quick_sort(array, size, q + 1, r, comp, selector);
       r = q - 1;
     }
   }
@@ -44,7 +44,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
       }
   }
   swap(pivot, array + r * size, size);
-  return partition(array, size, p, r, comp, selector);
+  return partition(array, size, p, r, comp);
 }
 
 int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))

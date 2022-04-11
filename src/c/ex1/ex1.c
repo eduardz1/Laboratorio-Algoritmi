@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
-    TIMING(binary_insert_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records));
+    TIMING(binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records));
   } 
   else 
   {
