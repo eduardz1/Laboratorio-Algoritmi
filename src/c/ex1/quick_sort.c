@@ -2,17 +2,7 @@
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
-void quick_sort_pivot_selection(void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
-{
-  _qsort(array, size, p, r, comp, selector);
-}
-
-void quick_sort(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
-{
-  _qsort(array, size, p, r, comp, MEDIAN3);
-}
-
-void _qsort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
+void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
   // function recursively only on the smaller sub-array reduces the call stack
@@ -57,7 +47,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
   return partition(array, size, p, r, comp, selector);
 }
 
-int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector)
+int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
 {
   void *pivot = array + r * size;
   int i = p - 1;
