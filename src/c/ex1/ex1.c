@@ -50,6 +50,8 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
+  srand(time(NULL));
+
   printf("Choose a sorting algorithm: [qsort]/[binssort] ");
   char input[10];
   scanf("%s", input);

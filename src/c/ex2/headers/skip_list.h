@@ -27,6 +27,7 @@ struct _node
 struct _skip_list
 {
   struct _node *head;
+  struct _node *tail;
   int (*comp)(void*, void*);
   uint32_t max_level;
 };
@@ -61,4 +62,17 @@ uint32_t random_level();
  * @param elem elements to search
  * @return the element if found or NULL otherwise
  */
-void * search_skip_list(struct _skip_list list, void *elem);
+void *search_skip_list(struct _skip_list *list, void *elem);
+
+/**
+ * @brief initializes a new empty skip list
+ *
+ * @param comp pointer to the compare function desired for a type
+ */
+struct _skip_list *create_skip_list(int (*comp)(void*, void*));
+
+/**
+ * @brief deallocates every element of a list
+ *
+ */
+void delete_skip_list(struct _skip_list* list);

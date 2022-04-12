@@ -5,8 +5,9 @@
 #include <stdint.h>
 #include <stdint.h>
 
-/**
+#define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
+/**
  * @brief compare two integers
  * 
  * @param a first element of comparison  

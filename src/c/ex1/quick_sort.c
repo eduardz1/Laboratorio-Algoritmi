@@ -1,8 +1,6 @@
 #include "headers/quick_sort.h"
 #include "headers/binary_insert_sort.h"
 
-#define RAND(min, max) ((rand() % (max - min + 1)) + min)
-
 #define FALLBACK_CONST 1000
 
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
@@ -56,15 +54,15 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
   case MIDDLE: pivot = array + ((p + r) / 2) * size ; break;
   case LAST:   pivot = array + r * size; break;
   case MEDIAN3: default: 
-      {
-        int a = RAND(p, r) * size;
-        int b = RAND(p, r) * size;
-        int c = RAND(p, r) * size;
-        if(comp(array + a, array + b) > 0)
-          pivot = comp(array + b, array + c) > 0 ? array + b : array + c;
-        else
-          pivot = comp(array + a, array + c) > 0 ? array + a : array + c;
-      }
+    {
+      int a = RAND(p, r) * size;
+      int b = RAND(p, r) * size;
+      int c = RAND(p, r) * size;
+      if(comp(array + a, array + b) > 0)
+        pivot = comp(array + b, array + c) > 0 ? array + b : array + c;
+      else
+        pivot = comp(array + a, array + c) > 0 ? array + a : array + c;
+    }
   }
   swap(pivot, array + r * size, size);
   return partition(array, size, p, r, comp);
