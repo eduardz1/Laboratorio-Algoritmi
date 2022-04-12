@@ -1,4 +1,5 @@
 #include "headers/quick_sort.h"
+#include "headers/binary_insert_sort.h"
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
@@ -10,6 +11,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
   while (p < r)
   {
     int q = _part(array, size, p, r, comp, selector);
+  #ifndef FALLBACK_BIS
     if(q - p < r - q)
     {
       quick_sort(array, size, p, q - 1, comp, selector);
@@ -20,6 +22,25 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
       quick_sort(array, size, q + 1, r, comp, selector);
       r = q - 1;
     }
+  #endif
+  #ifdef FALLBACK_BIS
+    if(q - p < r - q)
+    {
+      if(q - p > 400)
+        quick_sort(array, size, p, q - 1, comp, selector);
+      else
+        binary_insert_sort(array + p * size, size, q - p, comp);
+      p = q + 1;
+    }
+    else
+    {
+      if(r - q > 400)
+        quick_sort(array, size, q + 1, r, comp, selector);
+      else
+        binary_insert_sort(array + (q + 1) * size, size, r - q, comp);
+      r = q - 1;
+    }
+  #endif
   }
 }
 
