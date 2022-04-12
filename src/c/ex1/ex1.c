@@ -12,7 +12,7 @@
     clock_t start = clock(); \
     a; \
     clock_t end = clock(); \
-    printf("%s: %f msec\n", #a, (double)(end-start)/CLOCKS_PER_SEC); \
+    printf("%s: %f sec\n", #a, (double)(end-start)/CLOCKS_PER_SEC); \
   } while(0)
 
 void load_array(const char* file_name, struct _record *array, int size)
@@ -29,7 +29,7 @@ void load_array(const char* file_name, struct _record *array, int size)
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL && i < size; i++)
   {
     array[i].field1 = malloc(64);
-    sscanf(buffer, "%d,%s,%d,%lf", &array[i].id, array[i].field1, &array[i].field2, &array[i].field3);
+    sscanf(buffer, "%d,%63[^,],%d,%lf", &array[i].id, array[i].field1, &array[i].field2, &array[i].field3);
   }
   printf("\033[25m\0338\033[32mdone\033[0m\n");
   
@@ -50,7 +50,7 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
-  printf("Choose a sorting algorithm: [qsort]/[binssort]\n");
+  printf("Choose a sorting algorithm: [qsort]/[binssort] ");
   char input[10];
   scanf("%s", input);
   
@@ -73,6 +73,12 @@ int main(int argc, char const *argv[])
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
     load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
+    
+    printf("Starting test the first <size/100> sorted elements of the input array \
+    to see the difference between MEDIAN3 and LAST as pivot\n");
+    arr = realloc(arr, atoi(argv[2]) / 100 * sizeof (struct _record));
+    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
+    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {

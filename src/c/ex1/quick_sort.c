@@ -3,6 +3,8 @@
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
+#define FALLBACK_CONST 1000
+
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
@@ -26,7 +28,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
   #ifdef FALLBACK_BIS
     if(q - p < r - q)
     {
-      if(q - p > 400)
+      if(q - p > FALLBACK_CONST)
         quick_sort(array, size, p, q - 1, comp, selector);
       else
         binary_insert_sort(array + p * size, size, q - p, comp);
@@ -34,7 +36,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
     }
     else
     {
-      if(r - q > 400)
+      if(r - q > FALLBACK_CONST)
         quick_sort(array, size, q + 1, r, comp, selector);
       else
         binary_insert_sort(array + (q + 1) * size, size, r - q, comp);
