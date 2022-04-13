@@ -1,15 +1,31 @@
 #include "headers/skip_list.h"
+#include <stdlib.h>
 
 void insert_skip_list(struct _skip_list *list, void *elem)
 {
+
+  // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
+  // inserimento come logica nell'insert
   struct _node *new = create_node(elem, random_level());
-  if(new->size > list->max_level) list->max_level = new->size;
+  if(new->size > list->max_level) {
+    if (list->head != NULL) {
+      realloc(list->head, sizeof(struct _node) * new->size);
+      for (int i = new->size-1; i > list->max_level-1; i--)
+        list->head[i] = NULL;
+    }
+    list->max_level = new->size;
+  }
 
   struct _node *x = list->head;
-  for(int k = list->max_level; k > 1; k--)
-  { 
-    if(x->size < k) continue;
 
+  if (list->head == NULL) {
+    list->head = malloc(sizeof(struct _node) * list->max_level);
+    for (int i = 0; i < list->max_level; i++)
+      list->head[i] = &new;
+  }
+
+  for(int k = list->max_level-1; k > 0; k--)
+  { 
     if((x->next[k] == NULL) || (comp(elem, x->next[k]->elem) < 0))
     {
       if(k < new->size)
@@ -25,13 +41,14 @@ void insert_skip_list(struct _skip_list *list, void *elem)
   }
 }
 
-struct _skip_list *create_skip_list(int (*comp)(void*, void*))
+struct _skip_list *create_skip_list(int (*comp)(void*, void*), uint32_t size)
 {
   struct _skip_list *new = malloc(sizeof(struct _skip_list));
   new->comp = comp;
   new->max_level = 1;
   new->head = NULL;
   new->tail = NULL;
+  new->size = size;
   return new;
 }
 
@@ -40,10 +57,10 @@ void delete_skip_list(struct _skip_list* list)
   struct _node *tmp;
   while(list->head != NULL) 
   { 
-    tmp = list->head->next[0];
+    tmp = list->head[0]->next[0];
 
-    for(int i = 0; i < list->head->size; i++)
-      free(list->head->next[i]);
+    for(int i = 0; i < list->head[0]->size; i++)
+      free(list->head[0]->next[i]);
 
     free(list->head);
     list->head = tmp;

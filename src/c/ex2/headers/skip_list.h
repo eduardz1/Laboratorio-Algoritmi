@@ -26,10 +26,11 @@ struct _node
  */
 struct _skip_list
 {
-  struct _node *head;
+  struct _node **head;
   struct _node *tail;
   int (*comp)(void*, void*);
   uint32_t max_level;
+  uint32_t size;
 };
 
 /**
@@ -69,7 +70,7 @@ void *search_skip_list(struct _skip_list *list, void *elem);
  *
  * @param comp pointer to the compare function desired for a type
  */
-struct _skip_list *create_skip_list(int (*comp)(void*, void*));
+struct _skip_list *create_skip_list(int (*comp)(void*, void*), uint32_t size);
 
 /**
  * @brief deallocates every element of a list
