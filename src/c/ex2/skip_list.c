@@ -2,7 +2,7 @@
 
 void insert_skip_list(struct _skip_list *list, void *elem)
 {
-  struct _node *new = create_node(elem, random_level());
+  struct _node *new = create_node(elem, random_level(), list->type);
   if(new->size > list->max_level) list->max_level = new->size;
 
   struct _node *x = list->head;
@@ -25,13 +25,14 @@ void insert_skip_list(struct _skip_list *list, void *elem)
   }
 }
 
-struct _skip_list *create_skip_list(int (*comp)(void*, void*))
+struct _skip_list *create_skip_list(int (*comp)(void*, void*), size_t type)
 {
   struct _skip_list *new = malloc(sizeof(struct _skip_list));
   new->comp = comp;
   new->max_level = 1;
   new->head = NULL;
   new->tail = NULL;
+  new->type = type;
   return new;
 }
 
@@ -76,4 +77,14 @@ uint32_t random_level() {
   while(rand() < 0.5 && lvl < MAX_HEIGHT)
     lvl++;
   return lvl;
+}
+
+struct _node *create_node(void *elem, uint32_t level, size_t size)
+{
+  struct _node *new = malloc(sizeof(struct _node));
+  new->elem = malloc(size);
+  
+  new->elem = elem;
+  new->next = NULL;
+  new->size = level;
 }

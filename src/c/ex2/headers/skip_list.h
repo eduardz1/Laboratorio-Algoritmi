@@ -23,6 +23,7 @@ struct _node
  * @param head pointer to the first element of the list
  * @param comp function comparable relative to the type of the elements
  * @param max_level current max value of _node::size in the list
+ * @param type size_t in bytes of each element of he list
  */
 struct _skip_list
 {
@@ -30,6 +31,7 @@ struct _skip_list
   struct _node *tail;
   int (*comp)(void*, void*);
   uint32_t max_level;
+  size_t type; // idk all th elements are void* anyway, I don't really know if strings are deallocated correctly though, all the other types should be fine
 };
 
 /**
@@ -37,9 +39,10 @@ struct _skip_list
  * 
  * @param elem element of the node
  * @param level number of pointers to other nodes
+ * @param size specifies size of byte to allocate for the elem
  * @return pointer to the new node
  */
-struct _node *create_node(void *elem, uint32_t level);
+struct _node *create_node(void *elem, uint32_t level, size_t size);
 
 /**
  * @brief insert an element into the list
@@ -68,8 +71,9 @@ void *search_skip_list(struct _skip_list *list, void *elem);
  * @brief initializes a new empty skip list
  *
  * @param comp pointer to the compare function desired for a type
+ * @param type specifies the type by size
  */
-struct _skip_list *create_skip_list(int (*comp)(void*, void*));
+struct _skip_list *create_skip_list(int (*comp)(void*, void*), size_t type);
 
 /**
  * @brief deallocates every element of a list
