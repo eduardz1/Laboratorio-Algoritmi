@@ -113,8 +113,6 @@ void test_records_array(void)
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);
     TEST_ASSERT_EQUAL_INT(expected[i].field2, actual[i].field2);
     TEST_ASSERT_EQUAL_FLOAT(expected[i].field3, actual[i].field3);
-    // cleaner method but if compare_records breaks we don't know which one is broken
-    // TEST_ASSERT_TRUE(!compare_records(&expected[i], &actual[i]));
   }
 }
 

@@ -75,4 +75,4 @@ struct _skip_list *create_skip_list(int (*comp)(void*, void*));
  * @brief deallocates every element of a list
  *
  */
-void delete_skip_list(struct _skip_list* list);
+void delete_skip_list(struct _skip_list* list); // maybe serve anche passargli una size
