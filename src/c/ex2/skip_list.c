@@ -6,10 +6,12 @@ void insert_skip_list(struct _skip_list *list, void *elem)
 
   // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
   // inserimento come logica nell'insert
-  struct _node *new = create_node(elem, random_level());
-  if(new->size > list->max_level) {
-    if (list->head != NULL) {
-      realloc(list->head, sizeof(struct _node) * new->size);
+  struct _node *new = create_node(elem, random_level(), list->type);
+  if(new->size > list->max_level) 
+  {
+    if(list->head != NULL) 
+    {
+      realloc(list->head, sizeof(struct _node *) * new->size);
       for (int i = new->size-1; i > list->max_level-1; i--)
         list->head[i] = NULL;
     }
@@ -18,10 +20,11 @@ void insert_skip_list(struct _skip_list *list, void *elem)
 
   struct _node *x = list->head;
 
-  if (list->head == NULL) {
-    list->head = malloc(sizeof(struct _node) * list->max_level);
+  if(list->head == NULL) 
+  {
+    list->head = malloc(sizeof(struct _node *) * list->max_level);
     for (int i = 0; i < list->max_level; i++)
-      list->head[i] = &new;
+      list->head[i] = new;
   }
 
   for(int k = list->max_level-1; k > 0; k--)
@@ -100,7 +103,9 @@ struct _node *create_node(void *elem, uint32_t level, size_t size)
   struct _node *new = malloc(sizeof(struct _node));
   new->elem = malloc(size);
   
-  new->elem = elem;
+  for(int i = 0; i<size; i++)
+    *(char*)(new->elem + i) = *(char*)(elem + i);
+  
   new->next = NULL;
   new->size = level;
 }
