@@ -1,5 +1,7 @@
 #include "headers/binary_insert_sort.h"
 
+// TODO: implement a loading bar
+
 void binary_insert_sort(void* array, size_t size, int length, int (*comp)(void*, void*))
 {
   for(int j=1; j<length; ++j)

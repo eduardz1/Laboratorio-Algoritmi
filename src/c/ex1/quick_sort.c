@@ -1,6 +1,8 @@
 #include "headers/quick_sort.h"
 #include "headers/binary_insert_sort.h"
 
+// TODO: implement a loading bar
+
 #define FALLBACK_CONST 1000
 
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
