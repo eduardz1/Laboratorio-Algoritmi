@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS=-Wall -O2 -DUNITY_INCLUDE_DOUBLE -DFALLBACK_BIS
+CC=clang
+CFLAGS=-Wall -ggdb3 -O0 -DUNITY_INCLUDE_DOUBLE -DFALLBACK_BIS
 
 # Dependencies
 SHARED  := src/c/shared/*.c
@@ -24,7 +24,7 @@ ex1: #src/c/ex1/ex1.c $(QSORT) $(BINSORT) $(SHARED)
 $(OBJ)/%.o : src/c/shared/%.c 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-testall: testshd testqs testbis
+testall: testshd testqs testbis testsklist
 
 testshd: #$(OBJECTS) src/c/shared/*
 	$(CC) $(CFLAGS) -o $(BIN)/testshd $(SHARED) $(UNITY) src/c/test/shared_test.c 
@@ -34,6 +34,9 @@ testqs: #$(OBJECTS) $(QSORT) src/c/test/quick_sort_test.c
 
 testbis: #$(OBJECTS) $(BINSORT) src/c/test/binary_insert_sort_test.c
 	$(CC) $(CFLAGS) -o $(BIN)/testbis $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c src/c/ex1/binary_insert_sort.c 
+
+testsklist: #$(OBJECTS) src/c/test/skip_list_test.c
+	$(CC) $(CFLAGS) -o $(BIN)/testsklist $(SHARED) $(UNITY) src/c/test/skip_list_test.c src/c/ex2/skip_list.c
 
 clean:
 	rm -f $(BINDIR)/* $(OBJDIR)/* *~

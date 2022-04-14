@@ -11,14 +11,14 @@ void insert_skip_list(struct _skip_list *list, void *elem)
   {
     if(list->head != NULL) 
     {
-      realloc(list->head, sizeof(struct _node *) * new->size);
+      list->head = realloc(list->head, sizeof(struct _node *) * new->size);
       for (int i = new->size-1; i > list->max_level-1; i--)
         list->head[i] = NULL;
     }
     list->max_level = new->size;
   }
 
-  struct _node *x = list->head;
+  struct _node **x = list->head;
 
   if(list->head == NULL) 
   {
@@ -29,18 +29,18 @@ void insert_skip_list(struct _skip_list *list, void *elem)
 
   for(int k = list->max_level-1; k > 0;) // k = 0
   { 
-    if((x->next[k] == NULL) || (comp(elem, x->next[k]->elem) < 0))
+    if((x[k]->next[k] == NULL) || (list->comp(elem, x[k]->next[k]->elem) < 0))
     {
       if(k < new->size)
       {
-        new->next[k] = x->next[k];
-        x->next[k] = new;
+        new->next[k] = x[k]->next[k];
+        x[k]->next[k] = new;
       }
       k--;
     }
     else
     {
-      x = x->next[k];
+      x[k] = x[k]->next[k];
     }
   }
 }
@@ -56,8 +56,10 @@ struct _skip_list *create_skip_list(int (*comp)(void*, void*), size_t type)
   return new;
 }
 
+// FIXME: Changing the head to an array of pointers makes the following implementation nonsense
 void delete_skip_list(struct _skip_list* list)
 {
+  return;
   struct _node *tmp;
   while(list->head != NULL) 
   { 
@@ -67,25 +69,25 @@ void delete_skip_list(struct _skip_list* list)
       free(list->head[0]->next[i]);
 
     free(list->head);
-    list->head = tmp;
+    list->head = &tmp;
   }
 }
 
 void *search_skip_list(struct _skip_list *list, void *elem)
 {
-  struct _node *x = list->head;
+  struct _node **x = list->head;
   int i = list->max_level;
 
   /// @invariant x->elem < elem
   for(; i > 1; i--)
   {
-    while(comp(x->next[i]->elem, elem) < 0)
-      x = x->next[i];
+    while(list->comp(x[i]->next[i]->elem, elem) < 0)
+      x[i] = x[i]->next[i];
   }
 
-  x = x->next[i];
-  if(comp(x->elem, elem) == 0)
-    return x->elem;
+  x[i] = x[i]->next[i];
+  if(list->comp(x[i]->elem, elem) == 0)
+    return x[i]->elem;
   else
     return NULL;
 }
@@ -109,4 +111,6 @@ struct _node *create_node(void *elem, uint32_t level, size_t size)
   
   new->next = NULL;
   new->size = level;
+
+  return new;
 }
