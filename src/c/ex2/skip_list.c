@@ -8,24 +8,27 @@ void insert_skip_list(struct SkipList *list, void *elem)
   // inserimento come logica nell'insert
   struct Node *new = create_node(elem, random_level(), list->type);
   if(new->size > list->max_level) 
-  {
+    list->max_level = new->size;
+  
+    /* Allocando inizialmente MAX_HEIGHT puntatori NULL ad head non servono più malloc e realloc a gogo
     if(list->head != NULL) 
     {
       list->head = realloc(list->head, sizeof(struct Node *) * new->size);
       for (int i = new->size-1; i > list->max_level-1; i--)
         list->head[i] = NULL;
     }
-    list->max_level = new->size;
-  }
+    */
 
   struct Node **x = list->head;
 
+  /*
   if(list->head == NULL) 
   {
     list->head = malloc(sizeof(struct Node *) * list->max_level);
     for (int i = 0; i < list->max_level; i++)
       list->head[i] = new;
   }
+  */
 
   for(int k = list->max_level-1; k > 0;) // k = 0
   { 
@@ -50,7 +53,8 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), size_t type)
   struct SkipList *new = malloc(sizeof(struct SkipList));
   new->comp = comp;
   new->max_level = 1;
-  new->head = NULL;
+  BZERO(new->head, MAX_HEIGHT * (sizeof(struct _node *)));
+
   new->tail = NULL;
   new->type = type;
   return new;
@@ -61,7 +65,7 @@ void delete_skip_list(struct SkipList* list)
 {
   return;
   struct Node *tmp;
-  while(list->head != NULL) 
+  while(list->head[0] != NULL) 
   { 
     tmp = list->head[0]->next[0];
 
@@ -69,7 +73,7 @@ void delete_skip_list(struct SkipList* list)
       free(list->head[0]->next[i]);
 
     free(list->head);
-    list->head = &tmp;
+    list->head[0] = tmp;
   }
 }
 

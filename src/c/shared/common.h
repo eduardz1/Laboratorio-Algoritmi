@@ -7,6 +7,8 @@
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
 
+#define BZERO(x, x_size) memset(x, 0, x_size)
+
 /**
  * @brief compare two integers
  * 

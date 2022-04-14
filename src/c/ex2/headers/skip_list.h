@@ -27,7 +27,7 @@ struct Node
  */
 struct SkipList
 {
-  struct Node **head;
+  struct Node *head[MAX_HEIGHT];
   struct Node *tail;
   int (*comp)(void*, void*);
   uint32_t max_level;
