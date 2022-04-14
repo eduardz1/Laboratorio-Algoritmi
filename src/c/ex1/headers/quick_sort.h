@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum pivot_selector {
+enum PivotSelector {
   RANDOM,
   FIRST,
   MIDDLE,
@@ -15,7 +15,7 @@ enum pivot_selector {
 /**
  * @brief Allows selection of pivot for #partition()
  */
-int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector);
+int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum PivotSelector selector);
 
 /**
  * @brief quick sort of generic array
@@ -27,7 +27,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
  * @param comp pointer to the compare function desired for a type
  * @param selector allows to choose a pivot between { FIRST, LAST, MIDDLE, RANDOM, MEDIAN3 }, MEDIAN3 is the sggested one
  */
-void quick_sort(void* v, size_t size, int left, int right, int (*comp)(void*, void*), enum pivot_selector selector);
+void quick_sort(void* v, size_t size, int left, int right, int (*comp)(void*, void*), enum PivotSelector selector);
 
 /**
  * @brief partions the array in the specified range [p, r] using r as pivot

@@ -5,7 +5,7 @@
 
 #define FALLBACK_CONST 1000
 
-void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum pivot_selector selector) 
+void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum PivotSelector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
   // function recursively only on the smaller sub-array reduces the call stack
@@ -46,7 +46,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
   }
 }
 
-int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum pivot_selector selector)
+int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum PivotSelector selector)
 {
   void *pivot;
   switch(selector)

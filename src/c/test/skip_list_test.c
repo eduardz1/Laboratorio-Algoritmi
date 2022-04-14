@@ -10,7 +10,7 @@
 #pragma region /// TEST #insert_skip_list()
 void test_insert_char_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_char, sizeof(char));
+  struct SkipList *l = create_skip_list(compare_char, sizeof(char));
   char actual[6] = { 'l', 'f', 'a', 'b', '0', 'w'};
 
   insert_skip_list(l, actual + 0);
@@ -22,7 +22,7 @@ void test_insert_char_skip_list()
 
   char expected[6] = { 'a', 'b', 'f', 'l', 'o', 'w'};
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(char*)l->head[0]->elem;
     
@@ -32,7 +32,7 @@ void test_insert_char_skip_list()
 
 void test_insert_int_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_int, sizeof(int));
+  struct SkipList *l = create_skip_list(compare_int, sizeof(int));
   int actual[6] = { 3, 7, 1, 11, 89, 0};
 
   insert_skip_list(l, actual + 0);
@@ -44,7 +44,7 @@ void test_insert_int_skip_list()
 
   int expected[6] = {0, 1, 3, 7, 11, 89};
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(int*)l->head[0]->elem;
 
@@ -54,7 +54,7 @@ void test_insert_int_skip_list()
 
 void test_insert_double_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_double, sizeof(double));
+  struct SkipList *l = create_skip_list(compare_double, sizeof(double));
   double actual[6] = { 0.900000003, 34343.8989328, 0.0, 45.9999, 7.0, 78.89};
 
   insert_skip_list(l, actual + 0);
@@ -66,7 +66,7 @@ void test_insert_double_skip_list()
 
   double expected[6];
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(double*)l->head[0]->elem;
 
@@ -76,7 +76,7 @@ void test_insert_double_skip_list()
 
 void test_insert_long_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_long, sizeof(long));
+  struct SkipList *l = create_skip_list(compare_long, sizeof(long));
   long actual[6] = { INT_MAX + 1l, INT_MIN - 1l, 0l, 99l, INT_MIN * 2l, LONG_MAX};
 
   insert_skip_list(l, actual + 0);
@@ -88,7 +88,7 @@ void test_insert_long_skip_list()
 
   long expected[6] = {INT_MIN * 2l, INT_MIN - 1l, 0l, 99l, INT_MAX + 1l, LONG_MAX};
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(long*)l->head[0]->elem;
 
@@ -98,7 +98,7 @@ void test_insert_long_skip_list()
 
 void test_insert_float_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_char, sizeof(float));
+  struct SkipList *l = create_skip_list(compare_char, sizeof(float));
   float actual[6] = { 4.0f, 4.999f, 1.0f, 0.0f, 59595.1f, -1.8f};
 
   insert_skip_list(l, actual + 0);
@@ -110,7 +110,7 @@ void test_insert_float_skip_list()
 
   float expected[6] = { -1.8f, 0.0f, 1.0f, 4.0f, 4.999f, 59595.1f};
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(float*)l->head[0]->elem;
 
@@ -120,7 +120,7 @@ void test_insert_float_skip_list()
 
 void test_insert_string_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_char, (sizeof(char*)));
+  struct SkipList *l = create_skip_list(compare_char, (sizeof(char*)));
   char *actual[6] = {"aaaa", "sdsad", "bbb.,", ",", "away", "4"};
 
   insert_skip_list(l, actual + 0);
@@ -132,7 +132,7 @@ void test_insert_string_skip_list()
 
   char *expected[6] = {",", "4", "aaaa", "away", "bbb.,", "sdsad"};
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(char**)l->head[0]->elem;
 
@@ -142,7 +142,7 @@ void test_insert_string_skip_list()
 
 void test_insert_record_skip_list()
 {
-  struct _skip_list *l = create_skip_list(compare_char, sizeof(struct _record));
+  struct SkipList *l = create_skip_list(compare_char, sizeof(struct _record));
   struct _record actual[8] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},
@@ -172,7 +172,7 @@ void test_insert_record_skip_list()
       {6, "d\0", 0, 0.0001f},
   };
 
-  struct _skip_list *tmp = l;
+  struct SkipList *tmp = l;
   for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
     actual[i] = *(struct _record*)l->head[0]->elem;
 
