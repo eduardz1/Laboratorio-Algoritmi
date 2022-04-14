@@ -27,7 +27,7 @@ void insert_skip_list(struct _skip_list *list, void *elem)
       list->head[i] = new;
   }
 
-  for(int k = list->max_level-1; k > 0; k--)
+  for(int k = list->max_level-1; k > 0;) // k = 0
   { 
     if((x->next[k] == NULL) || (comp(elem, x->next[k]->elem) < 0))
     {
@@ -36,6 +36,7 @@ void insert_skip_list(struct _skip_list *list, void *elem)
         new->next[k] = x->next[k];
         x->next[k] = new;
       }
+      k--;
     }
     else
     {
