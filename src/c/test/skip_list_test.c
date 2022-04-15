@@ -2,6 +2,8 @@
 #include "../ex2/headers/skip_list.h"
 #include "../shared/record.h"
 
+#define UNITY_OUTPUT_COLOR
+
 // TODO: Implement tests for create_skip_list() and create_node(), otherwise it's 
 // pointless to test insert_skip_list(), right now the tests cause segfaults, 
 // could be caused by the for loop not working anymore now that the head is an 
@@ -34,6 +36,7 @@ void test_insert_char_skip_list()
     i++;
   }
 
+  //print_skip_list(l, TYPE_CHAR);
   TEST_ASSERT_EQUAL_INT8_ARRAY(expected, actual, 6);
   delete_skip_list(l);
 }
@@ -134,6 +137,7 @@ void test_insert_float_skip_list()
     i++;
   }
 
+  //print_skip_list(l, TYPE_FLOAT);
   TEST_ASSERT_EQUAL_FLOAT_ARRAY(expected, actual, 6);
   delete_skip_list(l);
 }
@@ -159,14 +163,15 @@ void test_insert_string_skip_list()
     i++;
   }
 
+  // print_skip_list(l, TYPE_STRING); doesn't work
   TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
   delete_skip_list(l);
 }
 
 void test_insert_record_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_records, sizeof(struct _record));
-  struct _record actual[8] = {
+  struct SkipList *l = create_skip_list(compare_records, sizeof(struct Record));
+  struct Record actual[8] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},
       {2, "a\0", 0, 0.0211f},
@@ -183,8 +188,10 @@ void test_insert_record_skip_list()
   insert_skip_list(l, actual + 3);
   insert_skip_list(l, actual + 4);
   insert_skip_list(l, actual + 5);
+  insert_skip_list(l, actual + 6);
+  insert_skip_list(l, actual + 7);
 
-  struct _record expected[8] = {
+  struct Record expected[8] = {
       {7, "a\0", 0, 0.0001f},
       {2, "a\0", 0, 0.0211f},
       {0, "a\0", 1, 0.0001f},
@@ -198,10 +205,11 @@ void test_insert_record_skip_list()
   struct Node *tmp = l->head->next[0];
   for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
   {
-    actual[i] = *(struct _record*)tmp->elem;
+    actual[i] = *(struct Record*)tmp->elem;
     i++;
   }
-
+  
+  print_skip_list(l, TYPE_RECORD);
   for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);

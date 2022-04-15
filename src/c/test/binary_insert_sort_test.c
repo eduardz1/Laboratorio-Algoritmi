@@ -85,7 +85,7 @@ void test_negative_int_array(void)
 void test_records_array(void)
 {
 
-  struct _record actual[] = {
+  struct Record actual[] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},
       {2, "a\0", 0, 0.0211f},
@@ -96,7 +96,7 @@ void test_records_array(void)
       {7, "a\0", 0, 0.0001f},
   };
 
-  struct _record expected[] = {
+  struct Record expected[] = {
       {7, "a\0", 0, 0.0001f},
       {2, "a\0", 0, 0.0211f},
       {0, "a\0", 1, 0.0001f},

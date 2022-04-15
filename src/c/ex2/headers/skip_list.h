@@ -1,7 +1,7 @@
 #pragma once
 #include "../../shared/common.h"
 
-#define MAX_HEIGHT 1000 // max number of pointers possible in a _node
+#define MAX_HEIGHT 10 // max number of pointers possible in a _node
 
 /**
  * @struct node of skip list
@@ -79,3 +79,5 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), size_t type);
  *
  */
 void delete_skip_list(struct SkipList* list); // maybe serve anche passargli una size
+
+void print_skip_list(struct SkipList *list, enum Type type);

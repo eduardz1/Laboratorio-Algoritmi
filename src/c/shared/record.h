@@ -1,7 +1,7 @@
 #pragma once
 #include "common.h"
 
-struct _record
+struct Record
 {
   int id;
   char *field1;

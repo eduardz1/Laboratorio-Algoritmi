@@ -137,8 +137,8 @@ void test_compare_string(void)
 
 void test_compare_record(void) 
 {
-  struct _record r1;
-  struct _record r2;
+  struct Record r1;
+  struct Record r2;
   int result;
   
   // Equal

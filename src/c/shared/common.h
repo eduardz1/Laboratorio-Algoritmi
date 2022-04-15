@@ -11,6 +11,18 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #define BZERO(x, x_size) memset(x, 0, x_size)
 
+enum Type
+{
+  TYPE_INT,
+  TYPE_DOUBLE,
+  TYPE_STRING,
+  TYPE_CHAR,
+  TYPE_LONG,
+  TYPE_FLOAT,
+  TYPE_POINTER,
+  TYPE_RECORD
+};
+
 /**
  * @brief compare two integers
  * 

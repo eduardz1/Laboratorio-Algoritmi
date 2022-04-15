@@ -1,4 +1,5 @@
 #include "headers/skip_list.h"
+#include "../shared/record.h"
 #include <stdlib.h>
 
 // TODO: metodo di stampa sensato
@@ -105,4 +106,99 @@ struct Node *create_node(void *elem, uint32_t level, size_t size)
   new->size = level;
   new->next = malloc(sizeof(void*) * level);
   return new;
+}
+
+// This function is O(bscene) but it works and it's only a print sooooooo
+void print_skip_list(struct SkipList *list, enum Type type)
+{
+  printf("\n");
+  // prints list of levels in line
+  struct Node *x = list->head;
+  for(int i = 0; i <= list->max_level; i++)
+  {
+    printf("[LEVEL %03d] ", i);
+  }
+  printf("\n\0337");
+
+  // fills every line with a link
+  while(x != NULL)
+  {
+    
+    for(int i = 0; i <= 3; i++)
+    {
+      for(int i = 0; i<= list->max_level; i++)
+      {
+        printf("     |      ");
+      }
+      printf("\n");
+    } 
+    x = x->next[0];
+  }
+
+  printf("\0338");
+  x = list->head;
+  do
+  {
+    x = x->next[0];
+    printf("\n");
+
+    printf("\033[1C");
+    for(int i = 0; i<= x->size; i++)
+      printf("------------");
+    printf("\n");
+
+    printf("\0337");
+    for(int i = 0; i<= x->size; i++)
+      printf("            ");
+    printf(" |");
+
+    switch(type)
+    {
+    case TYPE_CHAR:
+      printf("\0338| %c", *(char*)x->elem);
+      break;
+    case TYPE_INT:
+      printf("\0338| %d", *(int*)x->elem);
+      break;
+    case TYPE_FLOAT:
+      printf("\0338| %f", *(float*)x->elem);
+      break;
+    case TYPE_DOUBLE: 
+      printf("\0338| %lf", *(double*)x->elem);
+      break;
+    case TYPE_STRING:
+      printf("\0338| %s", (char*)x->elem);
+      break;
+    case TYPE_RECORD:
+      printf("\0338| <%d/%s/%d/%lf>", ((struct Record *)x->elem)->id, ((struct Record *)x->elem)->field1, ((struct Record *)x->elem)->field2, ((struct Record *)x->elem)->field3);
+      break;
+    case TYPE_POINTER: default:
+      printf("\0338| %p", x->elem);
+      break;
+    }
+
+    printf("\n");
+    printf("\033[1C");
+    for(int i = 0; i<= x->size; i++)
+      printf("------------");
+    printf("\n");
+       
+  }while(x->next[0] != NULL);
+
+  printf("\n");
+  printf("\033[1C");
+  for(int i = 0; i <= list->max_level; i++)
+    printf("------------");
+  printf("\n");
+  for(int i = 0; i <= list->max_level; i++)
+    printf("            ");
+  printf(" |");
+  printf("\033[0G| NIL\n");
+  printf("\033[1C");
+  for(int i = 0; i <= list->max_level; i++)
+    printf("------------");
+  printf("\n");
+  printf("\n");
+
+  printf("\033[0m");
 }

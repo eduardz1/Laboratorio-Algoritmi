@@ -15,7 +15,7 @@
     printf("%s: %f sec\n", #a, (double)(end-start)/CLOCKS_PER_SEC); \
   } while(0)
 
-void load_array(const char* file_name, struct _record *array, int size)
+void load_array(const char* file_name, struct Record *array, int size)
 {
   FILE *fp = fopen(file_name, "r");
   if(fp == NULL)
@@ -36,7 +36,7 @@ void load_array(const char* file_name, struct _record *array, int size)
   fclose(fp);
 }
 
-void print_records(struct _record *array, int size)
+void print_records(struct Record *array, int size)
 {
   for (int i = 0; i < size; i++)
     printf("%d,%s,%d,%lf\n", array[i].id, array[i].field1, array[i].field2, array[i].field3);
@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
   char input[10];
   scanf("%s", input);
   
-  struct _record *arr = malloc(sizeof(struct _record) * atoi(argv[2])); 
+  struct Record *arr = malloc(sizeof(struct Record) * atoi(argv[2])); 
   load_array(argv[1], arr, atoi(argv[2]));
 
 #ifdef PRINT_RECORDS
@@ -78,7 +78,7 @@ int main(int argc, char const *argv[])
     
     printf("Starting test the first <size/100> sorted elements of the input array \
     to see the difference between MEDIAN3 and LAST as pivot\n");
-    arr = realloc(arr, atoi(argv[2]) / 100 * sizeof (struct _record));
+    arr = realloc(arr, atoi(argv[2]) / 100 * sizeof (struct Record));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 
