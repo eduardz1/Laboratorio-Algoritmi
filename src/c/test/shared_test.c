@@ -1,6 +1,7 @@
 #include "unity/unity.h"
 #include "../shared/common.h"
 #include "../shared/record.h"
+#include "../ex2/headers/skip_list.h"
 
 void test_compare_int(void)
 {
@@ -181,6 +182,17 @@ void test_compare_record(void)
 }
 
 
+int test_compare_elem_in_node(void) {
+  
+  struct Node * a = malloc(sizeof(struct Node));
+  a->elem= 1; a->size = 3;
+
+  struct Node * b = malloc(sizeof(struct Node));
+  b->elem= 1; b->size = 1;
+
+  TEST_ASSERT_TRUE(!compare_int(&a->elem, &b->elem));
+}
+
 int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
@@ -192,6 +204,7 @@ int main(int argc, char const *argv[])
   RUN_TEST(test_compare_char);
   RUN_TEST(test_compare_string);
   RUN_TEST(test_compare_record);
+  RUN_TEST(test_compare_elem_in_node);
 
   return UNITY_END();
 }

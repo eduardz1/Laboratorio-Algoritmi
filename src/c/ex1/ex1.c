@@ -76,6 +76,8 @@ int main(int argc, char const *argv[])
     load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
     
+
+    for(int i = atoi(argv[2] - atoi(argv[2])/100); i > 0; i--) free(arr[i].field1);
     printf("Starting test the first <size/100> sorted elements of the input array \
     to see the difference between MEDIAN3 and LAST as pivot\n");
     arr = realloc(arr, atoi(argv[2]) / 100 * sizeof (struct Record));
@@ -97,5 +99,8 @@ int main(int argc, char const *argv[])
   print_records(arr, atoi(argv[2]));
 #endif
   
+  for(int i = 0; i < atoi(argv[2])/100; i++)
+    free(arr[i].field1);
+  free(arr);
   return (EXIT_SUCCESS);
 }

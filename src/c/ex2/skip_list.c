@@ -76,6 +76,7 @@ void *search_skip_list(struct SkipList *list, void *elem)
   /// @invariant x->elem < elem
   for(int i = list->max_level - 1; i > 0; i--)
   {
+    int rimani = 1;
     while(x->next[i] != NULL && list->comp(x->next[i]->elem, elem) < 0)
       x = x->next[i];
   }

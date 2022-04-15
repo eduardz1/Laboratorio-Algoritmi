@@ -11,6 +11,61 @@ void setUp(void)
   srand(time(NULL));
 }
 
+void test_search_int_skip_list() {
+  int aa = 1;
+  int bb = 3;
+  int cc = 5;
+  int dd = 7;
+
+  struct Node * a = malloc(sizeof(struct Node));
+  a->elem= &aa;
+  a->next=malloc(sizeof(struct Node) * 3);
+  a->size = 3;
+
+  struct Node * b = malloc(sizeof(struct Node));
+  b->elem= &bb;
+  b->next=malloc(sizeof(struct Node));
+  b->size = 1;
+
+  struct Node * c = malloc(sizeof(struct Node));
+  c->elem= &cc;
+  c->next=malloc(sizeof(struct Node) * 2);
+  c->size = 2;
+
+  struct Node * d = malloc(sizeof(struct Node));
+  d->elem= &dd;
+  d->next=malloc(sizeof(struct Node) * 3);
+  d->size = 3;
+
+  a->next[2] = d;
+  a->next[1] = c;
+  a->next[0] = b;
+  
+  b->next[0] = c;
+  
+  c->next[1] = d;
+  c->next[0] = d;
+
+  d->next[2] = NULL;
+  d->next[1] = NULL;
+  d->next[0] = NULL;
+
+  struct Node * dummy = malloc(sizeof(struct Node));
+  dummy->next = malloc(sizeof(struct Node *) * 3);
+  dummy->next[0] = a;
+  dummy->next[1] = a;
+  dummy->next[2] = a;
+
+  struct SkipList * list = malloc(sizeof(struct SkipList));
+  list->comp = compare_int;
+  list->max_level = 3;
+  list->type = sizeof(int);
+  list->head = dummy;
+
+  int blabla = 1;
+  TEST_ASSERT_EQUAL_INT(0, compare_int(&blabla, search_skip_list(list, &blabla)));
+}
+
 void test_search_char_skip_list()
 {
   struct SkipList *l = create_skip_list(compare_char, sizeof(char));
@@ -25,8 +80,10 @@ void test_search_char_skip_list()
 
   char to_search[6] = { 'l', 'z', 'a', 'k', '0', 'x'};
 
+  print_skip_list(l, TYPE_CHAR);
   printf("0\n");
-  TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 0), actual + 0));
+  char a = search_skip_list(l, to_search + 0);
+  TEST_ASSERT_EQUAL_INT(0, compare_char(a, actual + 0));
   printf("a\n");
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 1));
   printf("b\n");
@@ -292,16 +349,17 @@ int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
 
-  RUN_TEST(test_insert_char_skip_list);
-  RUN_TEST(test_insert_double_skip_list);
-  RUN_TEST(test_insert_float_skip_list);
-  RUN_TEST(test_insert_int_skip_list);
-  RUN_TEST(test_insert_long_skip_list);
-  RUN_TEST(test_insert_record_skip_list);
-  RUN_TEST(test_insert_string_skip_list);
+  // RUN_TEST(test_insert_char_skip_list);
+  // RUN_TEST(test_insert_double_skip_list);
+  // RUN_TEST(test_insert_float_skip_list);
+  // RUN_TEST(test_insert_int_skip_list);
+  // RUN_TEST(test_insert_long_skip_list);
+  // RUN_TEST(test_insert_record_skip_list);
+  // RUN_TEST(test_insert_string_skip_list);
 
   //RUN_TEST(test_search_skip_list);
-  RUN_TEST(test_search_char_skip_list);
+  RUN_TEST(test_search_int_skip_list);
+  // RUN_TEST(test_search_char_skip_list);
   return UNITY_END();
 }
 
