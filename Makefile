@@ -17,8 +17,8 @@ OBJ := obj
 ex1: #src/c/ex1/ex1.c $(QSORT) $(BINSORT) $(SHARED)
 	$(CC) $(UNITY) -o $(BIN)/ex1 $(SHARED) src/c/ex1/ex1.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
 
-# ex2: # skip_list.c
-#	$(CC) $(CFLAGS) src/c/ex2/skip_list.c -o src/c/ex2/build/main_ex2
+ex2: # skip_list.c
+	$(CC) $(CFLAGS) -o $(BIN)/ex2 $(SHARED) src/c/ex2/skip_list.c src/c/ex2/ex2.c
 
 # TODO: fix OBJECTS dependency
 $(OBJ)/%.o : src/c/shared/%.c 

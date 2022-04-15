@@ -80,20 +80,13 @@ void test_search_char_skip_list()
 
   char to_search[6] = { 'l', 'z', 'a', 'k', '0', 'x'};
 
-  print_skip_list(l, TYPE_CHAR);
-  printf("0\n");
+  //print_skip_list(l, TYPE_CHAR);
   TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 0), actual + 0));
-  printf("a\n");
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 1));
-  printf("b\n");
   TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 2), actual + 2));
-  printf("c\n");
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 3));
-  printf("d\n");
   TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 4), actual + 4));
-  printf("e\n");
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 5));
-  printf("f\n");
   delete_skip_list(l);
 }
 
@@ -356,7 +349,7 @@ int main(int argc, char const *argv[])
   RUN_TEST(test_insert_record_skip_list);
   RUN_TEST(test_insert_string_skip_list);
 
-  //RUN_TEST(test_search_skip_list);
+  RUN_TEST(test_search_skip_list);
   RUN_TEST(test_search_int_skip_list);
   RUN_TEST(test_search_char_skip_list);
   return UNITY_END();

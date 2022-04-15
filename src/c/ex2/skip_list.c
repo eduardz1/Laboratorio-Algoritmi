@@ -74,17 +74,17 @@ void *search_skip_list(struct SkipList *list, void *elem)
   struct Node *x = list->head;
 
   /// @invariant x->elem < elem
-  for(int i = list->max_level - 1; i > 0; i--)
+  for(int i = list->max_level - 1; i >= 0; i--)
   {
     while(x->next[i] != NULL && list->comp(x->next[i]->elem, elem) < 0)
       x = x->next[i];
   }
 
   x = x->next[0];
-  if(list->comp(x->elem, elem) == 0)
-    return x->elem;
-  else
+  if(x == NULL || list->comp(x->elem, elem) != 0)
     return NULL;
+  else
+    return x->elem;
 }
 
 // TODO: spiegare il vatnaggio di questo algoritmo nella relazione (specificato
@@ -112,7 +112,7 @@ void print_skip_list(struct SkipList *list, enum Type type)
   printf("\n");
   // prints list of levels in line
   struct Node *x = list->head;
-  for(int i = 0; i <= list->max_level; i++)
+  for(int i = 0; i < list->max_level; i++)
   {
     printf("[LEVEL %03d] ", i);
   }
@@ -124,7 +124,7 @@ void print_skip_list(struct SkipList *list, enum Type type)
     
     for(int i = 0; i <= 3; i++)
     {
-      for(int i = 0; i<= list->max_level; i++)
+      for(int i = 0; i < list->max_level; i++)
       {
         printf("     |      ");
       }
@@ -141,12 +141,12 @@ void print_skip_list(struct SkipList *list, enum Type type)
     printf("\n");
 
     printf("\033[1C");
-    for(int i = 0; i<= x->size; i++)
+    for(int i = 0; i < x->size; i++)
       printf("------------");
     printf("\n");
 
     printf("\0337");
-    for(int i = 0; i<= x->size; i++)
+    for(int i = 0; i < x->size; i++)
       printf("            ");
     printf(" |");
 
@@ -177,7 +177,7 @@ void print_skip_list(struct SkipList *list, enum Type type)
 
     printf("\n");
     printf("\033[1C");
-    for(int i = 0; i<= x->size; i++)
+    for(int i = 0; i < x->size; i++)
       printf("------------");
     printf("\n");
        
@@ -185,15 +185,15 @@ void print_skip_list(struct SkipList *list, enum Type type)
 
   printf("\n");
   printf("\033[1C");
-  for(int i = 0; i <= list->max_level; i++)
+  for(int i = 0; i < list->max_level; i++)
     printf("------------");
   printf("\n");
-  for(int i = 0; i <= list->max_level; i++)
+  for(int i = 0; i < list->max_level; i++)
     printf("            ");
   printf(" |");
   printf("\033[0G| NIL\n");
   printf("\033[1C");
-  for(int i = 0; i <= list->max_level; i++)
+  for(int i = 0; i < list->max_level; i++)
     printf("------------");
   printf("\n");
   printf("\n");

@@ -7,14 +7,6 @@
 #include <string.h>
 #include <time.h>
 
-#define TIMING(a) \
-  do { \
-    clock_t start = clock(); \
-    a; \
-    clock_t end = clock(); \
-    printf("%s: %f sec\n", #a, (double)(end-start)/CLOCKS_PER_SEC); \
-  } while(0)
-
 void load_array(const char* file_name, struct Record *array, int size)
 {
   FILE *fp = fopen(file_name, "r");
@@ -34,12 +26,6 @@ void load_array(const char* file_name, struct Record *array, int size)
   printf("\033[25m\0338\033[32mdone\033[0m\n");
   
   fclose(fp);
-}
-
-void print_records(struct Record *array, int size)
-{
-  for (int i = 0; i < size; i++)
-    printf("%d,%s,%d,%lf\n", array[i].id, array[i].field1, array[i].field2, array[i].field3);
 }
 
 int main(int argc, char const *argv[])

@@ -21,3 +21,5 @@ struct Record
  * 
  */
 int compare_records(void *a,void *b);
+
+void print_records(struct Record *array, int size);

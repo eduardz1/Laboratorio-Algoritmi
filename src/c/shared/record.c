@@ -9,3 +9,9 @@ int compare_records(void *a,void*b)
   int res2 = compare_int(&r1->field2, &r2->field2);
   return res2 ? res2 : compare_double(&r1->field3, &r2->field3);
 }
+
+void print_records(struct Record *array, int size)
+{
+  for (int i = 0; i < size; i++)
+    printf("%d,%s,%d,%lf\n", array[i].id, array[i].field1, array[i].field2, array[i].field3);
+}
