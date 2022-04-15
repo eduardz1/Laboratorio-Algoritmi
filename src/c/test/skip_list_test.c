@@ -82,8 +82,7 @@ void test_search_char_skip_list()
 
   print_skip_list(l, TYPE_CHAR);
   printf("0\n");
-  char a = search_skip_list(l, to_search + 0);
-  TEST_ASSERT_EQUAL_INT(0, compare_char(a, actual + 0));
+  TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 0), actual + 0));
   printf("a\n");
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 1));
   printf("b\n");
@@ -349,17 +348,17 @@ int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
 
-  // RUN_TEST(test_insert_char_skip_list);
-  // RUN_TEST(test_insert_double_skip_list);
-  // RUN_TEST(test_insert_float_skip_list);
-  // RUN_TEST(test_insert_int_skip_list);
-  // RUN_TEST(test_insert_long_skip_list);
-  // RUN_TEST(test_insert_record_skip_list);
-  // RUN_TEST(test_insert_string_skip_list);
+  RUN_TEST(test_insert_char_skip_list);
+  RUN_TEST(test_insert_double_skip_list);
+  RUN_TEST(test_insert_float_skip_list);
+  RUN_TEST(test_insert_int_skip_list);
+  RUN_TEST(test_insert_long_skip_list);
+  RUN_TEST(test_insert_record_skip_list);
+  RUN_TEST(test_insert_string_skip_list);
 
   //RUN_TEST(test_search_skip_list);
   RUN_TEST(test_search_int_skip_list);
-  // RUN_TEST(test_search_char_skip_list);
+  RUN_TEST(test_search_char_skip_list);
   return UNITY_END();
 }
 
