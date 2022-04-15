@@ -7,6 +7,11 @@
 // could be caused by the for loop not working anymore now that the head is an 
 // array of pointers or by the create_skip_list()
 
+void setUp(void)
+{
+  srand(time(NULL));
+}
+
 #pragma region /// TEST #insert_skip_list()
 void test_insert_char_skip_list()
 {
@@ -20,12 +25,15 @@ void test_insert_char_skip_list()
   insert_skip_list(l, actual + 4);
   insert_skip_list(l, actual + 5);
 
-  char expected[6] = { 'a', 'b', 'f', 'l', 'o', 'w'};
+  char expected[6] = { '0', 'a', 'b', 'f', 'l', 'w'};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(char*)l->head[0]->elem;
-    
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(char*)tmp->elem;
+    i++;
+  }
+
   TEST_ASSERT_EQUAL_INT8_ARRAY(expected, actual, 6);
   delete_skip_list(l);
 }
@@ -44,9 +52,12 @@ void test_insert_int_skip_list()
 
   int expected[6] = {0, 1, 3, 7, 11, 89};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(int*)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(int*)tmp->elem;
+    i++;
+  }
 
   TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, 6);
   delete_skip_list(l);
@@ -64,11 +75,14 @@ void test_insert_double_skip_list()
   insert_skip_list(l, actual + 4);
   insert_skip_list(l, actual + 5);
 
-  double expected[6];
+  double expected[6] = {0.0, 0.900000003, 7.0, 45.9999, 78.89, 34343.8989328};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(double*)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(double*)tmp->elem;
+    i++;
+  }
 
   TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, actual, 6);
   delete_skip_list(l);
@@ -88,9 +102,12 @@ void test_insert_long_skip_list()
 
   long expected[6] = {INT_MIN * 2l, INT_MIN - 1l, 0l, 99l, INT_MAX + 1l, LONG_MAX};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(long*)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(long*)tmp->elem;
+    i++;
+  }
 
   TEST_ASSERT_EQUAL_INT64_ARRAY(expected, actual, 6);
   delete_skip_list(l);
@@ -98,7 +115,7 @@ void test_insert_long_skip_list()
 
 void test_insert_float_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_char, sizeof(float));
+  struct SkipList *l = create_skip_list(compare_float, sizeof(float));
   float actual[6] = { 4.0f, 4.999f, 1.0f, 0.0f, 59595.1f, -1.8f};
 
   insert_skip_list(l, actual + 0);
@@ -110,9 +127,12 @@ void test_insert_float_skip_list()
 
   float expected[6] = { -1.8f, 0.0f, 1.0f, 4.0f, 4.999f, 59595.1f};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(float*)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(float*)tmp->elem;
+    i++;
+  }
 
   TEST_ASSERT_EQUAL_FLOAT_ARRAY(expected, actual, 6);
   delete_skip_list(l);
@@ -120,7 +140,7 @@ void test_insert_float_skip_list()
 
 void test_insert_string_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_char, (sizeof(char*)));
+  struct SkipList *l = create_skip_list(compare_string, (sizeof(char*)));
   char *actual[6] = {"aaaa", "sdsad", "bbb.,", ",", "away", "4"};
 
   insert_skip_list(l, actual + 0);
@@ -132,9 +152,12 @@ void test_insert_string_skip_list()
 
   char *expected[6] = {",", "4", "aaaa", "away", "bbb.,", "sdsad"};
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(char**)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(char**)tmp->elem;
+    i++;
+  }
 
   TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
   delete_skip_list(l);
@@ -142,7 +165,7 @@ void test_insert_string_skip_list()
 
 void test_insert_record_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_char, sizeof(struct _record));
+  struct SkipList *l = create_skip_list(compare_records, sizeof(struct _record));
   struct _record actual[8] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},
@@ -172,9 +195,12 @@ void test_insert_record_skip_list()
       {6, "d\0", 0, 0.0001f},
   };
 
-  struct SkipList *tmp = l;
-  for(int i = 0; tmp->head[0] != NULL; tmp->head[0] = tmp->head[0]->next[0])
-    actual[i] = *(struct _record*)l->head[0]->elem;
+  struct Node *tmp = l->head->next[0];
+  for(int i = 0; tmp->next[0] != NULL; tmp = tmp->next[0])
+  {
+    actual[i] = *(struct _record*)tmp->elem;
+    i++;
+  }
 
   for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {

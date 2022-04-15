@@ -27,8 +27,7 @@ struct Node
  */
 struct SkipList
 {
-  struct Node *head[MAX_HEIGHT];
-  struct Node *tail;
+  struct Node *head;
   int (*comp)(void*, void*);
   uint32_t max_level;
   size_t type; // idk all th elements are void* anyway, I don't really know if strings are deallocated correctly though, all the other types should be fine

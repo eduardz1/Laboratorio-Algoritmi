@@ -4,9 +4,11 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
-
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #define BZERO(x, x_size) memset(x, 0, x_size)
 
 /**
