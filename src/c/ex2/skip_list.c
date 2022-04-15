@@ -71,18 +71,16 @@ void delete_skip_list(struct SkipList* list)
 
 void *search_skip_list(struct SkipList *list, void *elem)
 {
-  return NULL;
   struct Node *x = list->head;
-  int i = list->max_level;
 
   /// @invariant x->elem < elem
-  for(; i > 1; i--)
+  for(int i = list->max_level - 1; i > 0; i--)
   {
-    while(list->comp(x->next[i]->elem, elem) < 0)
+    while(x->next[i] != NULL && list->comp(x->next[i]->elem, elem) < 0)
       x = x->next[i];
   }
 
-  x = x->next[i];
+  x = x->next[0];
   if(list->comp(x->elem, elem) == 0)
     return x->elem;
   else
