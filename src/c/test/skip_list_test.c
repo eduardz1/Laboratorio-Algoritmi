@@ -150,12 +150,12 @@ void test_insert_char_skip_list()
   struct SkipList *l = create_skip_list(compare_char, NULL, sizeof(char));
   char actual[6] = { 'l', 'f', 'a', 'b', '0', 'w'};
 
-  insert_skip_list(l, actual + 0);
-  insert_skip_list(l, actual + 1);
-  insert_skip_list(l, actual + 2);
-  insert_skip_list(l, actual + 3);
-  insert_skip_list(l, actual + 4);
-  insert_skip_list(l, actual + 5);
+  insert_skip_list(l, &actual[0]);
+  insert_skip_list(l, &actual[1]);
+  insert_skip_list(l, &actual[2]);
+  insert_skip_list(l, &actual[3]);
+  insert_skip_list(l, &actual[4]);
+  insert_skip_list(l, &actual[5]);
 
   char expected[6] = { '0', 'a', 'b', 'f', 'l', 'w'};
 
@@ -250,12 +250,12 @@ void test_insert_float_skip_list()
   struct SkipList *l = create_skip_list(compare_float, NULL, sizeof(float));
   float actual[6] = { 4.0f, 4.999f, 1.0f, 0.0f, 59595.1f, -1.8f};
 
-  insert_skip_list(l, actual + 0);
-  insert_skip_list(l, actual + 1);
-  insert_skip_list(l, actual + 2);
-  insert_skip_list(l, actual + 3);
-  insert_skip_list(l, actual + 4);
-  insert_skip_list(l, actual + 5);
+  insert_skip_list(l, &actual[0]);
+  insert_skip_list(l, &actual[1]);
+  insert_skip_list(l, &actual[2]);
+  insert_skip_list(l, &actual[3]);
+  insert_skip_list(l, &actual[4]);
+  insert_skip_list(l, &actual[5]);
 
   float expected[6] = { -1.8f, 0.0f, 1.0f, 4.0f, 4.999f, 59595.1f};
 
@@ -273,16 +273,22 @@ void test_insert_float_skip_list()
 void test_insert_string_skip_list()
 {
   struct SkipList *l = create_skip_list(compare_string, free_string, sizeof(char *));
-  char *actual[6] = {"aaaa", "sdsadaaaaaa", "bbb.,", ",", "away", "4"};
+  char *a = "aaaa";
+  char *b = "sdsadaaaaaa";
+  char *c = "bbb.";
+  char *d = ",";
+  char *e = "away";
+  char *f = "4";
+  char *actual[6] = { a, b, c, d, e, f};
+  
+  insert_skip_list(l, &a);
+  insert_skip_list(l, &b);
+  insert_skip_list(l, &c);
+  insert_skip_list(l, &d);
+  insert_skip_list(l, &e);
+  insert_skip_list(l, &f);
 
-  insert_skip_list(l, actual + 0);
-  insert_skip_list(l, actual + 1);
-  insert_skip_list(l, actual + 2);
-  insert_skip_list(l, actual + 3);
-  insert_skip_list(l, actual + 4);
-  insert_skip_list(l, actual + 5);
-
-  char *expected[6] = {",", "4", "aaaa", "away", "bbb.,", "sdsadaaaaaa"};
+  char *expected[] = {",", "4", "aaaa", "away", "bbb.,", "sdsadaaaaaa"};
 
   print_skip_list(l, TYPE_STRING);
   struct Node *tmp = l->head->next[0];
@@ -292,8 +298,8 @@ void test_insert_string_skip_list()
     i++;
   }
 
-  TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
   delete_skip_list(l);
+  TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
 }
 
 void test_insert_record_skip_list()

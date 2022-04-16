@@ -10,6 +10,11 @@ void insert_skip_list(struct SkipList *list, void *elem)
   // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
   // inserimento come logica nell'insert
   struct Node *new = create_node(elem, random_level(), list->elem_size);
+  if(new == NULL)
+  {
+    printf("Error creating node\n");
+    exit(EXIT_FAILURE);
+  }
   if(new->level > list->max_level) 
     list->max_level = new->level;
   
@@ -36,13 +41,19 @@ void insert_skip_list(struct SkipList *list, void *elem)
 struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
 {
   struct SkipList *new = malloc(sizeof(struct SkipList));
+  if(new == NULL)
+    return NULL;
 
   // following implementation does not convince me in the slightest, we can surely 
   // initialize it with create_note somehow, the problems are all the various
   // behaviours of the system function with NULL pointers as elements
   new->head = malloc(sizeof(struct Node)); // sentinel
-  new->head->next = malloc(sizeof(struct Node *)*MAX_HEIGHT);
-  BZERO(new->head->next, MAX_HEIGHT);
+  if(new->head == NULL)
+    return NULL;
+  new->head->next = malloc(sizeof(struct Node *) * MAX_HEIGHT);
+  if(new->head->next == NULL)
+    return NULL;
+  BZERO(new->head->next, MAX_HEIGHT * sizeof(struct Node *));
   new->head->level = MAX_HEIGHT;
   new->head->elem = NULL;
 
@@ -56,18 +67,19 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *
 // FIXME: Probably does not work, haven't tested it in any way shape or form, quite possibly nonsense
 void delete_skip_list(struct SkipList* list)
 {
+  struct Node *curr = NULL;
+  while(list->head != NULL) 
+  {
+    curr = list->head;
+    list->head = curr->next[0];
+    if(curr->elem != NULL && list->free != NULL)
+      list->free(curr->elem);
+    
+    if(curr->elem != NULL)
+      free(curr->elem);
+    free(curr->next);
+    free(curr);
 
-  struct Node *current;
-  while(list->head != NULL) {
-    current = list->head;
-    list->head = current->next[0];
-
-    if(current->elem != NULL && list->free != NULL) {
-      list->free(current->elem);
-    }
-    free(current->elem);
-    free(current->next);
-    free(current);
   }
 
   free(list);
@@ -139,13 +151,22 @@ uint32_t random_level() {
 
 struct Node *create_node(void *elem, uint32_t level, size_t size)
 {
-  // TODO: Check sulla disponibilità della memoria della malloc
   struct Node *new = malloc(sizeof(struct Node));
+  if(new == NULL)
+    return NULL;
+
   new->elem = malloc(size);
+  if(new->elem == NULL)
+    return NULL;
   memcpy(new->elem, elem, size);
+
   new->level = level;
+
   new->next = malloc(sizeof(void*) * level);
-  BZERO(new->next, sizeof(void*) * level);
+  if(new->next == NULL)
+    return NULL;
+  for(int i = 0; i < level; i++)
+    new->next[i] = NULL;
   return new;
 }
 

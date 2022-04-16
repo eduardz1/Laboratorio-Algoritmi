@@ -34,7 +34,7 @@ struct SkipList
   int (*comp)(void*, void*);
   uint32_t max_level;
   size_t elem_size;
-  void (*free)(void *)
+  void (*free)(void *);
 };
 
 /**
@@ -43,7 +43,7 @@ struct SkipList
  * @param elem element of the node
  * @param level number of pointers to other nodes
  * @param size specifies size of byte to allocate for the elem
- * @return pointer to the new node
+ * @return pointer to the new node or NULL if an error occurred
  */
 struct Node *create_node(void *elem, uint32_t level, size_t size);
 
@@ -76,6 +76,7 @@ void *search_skip_list(struct SkipList *list, void *elem);
  * @param comp pointer to the compare function desired for a type
  * @param free function used to free #elem
  * @param elem_size specifies the type by size
+ * @return pointer to the new list or NULL if an error occurred
  */
 struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size);
 

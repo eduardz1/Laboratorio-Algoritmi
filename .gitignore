@@ -5,6 +5,7 @@
 .obsidian
 .idea
 .iml
+*.log
 
 **/bin
 **/obj

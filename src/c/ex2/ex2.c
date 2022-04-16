@@ -73,18 +73,25 @@ int main(int argc, char const *argv[])
   srand(time(NULL));
 
   struct SkipList *list = create_skip_list(compare_string, free_string, sizeof(char *));
-  char *words_to_correct[256];
+  if(list == NULL)
+  {
+    printf("Error creating skip list\n");
+    exit(EXIT_FAILURE);
+  }
+  char *words_to_correct[256] = {0};
   load_dictionary(argv[1], list);
   load_array(argv[2], words_to_correct);
   //print_skip_list(list, TYPE_STRING);
   //return 0;
-  for(int i = 0; words_to_correct[i] != NULL && i < 256; i++)
+  for(int i = 0; words_to_correct[i] != 0 && i < 256; i++)
   {
     if(search_skip_list(list, &words_to_correct[i]) == NULL)
       printf("\033[31mNot found:\033[0m %30s\n", words_to_correct[i]);
     //else
     //  printf("\033[32mFound:\033[0m %30s\n", words_to_correct[i]);
   }
-
+  for(int i = 0; words_to_correct[i] != 0 && i < 256; i++)
+    free(words_to_correct[i]);
+  delete_skip_list(list);
   return (EXIT_SUCCESS);
 }
