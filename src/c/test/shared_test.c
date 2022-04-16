@@ -119,13 +119,13 @@ void test_compare_string(void)
   char *member1, *member2, result;
 
   // Equal
-  member1 = "aaa\0";
-  member2 = "aaa\0";
+  member1 = "aaaaaaaaa";
+  member2 = "aaaaaaaaa";
   result = compare_string(&member1, &member2);
   TEST_ASSERT_EQUAL_INT(0, result);
 
-  member1 = "zyx\0";
-  member2 = "abc\0";
+  member1 = "zyx";
+  member2 = "abc";
   
   // Greater
   result = compare_string(&member1, &member2);
@@ -144,12 +144,12 @@ void test_compare_record(void)
   
   // Equal
   r1.id = 0; 
-  r1.field1 = "abc\0";
+  r1.field1 = "abc";
   r1.field2 = 0;
   r1.field3 = 0.0001f;
 
   r2.id = 0;
-  r2.field1 = "abc\0";
+  r2.field1 = "abc";
   r2.field2 = 0;
   r2.field3 = 0.0001f;
 
@@ -157,14 +157,14 @@ void test_compare_record(void)
   TEST_ASSERT_EQUAL_INT(0, result);
 
   // Greater and lower by first field
-  r1.field1 = "abc\0"; r2.field1 = "zyx\0";
+  r1.field1 = "abc"; r2.field1 = "zyx";
   result = compare_records(&r1, &r2);
   TEST_ASSERT_TRUE(result < 0);
   result = compare_records(&r2, &r1);
   TEST_ASSERT_TRUE(result > 0);
 
   // Greater and lower by second field
-  r1.field1 = "abc\0"; r2.field1 = "abc\0";
+  r1.field1 = "abc"; r2.field1 = "abc";
   r1.field2 = 0; r2.field2 = INT_MAX;
   result = compare_records(&r1, &r2);
   TEST_ASSERT_EQUAL_INT(-1, result);
@@ -172,7 +172,7 @@ void test_compare_record(void)
   TEST_ASSERT_EQUAL_INT(1, result);
 
   // Greater and lower by third field
-  r1.field1 = "abc\0"; r2.field1 = "abc\0";
+  r1.field1 = "abc"; r2.field1 = "abc";
   r1.field2 = 0; r2.field2 = 0;
   r1.field3 = 0.1245f; r2.field3 = 0.9289f;
   result = compare_records(&r1, &r2);
@@ -182,15 +182,16 @@ void test_compare_record(void)
 }
 
 
-int test_compare_elem_in_node(void) {
-  
+void test_compare_elem_in_node(void) {
+  int aa = 1; int bb = 1;
+
   struct Node * a = malloc(sizeof(struct Node));
-  a->elem= 1; a->size = 3;
+  a->elem = &aa; a->level = 3;
 
   struct Node * b = malloc(sizeof(struct Node));
-  b->elem= 1; b->size = 1;
+  b->elem = &bb; b->level = 1;
 
-  TEST_ASSERT_TRUE(!compare_int(&a->elem, &b->elem));
+  TEST_ASSERT_TRUE(!compare_int(a->elem, b->elem));
 }
 
 int main(int argc, char const *argv[])

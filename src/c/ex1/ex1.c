@@ -48,6 +48,7 @@ int main(int argc, char const *argv[])
 #ifdef PRINT_RECORDS
   printf("\nUnsorted records:\n");
   print_records(arr, atoi(argv[2]));
+  printf("\n");
 #endif
 
   if(strcmp(input, "qsort") == 0) 
@@ -78,8 +79,7 @@ int main(int argc, char const *argv[])
 
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
     
-    printf("Starting test the first <size/100> sorted elements of the input array \
-    to see the difference between MEDIAN3 and LAST as pivot\n");
+    printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3 and LAST as pivot\n\n");
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 

@@ -1,20 +1,22 @@
 #pragma once
 #include "../../shared/common.h"
 
-#define MAX_HEIGHT 10 // max number of pointers possible in a _node
+#define MAX_HEIGHT 999 // max number of pointers possible in a _node
 
 /**
  * @struct node of skip list
  * 
  * @param elem generic element of Node
  * @param next array of pointers to the next and a certain number of other elements in the list
- * @param size current size of array #next of pointers to Node
+ * @param level current level of array #next of pointers to Node
+ * @param size size_t in bytes of #elem
  */
 struct Node
 {
   void *elem;
   struct Node **next;
-  uint32_t size;
+  uint32_t level;
+  size_t size;
 };
 
 /**
@@ -22,15 +24,13 @@ struct Node
  * 
  * @param head pointer to the first element of the list
  * @param comp function comparable relative to the type of the elements
- * @param max_level current max value of Node::size in the list
- * @param type size_t in bytes of each element of he list
+ * @param max_level current max value of Node::level in the list
  */
 struct SkipList
 {
   struct Node *head;
   int (*comp)(void*, void*);
   uint32_t max_level;
-  size_t type; // idk all th elements are void* anyway, I don't really know if strings are deallocated correctly though, all the other types should be fine
 };
 
 /**
@@ -48,8 +48,9 @@ struct Node *create_node(void *elem, uint32_t level, size_t size);
  * 
  * @param list pointer to a list of generic elements
  * @param elem element to insert
+ * @param size size_t of the element
  */
-void insert_skip_list(struct SkipList *list, void *elem);
+void insert_skip_list(struct SkipList *list, void *elem, size_t size);
 
 /**
  * @brief determines max number of pointer to include in a new Node
@@ -72,7 +73,7 @@ void *search_skip_list(struct SkipList *list, void *elem);
  * @param comp pointer to the compare function desired for a type
  * @param type specifies the type by size
  */
-struct SkipList *create_skip_list(int (*comp)(void*, void*), size_t type);
+struct SkipList *create_skip_list(int (*comp)(void*, void*));
 
 /**
  * @brief deallocates every element of a list

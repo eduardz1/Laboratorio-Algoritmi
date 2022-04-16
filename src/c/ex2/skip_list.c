@@ -4,14 +4,14 @@
 
 // TODO: metodo di stampa sensato
 
-void insert_skip_list(struct SkipList *list, void *elem)
+void insert_skip_list(struct SkipList *list, void *elem, size_t size)
 {
 
   // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
   // inserimento come logica nell'insert
-  struct Node *new = create_node(elem, random_level(), list->type);
-  if(new->size > list->max_level) 
-    list->max_level = new->size;
+  struct Node *new = create_node(elem, random_level(), size);
+  if(new->level > list->max_level) 
+    list->max_level = new->level;
   
   struct Node *x = list->head;
   
@@ -19,7 +19,7 @@ void insert_skip_list(struct SkipList *list, void *elem)
   {
     if((x->next[k] == NULL) || (list->comp(elem, x->next[k]->elem) < 0))
     {
-      if(k < new->size)
+      if(k < new->level)
       {
         new->next[k] = x->next[k];
         x->next[k] = new;
@@ -33,7 +33,7 @@ void insert_skip_list(struct SkipList *list, void *elem)
   }
 }
 
-struct SkipList *create_skip_list(int (*comp)(void*, void*), size_t type)
+struct SkipList *create_skip_list(int (*comp)(void*, void*))
 {
   struct SkipList *new = malloc(sizeof(struct SkipList));
 
@@ -43,12 +43,11 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), size_t type)
   new->head = malloc(sizeof(struct Node)); // sentinel
   new->head->next = malloc(sizeof(struct Node *)*MAX_HEIGHT);
   BZERO(new->head->next, MAX_HEIGHT);
-  new->head->size = MAX_HEIGHT;
+  new->head->level = MAX_HEIGHT;
   new->head->elem = NULL;
 
   new->comp = comp;
   new->max_level = 1;
-  new->type = type;
   return new;
 }
 
@@ -61,7 +60,7 @@ void delete_skip_list(struct SkipList* list)
   { 
     tmp = list->head->next[0];
 
-    for(int i = 0; i < list->head->size; i++)
+    for(int i = 0; i < list->head->level; i++)
       free(list->head->next[i]);
 
     free(list->head);
@@ -101,102 +100,94 @@ struct Node *create_node(void *elem, uint32_t level, size_t size)
   struct Node *new = malloc(sizeof(struct Node));
   new->elem = malloc(size);
   memcpy(new->elem, elem, size);
-  new->size = level;
+  new->level = level;
   new->next = malloc(sizeof(void*) * level);
+  BZERO(new->next, sizeof(void*) * level);
+  new->size = size;
   return new;
 }
 
-// This function is O(bscene) but it works and it's only a print sooooooo
+// Redirection doesn't look too good because of the carriage returns, if we find
+// a way to write the elem at the start of the line without them it will look good
+// even when redirected, for now we can convert it with "col -bxp <inputfile.txt >outputfile.txt" (it takes a while)
 void print_skip_list(struct SkipList *list, enum Type type)
 {
   printf("\n");
-  // prints list of levels in line
   struct Node *x = list->head;
+  printf("\n");
+  printf("-- HEAD (Sentinel) --\n\n");
   for(int i = 0; i < list->max_level; i++)
-  {
     printf("[LEVEL %03d] ", i);
-  }
-  printf("\n\0337");
+  printf("\n");
 
-  // fills every line with a link
-  while(x != NULL)
-  {
-    
-    for(int i = 0; i <= 3; i++)
-    {
-      for(int i = 0; i < list->max_level; i++)
-      {
-        printf("     |      ");
-      }
-      printf("\n");
-    } 
-    x = x->next[0];
-  }
-
-  printf("\0338");
   x = list->head;
   do
   {
     x = x->next[0];
+    for(int i = 0; i < list->max_level; i++)
+      printf("     |      ");
     printf("\n");
 
-    printf("\033[1C");
-    for(int i = 0; i < x->size; i++)
-      printf("------------");
+    printf(" ");
+    for(int i = 0; i < x->level; i++)
+      printf("----V-------");
+    for(int i = x->level; i < list->max_level; i++)
+      printf("    |       ");
     printf("\n");
-
-    printf("\0337");
-    for(int i = 0; i < x->size; i++)
+    for(int i = 0; i < x->level; i++)
       printf("            ");
     printf(" |");
-
+    for(int i = x->level; i < list->max_level; i++)
+      printf("   |        ");
     switch(type)
     {
     case TYPE_CHAR:
-      printf("\0338| %c", *(char*)x->elem);
+      printf("\r| %c", *(char*)x->elem);
       break;
     case TYPE_INT:
-      printf("\0338| %d", *(int*)x->elem);
+      printf("\r| %d", *(int*)x->elem);
       break;
     case TYPE_FLOAT:
-      printf("\0338| %f", *(float*)x->elem);
+      printf("\r| %f", *(float*)x->elem);
       break;
     case TYPE_DOUBLE: 
-      printf("\0338| %lf", *(double*)x->elem);
+      printf("\r| %lf", *(double*)x->elem);
       break;
     case TYPE_STRING:
-      printf("\0338| %s", (char*)x->elem);
+      printf("\r| %s", *(char**)x->elem);
       break;
     case TYPE_RECORD:
-      printf("\0338| <%d/%s/%d/%lf>", ((struct Record *)x->elem)->id, ((struct Record *)x->elem)->field1, ((struct Record *)x->elem)->field2, ((struct Record *)x->elem)->field3);
+      printf("\r| <%d/%s/%d/%lf>", ((struct Record *)x->elem)->id, ((struct Record *)x->elem)->field1, ((struct Record *)x->elem)->field2, ((struct Record *)x->elem)->field3);
       break;
     case TYPE_POINTER: default:
-      printf("\0338| %p", x->elem);
+      printf("\r| %p", x->elem);
       break;
     }
 
     printf("\n");
-    printf("\033[1C");
-    for(int i = 0; i < x->size; i++)
+    printf(" ");
+    for(int i = 0; i < x->level; i++)
       printf("------------");
+    for(int i = x->level; i < list->max_level; i++)
+      printf("    |       ");
     printf("\n");
        
-  }while(x->next[0] != NULL);
+  } while(x->next[0] != NULL);
 
-  printf("\n");
-  printf("\033[1C");
   for(int i = 0; i < list->max_level; i++)
-    printf("------------");
+    printf("     |      ");
+  printf("\n");
+  printf(" ");
+  for(int i = 0; i < list->max_level; i++)
+    printf("----V-------");
   printf("\n");
   for(int i = 0; i < list->max_level; i++)
     printf("            ");
   printf(" |");
-  printf("\033[0G| NIL\n");
-  printf("\033[1C");
+  printf("\r| NIL\n");
+  printf(" ");
   for(int i = 0; i < list->max_level; i++)
     printf("------------");
   printf("\n");
   printf("\n");
-
-  printf("\033[0m");
 }

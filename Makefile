@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-Wall -ggdb3 -O0 -DUNITY_INCLUDE_DOUBLE -DFALLBACK_BIS
+CFLAGS=-Wall -ggdb3 -O0 -DUNITY_INCLUDE_DOUBLE #-DFALLBACK_BIS
 
 # Dependencies
 SHARED  := src/c/shared/*.c
@@ -15,7 +15,10 @@ SRC := src
 OBJ := obj
 
 ex1: #src/c/ex1/ex1.c $(QSORT) $(BINSORT) $(SHARED)
-	$(CC) $(UNITY) -o $(BIN)/ex1 $(SHARED) src/c/ex1/ex1.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
+	$(CC) $(CFLAGS) -o $(BIN)/ex1 $(SHARED) src/c/ex1/ex1.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
+
+ex1p: #src/c/ex1/ex1.c $(QSORT) $(BINSORT) $(SHARED)
+	$(CC) $(CFLAGS) -DPRINT_RECORDS -o $(BIN)/ex1 $(SHARED) src/c/ex1/ex1.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
 
 ex2: # skip_list.c
 	$(CC) $(CFLAGS) -o $(BIN)/ex2 $(SHARED) src/c/ex2/skip_list.c src/c/ex2/ex2.c

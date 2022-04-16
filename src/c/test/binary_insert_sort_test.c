@@ -20,9 +20,15 @@ void test_int_array(void)
 
 void test_string_array(void)
 {
-  char *actual[6] = {"aa\0", "zzz\0", "yy\0", "cc\0", "ab\0", "ba\0"};
-  char *expected[6] = {"aa\0", "ab\0", "ba\0", "cc\0", "yy\0", "zzz\0"};
-  binary_insert_sort(actual, sizeof(actual[0]), 6, compare_string);
+  char a[] = "aaaaaaaaa";
+  char b[] = "zzz";
+  char c[] = "yy";
+  char d[] = "cc";
+  char e[] = "ab";
+  char f[] = "ba";
+  char *actual[] = {a, b, c, d, e, f};
+  char *expected[] = {a, e, f, d, c, b};
+  binary_insert_sort(actual, sizeof(char*), 6, compare_string);
   TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
 }
 
@@ -86,25 +92,25 @@ void test_records_array(void)
 {
 
   struct Record actual[] = {
-      {0, "a\0", 1, 0.0001f},
-      {1, "c\0", 0, 1.0001f},
-      {2, "a\0", 0, 0.0211f},
-      {3, "b\0", 24, 0.0001f},
-      {4, "b\0", 15, 0.0001f},
-      {5, "c\0", 0, 0.0001f},
-      {6, "d\0", 0, 0.0001f},
-      {7, "a\0", 0, 0.0001f},
+      {0, "a", 1, 0.0001f},
+      {1, "c", 0, 1.0001f},
+      {2, "a", 0, 0.0211f},
+      {3, "b", 24, 0.0001f},
+      {4, "b", 15, 0.0001f},
+      {5, "c", 0, 0.0001f},
+      {6, "d", 0, 0.0001f},
+      {7, "a", 0, 0.0001f},
   };
 
   struct Record expected[] = {
-      {7, "a\0", 0, 0.0001f},
-      {2, "a\0", 0, 0.0211f},
-      {0, "a\0", 1, 0.0001f},
-      {4, "b\0", 15, 0.0001f},
-      {3, "b\0", 24, 0.0001f},
-      {5, "c\0", 0, 0.0001f},
-      {1, "c\0", 0, 1.0001f},
-      {6, "d\0", 0, 0.0001f},
+      {7, "a", 0, 0.0001f},
+      {2, "a", 0, 0.0211f},
+      {0, "a", 1, 0.0001f},
+      {4, "b", 15, 0.0001f},
+      {3, "b", 24, 0.0001f},
+      {5, "c", 0, 0.0001f},
+      {1, "c", 0, 1.0001f},
+      {6, "d", 0, 0.0001f},
   };
 
   binary_insert_sort(actual, sizeof(actual[0]), 8, compare_records);
