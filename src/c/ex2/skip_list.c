@@ -20,7 +20,7 @@ void insert_skip_list(struct SkipList *list, void *elem)
   
   struct Node *x = list->head;
   
-  for(int k = list->max_level; k >= 0;)
+  for(int k = list->max_level - 1; k >= 0;)
   {
     if((x->next[k] == NULL) || (list->comp(elem, x->next[k]->elem) < 0))
     {
