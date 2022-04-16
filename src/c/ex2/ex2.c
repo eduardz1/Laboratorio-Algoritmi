@@ -27,8 +27,8 @@ void load_dictionary(const char* file_name, struct SkipList *list)
   // inside of list again instead of passing it to create_note()
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL; i++)
   { 
-    char *word = malloc(64); // have fun deallocating this
-    BZERO(word, 64);
+    char *word = malloc(30); // esofagodermatodigiunoplastica is the longest word in the italian dictionary :p
+    BZERO(word, 30);
     sscanf(buffer, "%s", word);
     insert_skip_list(list, &word, sizeof(char*));
   }
@@ -39,7 +39,8 @@ void load_dictionary(const char* file_name, struct SkipList *list)
 
 // this doesn't work, FIXME: read from correctme.txt words separated by spaces or
 // newlines or punctuation
-void load_array(const char* file_name, char *arr)
+// TODO: convert words to lowercase and remove punctuation
+void load_array(const char* file_name, char *arr[256])
 {
   FILE *fp = fopen(file_name, "r");
   if(fp == NULL)
@@ -50,9 +51,11 @@ void load_array(const char* file_name, char *arr)
 
   printf("Loading array from file \033[1m%s\033[22m \0337\033[5m...\n", file_name);
   char buffer[128];
-  for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL; i++)
+  // fgets reads until newline, we want to read until whitespace or punctuation or newline or EOF
+  for(int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL && i < 256; i++)
   {
-    sscanf(buffer, "%63[^ ]", arr + i * 64);
+    arr[i] = malloc(30);
+    sscanf(buffer, "%s", arr[i]);
   }
   printf("\033[25m\0338\033[32mdone\033[0m\n");
   
@@ -70,16 +73,17 @@ int main(int argc, char const *argv[])
   srand(time(NULL));
 
   struct SkipList *list = create_skip_list(compare_string);
-  char arr[64 * 256] = {0}; // 256 words of 64 chars each
+  char *words_to_correct[256];
   load_dictionary(argv[1], list);
-  load_array(argv[2], arr);
-  
-  print_skip_list(list, TYPE_STRING);
-  return 0;
-  for(int i = 0; i < 256; i++)
+  load_array(argv[2], words_to_correct);
+  //print_skip_list(list, TYPE_STRING);
+  //return 0;
+  for(int i = 0; words_to_correct[i] != NULL && i < 256; i++)
   {
-    if(search_skip_list(list, arr + i * sizeof(char*)) == NULL)
-      printf("\033[31mNot found:\033[0m %64s\n", arr + i * sizeof(char*));
+    if(search_skip_list(list, &words_to_correct[i]) == NULL)
+      printf("\033[31mNot found:\033[0m %30s\n", words_to_correct[i]);
+    //else
+    //  printf("\033[32mFound:\033[0m %30s\n", words_to_correct[i]);
   }
 
   return (EXIT_SUCCESS);
