@@ -28,6 +28,11 @@ void load_array(const char* file_name, struct Record *array, int size)
   fclose(fp);
 }
 
+void dispose_string_in_array(struct Record * a, int length) {
+  for(int i = 0; i < length; i++)
+      free(a[i].field1);
+}
+
 int main(int argc, char const *argv[])
 {
   if(argc < 3) 
@@ -45,38 +50,30 @@ int main(int argc, char const *argv[])
   struct Record *arr = malloc(sizeof(struct Record) * atoi(argv[2])); 
   load_array(argv[1], arr, atoi(argv[2]));
 
-#ifdef PRINT_RECORDS
-  printf("\nUnsorted records:\n");
-  print_records(arr, atoi(argv[2]));
-  printf("\n");
-#endif
+  #ifdef PRINT_RECORDS
+    printf("\nUnsorted records:\n");
+    print_records(arr, atoi(argv[2]));
+    printf("\n");
+  #endif
 
   if(strcmp(input, "qsort") == 0) 
   {
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MEDIAN3));
-    
-    for(int i = 0; i < atoi(argv[2]); i++)
-      free(arr[i].field1);
-    load_array(argv[1], arr, atoi(argv[2]));
 
+    dispose_string_in_array(arr, atoi(argv[2]));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
-    
-    for(int i = 0; i < atoi(argv[2]); i++)
-      free(arr[i].field1);
-    load_array(argv[1], arr, atoi(argv[2]));
 
+    dispose_string_in_array(arr, atoi(argv[2]));
+    load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
     
-    for(int i = 0; i < atoi(argv[2]); i++)
-      free(arr[i].field1);
+    dispose_string_in_array(arr, atoi(argv[2]));
     load_array(argv[1], arr, atoi(argv[2]));
-
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
 
-    for(int i = 0; i < atoi(argv[2]); i++)
-      free(arr[i].field1);
+    dispose_string_in_array(arr, atoi(argv[2]));
     load_array(argv[1], arr, atoi(argv[2]));
-
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
     
     printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3 and LAST as pivot\n\n");
@@ -93,13 +90,12 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
-#ifdef PRINT_RECORDS
-  printf("\nSorted records:\n");
-  print_records(arr, atoi(argv[2]));
-#endif
-  
-  for(int i = 0; i < atoi(argv[2]); i++)
-    free(arr[i].field1);
+  #ifdef PRINT_RECORDS
+    printf("\nSorted records:\n");
+    print_records(arr, atoi(argv[2]));
+  #endif
+
+  dispose_string_in_array(arr, atoi(argv[2]));
   free(arr);
   return (EXIT_SUCCESS);
 }

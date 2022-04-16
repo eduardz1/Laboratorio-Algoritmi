@@ -1,7 +1,7 @@
 #pragma once
 #include "../../shared/common.h"
 
-#define MAX_HEIGHT 999 // max number of pointers possible in a _node
+#define MAX_HEIGHT 12 // ~ln(NUM_WORDS_ITALIAN_DICTIONARY)
 
 /**
  * @struct node of skip list
@@ -25,12 +25,16 @@ struct Node
  * @param head pointer to the first element of the list
  * @param comp function comparable relative to the type of the elements
  * @param max_level current max value of Node::level in the list
+ * @param elem_size size_t in bytes of #elem
+ * @param free function used to free #elem
  */
 struct SkipList
 {
   struct Node *head;
   int (*comp)(void*, void*);
   uint32_t max_level;
+  size_t elem_size;
+  void (*free)(void *)
 };
 
 /**
@@ -48,9 +52,8 @@ struct Node *create_node(void *elem, uint32_t level, size_t size);
  * 
  * @param list pointer to a list of generic elements
  * @param elem element to insert
- * @param size size_t of the element
  */
-void insert_skip_list(struct SkipList *list, void *elem, size_t size);
+void insert_skip_list(struct SkipList *list, void *elem);
 
 /**
  * @brief determines max number of pointer to include in a new Node
@@ -71,14 +74,21 @@ void *search_skip_list(struct SkipList *list, void *elem);
  * @brief initializes a new empty skip list
  *
  * @param comp pointer to the compare function desired for a type
- * @param type specifies the type by size
+ * @param free function used to free #elem
+ * @param elem_size specifies the type by size
  */
-struct SkipList *create_skip_list(int (*comp)(void*, void*));
+struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size);
 
 /**
  * @brief deallocates every element of a list
  *
  */
-void delete_skip_list(struct SkipList* list); // maybe serve anche passargli una size
+void delete_skip_list(struct SkipList* list);
 
+/**
+ * @brief prints skip list formatted vertically
+ *
+ *  output when redirected needs to be converted with "col -bxp <inputfile.txt >outputfile.txt"
+ *  to render carriage returns properly
+ */
 void print_skip_list(struct SkipList *list, enum Type type);

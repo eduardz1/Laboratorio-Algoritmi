@@ -15,3 +15,9 @@ void print_records(struct Record *array, int size)
   for (int i = 0; i < size; i++)
     printf("%d,%s,%d,%lf\n", array[i].id, array[i].field1, array[i].field2, array[i].field3);
 }
+
+void free_record(void *a) 
+{
+    struct Record *r1 = (struct Record *)a;
+    free_string(r1->field1);
+}

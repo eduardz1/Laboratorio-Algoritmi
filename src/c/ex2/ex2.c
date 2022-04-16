@@ -30,7 +30,7 @@ void load_dictionary(const char* file_name, struct SkipList *list)
     char *word = malloc(30); // esofagodermatodigiunoplastica is the longest word in the italian dictionary :p
     BZERO(word, 30);
     sscanf(buffer, "%s", word);
-    insert_skip_list(list, &word, sizeof(char*));
+    insert_skip_list(list, &word);
   }
   printf("\033[25m\0338\033[32mdone\033[0m\n");
   
@@ -72,7 +72,7 @@ int main(int argc, char const *argv[])
 
   srand(time(NULL));
 
-  struct SkipList *list = create_skip_list(compare_string);
+  struct SkipList *list = create_skip_list(compare_string, free_string, sizeof(char *));
   char *words_to_correct[256];
   load_dictionary(argv[1], list);
   load_array(argv[2], words_to_correct);

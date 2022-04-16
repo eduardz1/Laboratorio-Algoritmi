@@ -4,12 +4,12 @@
 
 // TODO: metodo di stampa sensato
 
-void insert_skip_list(struct SkipList *list, void *elem, size_t size)
+void insert_skip_list(struct SkipList *list, void *elem)
 {
 
   // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
   // inserimento come logica nell'insert
-  struct Node *new = create_node(elem, random_level(), size);
+  struct Node *new = create_node(elem, random_level(), list->elem_size);
   if(new->level > list->max_level) 
     list->max_level = new->level;
   
@@ -33,7 +33,7 @@ void insert_skip_list(struct SkipList *list, void *elem, size_t size)
   }
 }
 
-struct SkipList *create_skip_list(int (*comp)(void*, void*))
+struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
 {
   struct SkipList *new = malloc(sizeof(struct SkipList));
 
@@ -46,26 +46,68 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*))
   new->head->level = MAX_HEIGHT;
   new->head->elem = NULL;
 
+  new->free = free;
   new->comp = comp;
   new->max_level = 1;
+  new->elem_size = elem_size;
   return new;
 }
 
 // FIXME: Probably does not work, haven't tested it in any way shape or form, quite possibly nonsense
 void delete_skip_list(struct SkipList* list)
 {
-  return;
-  struct Node *tmp;
-  while(list->head->next[0] != NULL) 
-  { 
-    tmp = list->head->next[0];
 
-    for(int i = 0; i < list->head->level; i++)
-      free(list->head->next[i]);
+  struct Node *current;
+  while(list->head != NULL) {
+    current = list->head;
+    list->head = current->next[0];
 
-    free(list->head);
-    list->head = tmp;
+    if(current->elem != NULL && list->free != NULL) {
+      list->free(current->elem);
+    }
+    free(current->elem);
+    free(current->next);
+    free(current);
   }
+
+  free(list);
+  return;
+
+
+  // FIXME: non mi piace la ripetizione del codice, lvorare sul while per protare un unica condizione
+  // Dispose all items
+  struct Node *tmp = list->head->next[0];
+  while(tmp != NULL) 
+  { 
+    //tmp = list->head->next[0];
+
+    //for(int i = 0; i < list->head->level; i++) { // c'è un problema qui, sono abbastanza sicuro che facendo così 
+    // fai la free di tutti i next[i], vogliamo solo la free di next[0]
+      if (list->free)
+        list->free(tmp->elem);
+      free(tmp->elem);
+    //} prova ora
+  // ho capito dove ho sbagliato
+  
+
+  // non può funzionare così, facciamo free prima di passare al prossimo valor
+    free(tmp->next);
+    //free(list->head);
+    tmp = tmp->next[0];
+  }
+
+  // Dispose head
+  // for(int i = 0; i < list->head->level; i++) {
+    if (list->free)
+      list->free(list->head->next[0]);
+    // free(list->head->next[i]);
+  // }
+  free(list->head->next);
+  free(list->head);
+
+  // Dispose list
+  free(list);
+
 }
 
 void *search_skip_list(struct SkipList *list, void *elem)
@@ -97,13 +139,13 @@ uint32_t random_level() {
 
 struct Node *create_node(void *elem, uint32_t level, size_t size)
 {
+  // TODO: Check sulla disponibilità della memoria della malloc
   struct Node *new = malloc(sizeof(struct Node));
   new->elem = malloc(size);
   memcpy(new->elem, elem, size);
   new->level = level;
   new->next = malloc(sizeof(void*) * level);
   BZERO(new->next, sizeof(void*) * level);
-  new->size = size;
   return new;
 }
 

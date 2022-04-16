@@ -23,3 +23,10 @@ struct Record
 int compare_records(void *a,void *b);
 
 void print_records(struct Record *array, int size);
+
+/**
+ * @brief dispose record memory
+ * 
+ * @param a record to dispose
+ */
+void free_record(void *a);

@@ -94,3 +94,10 @@ int compare_string(void *a, void *b);
  * @return 1 if a or b are null, 0 otherwise 
  */
 int is_null(void *a, void *b, int *res);
+
+/**
+ * @brief dispose string memory
+ * 
+ * @param a char array (string) to dispose
+ */
+void free_string(void *a);
