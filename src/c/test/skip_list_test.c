@@ -18,26 +18,66 @@ void test_search_int_skip_list() {
   int dd = 7;
 
   struct Node * a = malloc(sizeof(struct Node));
+  if(a == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   a->elem= &aa;
   a->next=malloc(sizeof(struct Node) * 3);
+  if(a->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   a->level = 3;
   a->size = sizeof(int);
 
   struct Node * b = malloc(sizeof(struct Node));
+  if(b == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   b->elem= &bb;
   b->next=malloc(sizeof(struct Node));
+  if(b->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   b->level = 1;
   b->size = sizeof(int);
 
   struct Node * c = malloc(sizeof(struct Node));
+  if(c == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   c->elem= &cc;
   c->next=malloc(sizeof(struct Node) * 2);
+  if(c->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   c->level = 2;
   c->size = sizeof(int);
 
   struct Node * d = malloc(sizeof(struct Node));
+  if(d == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   d->elem= &dd;
   d->next=malloc(sizeof(struct Node) * 3);
+  if(d->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   d->level = 3;
   d->size = sizeof(int);
 
@@ -55,7 +95,17 @@ void test_search_int_skip_list() {
   d->next[0] = NULL;
 
   struct Node * dummy = malloc(sizeof(struct Node));
+  if(dummy == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   dummy->next = malloc(sizeof(struct Node *) * 3);
+  if(dummy->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   dummy->next[0] = a;
   dummy->next[1] = a;
   dummy->next[2] = a;
@@ -63,6 +113,11 @@ void test_search_int_skip_list() {
   dummy->level = 3;
 
   struct SkipList * list = malloc(sizeof(struct SkipList));
+  if(list == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   list->comp = compare_int;
   list->max_level = 3;
   list->head = dummy;
@@ -355,6 +410,11 @@ void test_leak() {
 
   struct SkipList *l = create_skip_list(compare_string, free_string, sizeof(char *));
   char * st = malloc(sizeof(char) * 30);
+  if(st == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
   for (size_t i = 0; i < 30; i++)
   {
     st[i] = 'a';

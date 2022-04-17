@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-Wall -ggdb3 -O0 -DUNITY_INCLUDE_DOUBLE #-DFALLBACK_BIS
+CFLAGS=-Wall -O2 -DUNITY_INCLUDE_DOUBLE -DFALLBACK_BIS #-ggdb3
 
 # Dependencies
 SHARED  := src/c/shared/*.c

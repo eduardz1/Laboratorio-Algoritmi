@@ -21,6 +21,11 @@ void load_array(const char* file_name, struct Record *array, int size)
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL && i < size; i++)
   {
     array[i].field1 = malloc(64);
+    if(array[i].field1 == NULL)
+    {
+      printf("Error allocating memory\n");
+      exit(EXIT_FAILURE);
+    }
     sscanf(buffer, "%d,%63[^,],%d,%lf", &array[i].id, array[i].field1, &array[i].field2, &array[i].field3);
   }
   printf("\033[25m\0338\033[32mdone\033[0m\n");
@@ -47,7 +52,12 @@ int main(int argc, char const *argv[])
   char input[10];
   scanf("%s", input);
   
-  struct Record *arr = malloc(sizeof(struct Record) * atoi(argv[2])); 
+  struct Record *arr = calloc(atoi(argv[2]), sizeof(struct Record));
+  if(arr == NULL && atoi(argv[2]) > 0)
+  {
+    printf("Error allocating memory\n");
+    exit(EXIT_FAILURE);
+  }
   load_array(argv[1], arr, atoi(argv[2]));
 
   #ifdef PRINT_RECORDS

@@ -92,10 +92,10 @@ void *search_skip_list(struct SkipList *list, void *elem)
 
 // TODO: spiegare il vatnaggio di questo algoritmo nella relazione (specificato
 // nei requisiti che il numero di puntatori deve essere determinato da questo algoritmo)
-uint32_t random_level() {
+uint32_t random_level()
+{
   int lvl = 1;
-  while(rand() % 2 && lvl < MAX_HEIGHT)
-    lvl++;
+  while(rand() % 2 && lvl < MAX_HEIGHT) lvl++;
   return lvl;
 }
 
@@ -105,7 +105,7 @@ struct Node *create_node(void *elem, uint32_t level, size_t size)
   if(new == NULL) return NULL;
 
   if(size == 0)
-  {
+  { 
     new->elem = NULL;
   }
   else
@@ -117,9 +117,8 @@ struct Node *create_node(void *elem, uint32_t level, size_t size)
 
   new->level = level;
 
-  new->next = malloc(sizeof(void*) * level);
+  new->next = calloc(level, sizeof(void*));
   if(new->next == NULL) return NULL;
-  BZERO(new->next, level * sizeof(void*));
   return new;
 }
 

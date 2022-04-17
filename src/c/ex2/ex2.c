@@ -23,13 +23,12 @@ void load_dictionary(const char* file_name, struct SkipList *list)
   
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL; i++)
   { 
-    char *word = malloc(LONGEST_WORD * sizeof(char));
-    if(word == NULL)
+    char *word = calloc(LONGEST_WORD, sizeof(char));
+    if(word == NULL && LONGEST_WORD > 0)
     {
       printf("Error allocating memory\n");
       exit(EXIT_FAILURE);
     }
-    BZERO(word, LONGEST_WORD * sizeof(char));
     sscanf(buffer, "%s", word);
     insert_skip_list(list, &word);
   }
@@ -53,13 +52,12 @@ int load_array(const char* file_name, char *arr[256])
   char c;
   int words = 0, chars = 0;
 
-  arr[words] = malloc(LONGEST_WORD * sizeof(char)); // first word needs to be manually alloc'd
-  if(arr[words] == NULL)
+  arr[words] = calloc(LONGEST_WORD, sizeof(char)); // first word needs to be manually alloc'd
+  if(arr[words] == NULL && LONGEST_WORD > 0)
   {
     printf("Error allocating memory\n");
     exit(EXIT_FAILURE);
   }
-  BZERO(arr[words], LONGEST_WORD * sizeof(char));
   while(((c = fgetc(fp)) != EOF) && words < MAX_WORDS)
   {
     if(c < 'A' || (c > 'Z' && c < 'a') || c > 'z')
@@ -68,13 +66,12 @@ int load_array(const char* file_name, char *arr[256])
 
       arr[words][chars] = '\0';
       chars = 0;
-      arr[++words] = malloc(LONGEST_WORD * sizeof(char));
-      if(arr[words] == NULL)
+      arr[++words] = calloc(LONGEST_WORD, sizeof(char));
+      if(arr[words] == NULL && LONGEST_WORD > 0)
       {
         printf("Error allocating memory\n");
         exit(EXIT_FAILURE);
       }
-      BZERO(arr[words], LONGEST_WORD * sizeof(char));
       ugly_flag = false;
     }
     else
@@ -113,11 +110,15 @@ int main(int argc, char const *argv[])
   load_dictionary(argv[1], list);
   int n_words = load_array(argv[2], words_to_correct);
 
+  printf("\n\033[1mMAX_HEIGHT\033[22m of skip list set to \033[1m%d\033[22m\n", MAX_HEIGHT);
+  clock_t start = clock();
   for(int i = 0; i <= n_words; i++)
   {
     if(search_skip_list(list, &words_to_correct[i]) == NULL)
       printf("\033[31mNot found:\033[0m %30s\n", words_to_correct[i]);
   }
+  clock_t end = clock();
+  printf("\033[1mTIME\033[22m: %f seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
 
   for(int i = 0; i <= n_words; i++) free(words_to_correct[i]);
   delete_skip_list(list);
