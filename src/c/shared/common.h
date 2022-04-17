@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)

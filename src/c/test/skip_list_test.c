@@ -366,7 +366,7 @@ void test_leak() {
 
 }
 
-/// Everything that is commented is broken, good luck @emme
+/// FIXME: Everything that is commented is broken, good luck
 int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
@@ -383,7 +383,7 @@ int main(int argc, char const *argv[])
   //RUN_TEST(test_search_int_skip_list);
   RUN_TEST(test_search_char_skip_list);
 
-  // RUN_TEST(test_leak);
+  RUN_TEST(test_leak);
   return UNITY_END();
 }
 
