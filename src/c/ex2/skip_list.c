@@ -2,8 +2,6 @@
 #include "../shared/record.h"
 #include <stdlib.h>
 
-// TODO: metodo di stampa sensato
-
 void insert_skip_list(struct SkipList *list, void *elem)
 {
 
@@ -41,21 +39,11 @@ void insert_skip_list(struct SkipList *list, void *elem)
 struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
 {
   struct SkipList *new = malloc(sizeof(struct SkipList));
-  if(new == NULL)
-    return NULL;
+  if(new == NULL) return NULL;
 
-  // following implementation does not convince me in the slightest, we can surely 
-  // initialize it with create_note somehow, the problems are all the various
-  // behaviours of the system function with NULL pointers as elements
-  new->head = malloc(sizeof(struct Node)); // sentinel
-  if(new->head == NULL)
-    return NULL;
-  new->head->next = malloc(sizeof(struct Node *) * MAX_HEIGHT);
-  if(new->head->next == NULL)
-    return NULL;
-  BZERO(new->head->next, MAX_HEIGHT * sizeof(struct Node *));
-  new->head->level = MAX_HEIGHT;
-  new->head->elem = NULL;
+  struct Node *sentinel = create_node(NULL, MAX_HEIGHT, 0);
+  if(sentinel == NULL) return NULL;
+  new->head = sentinel;
 
   new->free = free;
   new->comp = comp;
@@ -64,7 +52,6 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *
   return new;
 }
 
-// FIXME: Probably does not work, haven't tested it in any way shape or form, quite possibly nonsense
 void delete_skip_list(struct SkipList* list)
 {
   struct Node *curr = NULL;
@@ -83,43 +70,6 @@ void delete_skip_list(struct SkipList* list)
   }
 
   free(list);
-  return;
-
-
-  // FIXME: non mi piace la ripetizione del codice, lvorare sul while per protare un unica condizione
-  // Dispose all items
-  struct Node *tmp = list->head->next[0];
-  while(tmp != NULL) 
-  { 
-    //tmp = list->head->next[0];
-
-    //for(int i = 0; i < list->head->level; i++) { // c'è un problema qui, sono abbastanza sicuro che facendo così 
-    // fai la free di tutti i next[i], vogliamo solo la free di next[0]
-      if (list->free)
-        list->free(tmp->elem);
-      free(tmp->elem);
-    //} prova ora
-  // ho capito dove ho sbagliato
-  
-
-  // non può funzionare così, facciamo free prima di passare al prossimo valor
-    free(tmp->next);
-    //free(list->head);
-    tmp = tmp->next[0];
-  }
-
-  // Dispose head
-  // for(int i = 0; i < list->head->level; i++) {
-    if (list->free)
-      list->free(list->head->next[0]);
-    // free(list->head->next[i]);
-  // }
-  free(list->head->next);
-  free(list->head);
-
-  // Dispose list
-  free(list);
-
 }
 
 void *search_skip_list(struct SkipList *list, void *elem)
@@ -152,21 +102,24 @@ uint32_t random_level() {
 struct Node *create_node(void *elem, uint32_t level, size_t size)
 {
   struct Node *new = malloc(sizeof(struct Node));
-  if(new == NULL)
-    return NULL;
+  if(new == NULL) return NULL;
 
-  new->elem = malloc(size);
-  if(new->elem == NULL)
-    return NULL;
-  memcpy(new->elem, elem, size);
+  if(size == 0)
+  {
+    new->elem = NULL;
+  }
+  else
+  {
+    new->elem = malloc(size);
+    if(new->elem == NULL) return NULL;
+    memcpy(new->elem, elem, size);
+  }
 
   new->level = level;
 
   new->next = malloc(sizeof(void*) * level);
-  if(new->next == NULL)
-    return NULL;
-  for(int i = 0; i < level; i++)
-    new->next[i] = NULL;
+  if(new->next == NULL) return NULL;
+  BZERO(new->next, level * sizeof(void*));
   return new;
 }
 

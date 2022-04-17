@@ -4,8 +4,6 @@
 
 #define UNITY_OUTPUT_COLOR
 
-// TODO: Implement tests for search_skip_list()
-
 void setUp(void)
 {
   srand(time(NULL));
