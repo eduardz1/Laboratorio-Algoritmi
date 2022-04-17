@@ -175,34 +175,28 @@ struct Node *create_node(void *elem, uint32_t level, size_t size)
 // even when redirected, for now we can convert it with "col -bxp <inputfile.txt >outputfile.txt" (it takes a while)
 void print_skip_list(struct SkipList *list, enum Type type)
 {
-  printf("\n");
+  int i;
+
   struct Node *x = list->head;
-  printf("\n");
+  printf("\n\n");
   printf("-- HEAD (Sentinel) --\n\n");
-  for(int i = 0; i < list->max_level; i++)
-    printf("[LEVEL %03d] ", i);
+  for(int i = 0; i < list->max_level; i++) printf("[LEVEL %03d] ", i);
   printf("\n");
 
   x = list->head;
   do
   {
     x = x->next[0];
-    for(int i = 0; i < list->max_level; i++)
-      printf("     |      ");
-    printf("\n");
 
-    printf(" ");
-    for(int i = 0; i < x->level; i++)
-      printf("----V-------");
-    for(int i = x->level; i < list->max_level; i++)
-      printf("    |       ");
+    for(i = 0; i < list->max_level; i++) printf("     |      ");
+    printf("\n ");
+    for(i = 0; i < x->level; i++) printf("----V-------");
+    for(i = x->level; i < list->max_level; i++) printf("    |       ");
     printf("\n");
-    for(int i = 0; i < x->level; i++)
-      printf("            ");
+    for(i = 0; i < x->level; i++) printf("            "); // blank space for elem
     printf(" |");
-    for(int i = x->level; i < list->max_level; i++)
-      printf("   |        ");
-    switch(type)
+    for(i = x->level; i < list->max_level; i++) printf("   |        ");
+    switch(type) // elem written at the start with carriage return, would be nice to do it without it
     {
     case TYPE_CHAR:
       printf("\r| %c", *(char*)x->elem);
@@ -227,30 +221,19 @@ void print_skip_list(struct SkipList *list, enum Type type)
       break;
     }
 
-    printf("\n");
-    printf(" ");
-    for(int i = 0; i < x->level; i++)
-      printf("------------");
-    for(int i = x->level; i < list->max_level; i++)
-      printf("    |       ");
+    printf("\n ");
+    for(i = 0; i < x->level; i++) printf("------------");
+    for(i = x->level; i < list->max_level; i++) printf("    |       ");
     printf("\n");
        
   } while(x->next[0] != NULL);
 
-  for(int i = 0; i < list->max_level; i++)
-    printf("     |      ");
+  for(i = 0; i < list->max_level; i++) printf("     |      ");
+  printf("\n ");
+  for(i = 0; i < list->max_level; i++) printf("----V-------");
   printf("\n");
-  printf(" ");
-  for(int i = 0; i < list->max_level; i++)
-    printf("----V-------");
-  printf("\n");
-  for(int i = 0; i < list->max_level; i++)
-    printf("            ");
-  printf(" |");
-  printf("\r| NIL\n");
-  printf(" ");
-  for(int i = 0; i < list->max_level; i++)
-    printf("------------");
-  printf("\n");
-  printf("\n");
+  for(i = 0; i < list->max_level; i++) printf("            ");
+  printf(" |\r| NIL\n ");
+  for(i = 0; i < list->max_level; i++) printf("------------");
+  printf("\n\n");
 }
