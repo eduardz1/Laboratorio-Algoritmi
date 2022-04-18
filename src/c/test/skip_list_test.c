@@ -3,6 +3,7 @@
 #include "../shared/record.h"
 
 #define UNITY_OUTPUT_COLOR
+#define PRINT_LISTS true
 
 void setUp(void)
 {
@@ -153,6 +154,9 @@ void test_insert_char_skip_list()
   }
 
   TEST_ASSERT_EQUAL_INT8_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_CHAR);
+#endif
   delete_skip_list(l);
 }
 
@@ -178,6 +182,9 @@ void test_insert_int_skip_list()
   }
 
   TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_INT);
+#endif
   delete_skip_list(l);
 }
 
@@ -203,6 +210,9 @@ void test_insert_double_skip_list()
   }
 
   TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_DOUBLE);
+#endif
   delete_skip_list(l);
 }
 
@@ -228,6 +238,9 @@ void test_insert_long_skip_list()
   }
 
   TEST_ASSERT_EQUAL_INT64_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_LONG);
+#endif
   delete_skip_list(l);
 }
 
@@ -253,6 +266,9 @@ void test_insert_float_skip_list()
   }
 
   TEST_ASSERT_EQUAL_FLOAT_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_FLOAT);
+#endif
   delete_skip_list(l);
 }
 
@@ -294,6 +310,9 @@ void test_insert_string_skip_list()
 
   // Assert must be done before delete, as delete dispose values in #actual array
   TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_STRING);
+#endif
   delete_skip_list(l);
 }
 
@@ -344,6 +363,9 @@ void test_insert_record_skip_list()
     TEST_ASSERT_EQUAL_INT(expected[i].field2, actual[i].field2);
     TEST_ASSERT_EQUAL_FLOAT(expected[i].field3, actual[i].field3);
   }
+#if PRINT_LISTS
+  print_skip_list(l, TYPE_RECORD);
+#endif
   delete_skip_list(l);
 }
 #pragma endregion
@@ -363,7 +385,6 @@ void test_leak() {
   }
   insert_skip_list(l, &st);
   delete_skip_list(l);
-
 }
 
 /// FIXME: Everything that is commented is broken, good luck
