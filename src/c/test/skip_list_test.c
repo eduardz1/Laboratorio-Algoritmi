@@ -12,87 +12,21 @@ void setUp(void)
 
 #pragma region /// TEST #seach_skip_list()
 void test_search_int_skip_list() {
+  
   int aa = 1;
   int bb = 3;
   int cc = 5;
   int dd = 7;
 
-  struct Node * a = malloc(sizeof(struct Node));
-  if(a == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  a->elem= &aa;
-  a->next=malloc(sizeof(struct Node) * 3);
-  if(a->next == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  a->level = 3;
-  a->size = sizeof(int);
+  struct Node * a = create_node(&aa, 3, sizeof(int));
+  struct Node * b = create_node(&bb, 1, sizeof(int));
+  struct Node * c = create_node(&cc, 2, sizeof(int));
+  struct Node * d = create_node(&dd, 3, sizeof(int));
 
-  struct Node * b = malloc(sizeof(struct Node));
-  if(b == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  b->elem= &bb;
-  b->next=malloc(sizeof(struct Node));
-  if(b->next == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  b->level = 1;
-  b->size = sizeof(int);
-
-  struct Node * c = malloc(sizeof(struct Node));
-  if(c == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  c->elem= &cc;
-  c->next=malloc(sizeof(struct Node) * 2);
-  if(c->next == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  c->level = 2;
-  c->size = sizeof(int);
-
-  struct Node * d = malloc(sizeof(struct Node));
-  if(d == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  d->elem= &dd;
-  d->next=malloc(sizeof(struct Node) * 3);
-  if(d->next == NULL)
-  {
-    printf("Malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  d->level = 3;
-  d->size = sizeof(int);
-
-  a->next[2] = d;
-  a->next[1] = c;
-  a->next[0] = b;
-  
+  a->next[2] = d; a->next[1] = c; a->next[0] = b;
   b->next[0] = c;
-  
-  c->next[1] = d;
-  c->next[0] = d;
-
-  d->next[2] = NULL;
-  d->next[1] = NULL;
-  d->next[0] = NULL;
+  c->next[1] = d; c->next[0] = d;
+  d->next[2] = NULL; d->next[1] = NULL; d->next[0] = NULL;
 
   struct Node * dummy = malloc(sizeof(struct Node));
   if(dummy == NULL)
@@ -106,9 +40,7 @@ void test_search_int_skip_list() {
     printf("Malloc failed\n");
     exit(EXIT_FAILURE);
   }
-  dummy->next[0] = a;
-  dummy->next[1] = a;
-  dummy->next[2] = a;
+  dummy->next[0] = a; dummy->next[1] = a; dummy->next[2] = a;
   dummy->elem = NULL;
   dummy->level = 3;
 
@@ -119,11 +51,12 @@ void test_search_int_skip_list() {
     exit(EXIT_FAILURE);
   }
   list->comp = compare_int;
+  list->free = NULL;
   list->max_level = 3;
   list->head = dummy;
 
-  int blabla = 1;
-  TEST_ASSERT_EQUAL_INT(0, compare_int(&blabla, search_skip_list(list, &blabla)));
+  int to_find = 1;
+  TEST_ASSERT_EQUAL_INT(0, compare_int(&to_find, (int*)search_skip_list(list, &to_find)));
   delete_skip_list(list);
 }
 
@@ -141,7 +74,7 @@ void test_search_char_skip_list()
 
   char to_search[6] = { 'l', 'z', 'a', 'k', '0', 'x'};
 
-  print_skip_list(l, TYPE_CHAR);
+  // print_skip_list(l, TYPE_CHAR);
   TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 0), actual + 0));
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 1));
   TEST_ASSERT_EQUAL_INT(0, compare_char(search_skip_list(l, to_search + 2), actual + 2));
@@ -326,12 +259,20 @@ void test_insert_float_skip_list()
 void test_insert_string_skip_list()
 {
   struct SkipList *l = create_skip_list(compare_string, free_string, sizeof(char *));
-  char *a = "aaaa";
-  char *b = "sdsadaaaaaa";
-  char *c = "bbb.";
-  char *d = ",";
-  char *e = "away";
-  char *f = "4";
+
+  char *a = malloc(sizeof(char) * 5);
+  strcpy(a, "aaaa");
+  char *b = malloc(sizeof(char) * strlen("sdsadaaaaaa") + 1);
+  strcpy(b, "sdsadaaaaaa");
+  char *c = malloc(sizeof(char) * 5);
+  strcpy(c, "bbb.");
+  char *d = malloc(sizeof(char) * 2);
+  strcpy(d, ",");
+  char *e = malloc(sizeof(char) * 5);
+  strcpy(e, "away");
+  char *f = malloc(sizeof(char) * 2);
+  strcpy(f, "4");
+
   char *actual[6] = { a, b, c, d, e, f};
   
   insert_skip_list(l, &a);
@@ -341,9 +282,9 @@ void test_insert_string_skip_list()
   insert_skip_list(l, &e);
   insert_skip_list(l, &f);
 
-  char *expected[] = {",", "4", "aaaa", "away", "bbb.,", "sdsadaaaaaa"};
+  char *expected[] = {",", "4", "aaaa", "away", "bbb.", "sdsadaaaaaa"};
 
-  print_skip_list(l, TYPE_STRING);
+  // print_skip_list(l, TYPE_STRING);
   struct Node *tmp = l->head->next[0];
   for(int i = 0; tmp != NULL; tmp = tmp->next[0])
   {
@@ -351,8 +292,9 @@ void test_insert_string_skip_list()
     i++;
   }
 
-  delete_skip_list(l);
+  // Assert must be done before delete, as delete dispose values in #actual array
   TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, 6);
+  delete_skip_list(l);
 }
 
 void test_insert_record_skip_list()
@@ -435,13 +377,17 @@ int main(int argc, char const *argv[])
   RUN_TEST(test_insert_int_skip_list);
   RUN_TEST(test_insert_long_skip_list);
   RUN_TEST(test_insert_record_skip_list);
-  //RUN_TEST(test_insert_string_skip_list);
+  RUN_TEST(test_insert_string_skip_list);
 
   RUN_TEST(test_search_skip_list);
-  //RUN_TEST(test_search_int_skip_list);
+  RUN_TEST(test_search_int_skip_list);
   RUN_TEST(test_search_char_skip_list);
 
-  RUN_TEST(test_leak);
+  /*
+  / Test used to check memory leak. 
+  / No need to run it because without valgrind this test doesn't show nothing.
+  */
+  // RUN_TEST(test_leak);
   return UNITY_END();
 }
 

@@ -20,7 +20,9 @@ void load_dictionary(const char* file_name, struct SkipList *list)
 
   printf("Loading dictionary from file \033[1m%s\033[22m \0337\033[5m...\n", file_name);
   char buffer[128];
-  
+  int words_count = 0;
+
+  clock_t start_loading = clock();
   for (int i = 0; fgets(buffer, sizeof(buffer), fp) != NULL; i++)
   { 
     char *word = calloc(LONGEST_WORD, sizeof(char));
@@ -31,8 +33,12 @@ void load_dictionary(const char* file_name, struct SkipList *list)
     }
     sscanf(buffer, "%s", word);
     insert_skip_list(list, &word);
+    words_count++;
   }
+  clock_t end_loading = clock();
   printf("\033[25m\0338\033[32mdone\033[0m\n");
+  printf("\033[1mLOADING TIME\033[22m: %f seconds. Words inserted: %i\n", (double)(end_loading - start_loading) / CLOCKS_PER_SEC, words_count);
+
   
   fclose(fp);
 }
@@ -108,6 +114,7 @@ int main(int argc, char const *argv[])
 
   char *words_to_correct[MAX_WORDS] = {0};
   load_dictionary(argv[1], list);
+  
   int n_words = load_array(argv[2], words_to_correct);
 
   printf("\n\033[1mMAX_HEIGHT\033[22m of skip list set to \033[1m%d\033[22m\n", MAX_HEIGHT);
