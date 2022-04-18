@@ -4,9 +4,6 @@
 
 void insert_skip_list(struct SkipList *list, void *elem)
 {
-
-  // TODO: Da rivedere, non sono convinto che vogliamo mettere il caso base di primo
-  // inserimento come logica nell'insert
   struct Node *new = create_node(elem, random_level(), list->elem_size);
   if(new == NULL)
   {

@@ -387,7 +387,6 @@ void test_leak() {
   delete_skip_list(l);
 }
 
-/// FIXME: Everything that is commented is broken, good luck
 int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
