@@ -366,7 +366,6 @@ void test_leak() {
 
 }
 
-/// FIXME: Everything that is commented is broken, good luck
 int main(int argc, char const *argv[])
 {
   UNITY_BEGIN();
