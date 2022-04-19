@@ -3,7 +3,7 @@
 
 // TODO: implement a loading bar
 
-#define FALLBACK_CONST 1000
+#define FALLBACK_CONST 8
 
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum PivotSelector selector) 
 {
@@ -57,13 +57,13 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
   case LAST:   pivot = array + r * size; break;
   case MEDIAN3: default: 
     {
-      int a = RAND(p, r) * size;
-      int b = RAND(p, r) * size;
-      int c = RAND(p, r) * size;
-      if(comp(array + a, array + b) > 0)
-        pivot = comp(array + b, array + c) > 0 ? array + b : array + c;
+      int first  = p * size;
+      int middle = ((p + r) / 2) * size;
+      int last   = r * size;
+      if(comp(array + first, array + middle) > 0)
+        pivot = comp(array + middle, array + last) > 0 ? array + middle : array + last;
       else
-        pivot = comp(array + a, array + c) > 0 ? array + a : array + c;
+        pivot = comp(array + first, array + last) > 0 ? array + first : array + last;
     }
   }
   swap(pivot, array + r * size, size);

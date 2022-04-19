@@ -86,7 +86,8 @@ int main(int argc, char const *argv[])
     load_array(argv[1], arr, atoi(argv[2]));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
     
-    printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3 and LAST as pivot\n\n");
+    printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
+    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 

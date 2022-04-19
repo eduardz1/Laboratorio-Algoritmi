@@ -30,7 +30,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
 void quick_sort(void* v, size_t size, int left, int right, int (*comp)(void*, void*), enum PivotSelector selector);
 
 /**
- * @brief partions the array in the specified range [p, r] using r as pivot
+ * @brief [Lomuto] partions the array in the specified range [p, r] using r as pivot
  *  
  * @param array array of generic elements
  * @param size is the size of single element of the array

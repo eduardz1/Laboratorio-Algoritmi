@@ -1,7 +1,7 @@
 #pragma once
 #include "../../shared/common.h"
 
-#define MAX_HEIGHT 12 // ~ln(NUM_WORDS_ITALIAN_DICTIONARY)
+#define MAX_HEIGHT 13 // ~ln(NUM_WORDS=661561)
 
 /**
  * @struct node of skip list
