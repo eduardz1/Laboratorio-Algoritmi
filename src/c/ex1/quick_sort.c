@@ -51,25 +51,40 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
   void *pivot;
   switch(selector)
   {
-  case RANDOM: pivot = array + RAND(p, r) * size; break;
-  case FIRST:  pivot = array + p * size; break;
-  case MIDDLE: pivot = array + ((p + r) / 2) * size ; break;
-  case LAST:   pivot = array + r * size; break;
+  case RANDOM:
+    pivot = array + RAND(p, r) * size;
+    swap(pivot, array + r * size, size);
+    break;
+  case FIRST:
+    pivot = array + p * size;
+    swap(pivot, array + r * size, size);
+    break;
+  case MIDDLE:
+    pivot = array + (p + (r - p) / 2) * size;
+    swap(pivot, array + r * size, size);
+    break;
+  case LAST:
+    pivot = array + r * size;
+    swap(pivot, array + r * size, size);
+    break;
   case MEDIAN3: default: 
     {
       int first  = p * size;
-      int middle = ((p + r) / 2) * size;
+      int middle = (p + (r - p) / 2) * size;
       int last   = r * size;
-      if(comp(array + first, array + middle) > 0)
-        pivot = comp(array + middle, array + last) > 0 ? array + middle : array + last;
-      else
-        pivot = comp(array + first, array + last) > 0 ? array + first : array + last;
+      if(comp(array + middle, array + first) < 0)
+        swap(array + first, array + middle, size);
+      if(comp(array + last, array + first) < 0)
+        swap(array + first, array + last, size);
+      if(comp(array + middle, array + last) < 0)
+        swap(array + middle, array + last, size);
     }
   }
-  swap(pivot, array + r * size, size);
   return partition(array, size, p, r, comp);
 }
 
+// TODO: not really necessary but 3-way partition might improve performance and
+//       dual pivot might be faster
 int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
 {
   void *pivot = array + r * size;
