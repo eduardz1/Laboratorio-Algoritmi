@@ -15,7 +15,7 @@ struct Node
 {
   void *elem;
   struct Node **next;
-  uint32_t level;
+  uint8_t level;
   size_t size;
 };
 
@@ -32,7 +32,7 @@ struct SkipList
 {
   struct Node *head;
   int (*comp)(void*, void*);
-  uint32_t max_level;
+  uint8_t max_level;
   size_t elem_size;
   void (*free)(void *);
 };
