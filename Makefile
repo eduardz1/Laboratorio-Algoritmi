@@ -30,17 +30,18 @@ $(OBJ)/%.o : src/c/shared/%.c
 
 testall: testshd testqs testbis testsklist
 
-testshd: #$(OBJECTS) src/c/shared/*
+$(BIN)/testshd: #$(OBJECTS) src/c/shared/*
 	$(CC) $(CFLAGS) $(DBG) -o $(BIN)/testshd $(SHARED) $(UNITY) src/c/test/shared_test.c 
 
-testqs: #$(OBJECTS) $(QSORT) src/c/test/quick_sort_test.c
+$(BIN)/testqs: #$(OBJECTS) $(QSORT) src/c/test/quick_sort_test.c
 	$(CC) $(CFLAGS) $(DBG) -o $(BIN)/testqs  $(SHARED) $(UNITY) src/c/test/quick_sort_test.c src/c/ex1/quick_sort.c src/c/ex1/binary_insert_sort.c
 
-testbis: #$(OBJECTS) $(BINSORT) src/c/test/binary_insert_sort_test.c
+$(BIN)/testbis: #$(OBJECTS) $(BINSORT) src/c/test/binary_insert_sort_test.c
 	$(CC) $(CFLAGS) $(DBG) -o $(BIN)/testbis $(SHARED) $(UNITY) src/c/test/binary_insert_sort_test.c src/c/ex1/binary_insert_sort.c 
 
-testsklist: #$(OBJECTS) src/c/test/skip_list_test.c
+$(BIN)/testsklist: #$(OBJECTS) src/c/test/skip_list_test.c
 	$(CC) $(CFLAGS) $(DBG) -o $(BIN)/testsklist $(SHARED) $(UNITY) src/c/test/skip_list_test.c src/c/ex2/skip_list.c
 
+.PHONY: clean
 clean:
-	rm -f $(BINDIR)/* $(OBJDIR)/* *~
+	rm -f $(BIN)/* $(OBJ)/* *~
