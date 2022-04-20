@@ -18,6 +18,6 @@ void print_records(struct Record *array, int size)
 
 void free_record(void *a) 
 {
-    struct Record *r1 = (struct Record *)a;
-    free_string(r1->field1);
+  struct Record *r1 = (struct Record *)a;
+  free_string(r1->field1);
 }

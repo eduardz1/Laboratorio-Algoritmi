@@ -50,7 +50,7 @@ int main(int argc, char const *argv[])
 
   printf("Choose a sorting algorithm: [qsort]/[binssort] ");
   char input[10];
-  scanf("%s", input);
+  (void)!scanf("%s", input); // scanf is not really safe, I'm casting the return into the void, we can use a better function
   
   struct Record *arr = calloc(atoi(argv[2]), sizeof(struct Record));
   if(arr == NULL && atoi(argv[2]) > 0)

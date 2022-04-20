@@ -1,4 +1,5 @@
 #include "common.h"
+#include "comparable.h"
 
 int compare_int(void *a, void *b)
 {

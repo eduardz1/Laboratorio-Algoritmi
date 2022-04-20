@@ -1,5 +1,7 @@
 #pragma once
 #include "common.h"
+#include "comparable.h"
+#include "free.h"
 
 struct Record
 {
