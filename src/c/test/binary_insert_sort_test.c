@@ -2,6 +2,9 @@
 #include "../ex1/headers/binary_insert_sort.h"
 #include "../shared/record.h"
 
+void setUp(void) {}
+void tearDown(void) {}
+
 void test_null_array(void)
 {
   int *actual = NULL;

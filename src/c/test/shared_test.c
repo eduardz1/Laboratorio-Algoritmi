@@ -3,6 +3,9 @@
 #include "../shared/record.h"
 #include "../ex2/headers/skip_list.h"
 
+void setUp(void) {}
+void tearDown(void) {}
+
 void test_compare_int(void)
 {
   int member1, member2, result;

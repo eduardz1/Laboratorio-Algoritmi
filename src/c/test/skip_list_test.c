@@ -2,14 +2,14 @@
 #include "../ex2/headers/skip_list.h"
 #include "../shared/record.h"
 
-#define UNITY_OUTPUT_COLOR
-#define PRINT_LISTS true
+#define PRINT_LISTS false
 
 void setUp(void)
 {
   srand(time(NULL));
-
 }
+
+void tearDown(void) {}
 
 #pragma region /// TEST #seach_skip_list()
 void test_search_int_skip_list() {
