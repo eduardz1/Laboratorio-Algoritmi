@@ -387,7 +387,7 @@ void test_leak() {
   delete_skip_list(l);
 }
 
-int main(int argc, char const *argv[])
+int main(void)
 {
   UNITY_BEGIN();
 

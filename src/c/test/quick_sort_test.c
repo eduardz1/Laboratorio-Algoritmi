@@ -121,7 +121,7 @@ void test_records_array(void)
   }
 }
 
-int main(int argc, char const *argv[])
+int main(void)
 {
   UNITY_BEGIN();
 

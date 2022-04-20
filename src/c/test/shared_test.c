@@ -205,7 +205,7 @@ void test_compare_elem_in_node(void) {
   TEST_ASSERT_TRUE(!compare_int(a->elem, b->elem));
 }
 
-int main(int argc, char const *argv[])
+int main(void)
 {
   UNITY_BEGIN();
 
