@@ -89,12 +89,17 @@ int main(int argc, char const *argv[])
         time[i] = (double)(end-start)/CLOCKS_PER_SEC;
       };
 
-      char * buf = malloc(100);
+      char * buf = calloc(100, sizeof(char));
+      if(buf == NULL)
+      {
+        printf("Error allocating memory\n");
+        exit(EXIT_FAILURE);
+      }
       for (int i = 0; i < 5; i++)
         sprintf(buf,"%s%f%s",buf,time[i], i == 4 ? "" : ";");
 
       // Write log
-      fprintf(fp, buf);
+      fprintf(fp, "%s", buf);
       fprintf(fp, "\n");
       free(buf);
     }
@@ -119,11 +124,16 @@ int main(int argc, char const *argv[])
       dispose_string_in_array(arr, atoi(argv[2]));
       time = (double)(end-start)/CLOCKS_PER_SEC;
 
-      char * buf = malloc(30);
-        sprintf(buf,"%f",time);
+      char * buf = calloc(30, sizeof(char));
+      if(buf == NULL)
+      {
+        printf("Error allocating memory\n");
+        exit(EXIT_FAILURE);
+      }
+      sprintf(buf,"%f",time);
 
       // Write log
-      fprintf(fp, buf);
+      fprintf(fp, "%s", buf);
       fprintf(fp, "\n");
       free(buf);
     }
