@@ -7,6 +7,7 @@ override CFLAGS := -Wall -Ofast -DUNITY_INCLUDE_DOUBLE -DFALLBACK_BIS \
 BIN := bin
 SRC := src
 OBJ := obj
+$(info $(shell mkdir -p $(BIN) $(OBJ)))
 
 # Shared library ---------------------------------------------------------------
 
@@ -51,6 +52,8 @@ EX2_OBJS := $(patsubst $(EX2)/%.c, $(OBJ)/%.o, $(EX2_SRCS))
 EX2_HDRS := $(wildcard $(EX2)/headers/*.h)
 
 # Targets ----------------------------------------------------------------------
+
+.PHONY: clean main_ex1 main_ex2 testall testbis testqs testshd testskl
 
 main_ex1: $(BIN)/main_ex1
 $(BIN)/main_ex1: $(EX1_OBJS) $(SHD_OBJS)
@@ -97,6 +100,5 @@ $(OBJ)/%.o : $(TST)/%.c $(TST_HDRS)
 $(OBJ)/%.o : $(UNITY)/%.c $(UNITY_HDRS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean
 clean:
-	@rm -f $(BIN)/* $(OBJ)/* *~
+	@rm -f -r $(BIN) $(OBJ) *~
