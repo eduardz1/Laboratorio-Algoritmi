@@ -58,7 +58,6 @@ int main(int argc, char const *argv[])
     printf("Error allocating memory\n");
     exit(EXIT_FAILURE);
   }
-  load_array(argv[1], arr, atoi(argv[2]));
 
   #ifdef PRINT_RECORDS
     printf("\nUnsorted records:\n");
@@ -68,32 +67,68 @@ int main(int argc, char const *argv[])
 
   if(strcmp(input, "qsort") == 0) 
   {
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MEDIAN3));
+    double time[5] = {};
+    enum PivotSelector enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
 
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
-
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
+    FILE *fp = fopen("time_log_qsort.csv", "a+");
     
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
+    // Check fis file is empty
+    int c = fgetc(fp);
+    if (c == EOF)
+      fprintf(fp, "MEDIAN3; RANDOM; FIRST; MIDDLE; LAST\n");
 
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
-    
-    printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
+    for (size_t i = 0; i < NUMBER_OF_TEST_TO_DO; i++)
+    {
+      for (int i = 0; i < 5; i++)
+      {
+        load_array(argv[1], arr, atoi(argv[2]));
+        clock_t start = clock();
+        quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, enums[i]);
+        clock_t end = clock();
+        dispose_string_in_array(arr, atoi(argv[2]));
+        time[i] = (double)(end-start)/CLOCKS_PER_SEC;
+      };
+
+      char * buf = malloc(100);
+      for (int i = 0; i < 5; i++)
+        sprintf(buf,"%s%f%s",buf,time[i], i == 4 ? "" : ";");
+
+      // Write log
+      fprintf(fp, buf);
+      fprintf(fp, "\n");
+      free(buf);
+    }
+
+    fclose(fp);
+    // printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
+    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
+    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
+    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
-    TIMING(binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records));
+
+    FILE *fp = fopen("time_log_insertsort.csv", "a+");
+    
+    double time;
+    for (size_t i = 0; i < NUMBER_OF_TEST_TO_DO; i++) {
+      load_array(argv[1], arr, atoi(argv[2]));
+      clock_t start = clock();
+      binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records);
+      clock_t end = clock();
+      dispose_string_in_array(arr, atoi(argv[2]));
+      time = (double)(end-start)/CLOCKS_PER_SEC;
+
+      char * buf = malloc(30);
+        sprintf(buf,"%f",time);
+
+      // Write log
+      fprintf(fp, buf);
+      fprintf(fp, "\n");
+      free(buf);
+    }
+
+
   } 
   else 
   {
@@ -106,7 +141,7 @@ int main(int argc, char const *argv[])
     print_records(arr, atoi(argv[2]));
   #endif
 
-  dispose_string_in_array(arr, atoi(argv[2]));
+  // dispose_string_in_array(arr, atoi(argv[2]));
   free(arr);
   return (EXIT_SUCCESS);
 }
