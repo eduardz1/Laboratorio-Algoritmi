@@ -2,6 +2,7 @@
 #include "../../shared/common.h"
 
 #define MAX_HEIGHT 19 // ~log_2(NUM_WORDS=661561)
+extern int dynamic_max_height;
 
 /**
  * @struct node of skip list

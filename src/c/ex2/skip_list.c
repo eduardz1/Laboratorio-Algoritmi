@@ -35,10 +35,11 @@ void insert_skip_list(struct SkipList *list, void *elem)
 
 struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
 {
+  printf("%d", dynamic_max_height);
   struct SkipList *new = malloc(sizeof(struct SkipList));
   if(new == NULL) return NULL;
 
-  struct Node *sentinel = create_node(NULL, MAX_HEIGHT, 0);
+  struct Node *sentinel = create_node(NULL, dynamic_max_height, 0);
   if(sentinel == NULL) return NULL;
   new->head = sentinel;
 
@@ -92,7 +93,7 @@ void *search_skip_list(struct SkipList *list, void *elem)
 uint32_t random_level()
 {
   int lvl = 1;
-  while(rand() % 2 && lvl < MAX_HEIGHT) lvl++;
+  while(rand() % 2 && lvl < dynamic_max_height) lvl++;
   return lvl;
 }
 

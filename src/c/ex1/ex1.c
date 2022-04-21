@@ -89,6 +89,7 @@ int main(int argc, char const *argv[])
         time[i] = (double)(end-start)/CLOCKS_PER_SEC;
       };
 
+      // Prepare log
       char * buf = calloc(100, sizeof(char));
       if(buf == NULL)
       {
@@ -102,6 +103,8 @@ int main(int argc, char const *argv[])
       fprintf(fp, "%s", buf);
       fprintf(fp, "\n");
       free(buf);
+      fflush(fp);
+
     }
 
     fclose(fp);
@@ -124,6 +127,7 @@ int main(int argc, char const *argv[])
       dispose_string_in_array(arr, atoi(argv[2]));
       time = (double)(end-start)/CLOCKS_PER_SEC;
 
+      // Prepare log
       char * buf = calloc(30, sizeof(char));
       if(buf == NULL)
       {
@@ -136,6 +140,8 @@ int main(int argc, char const *argv[])
       fprintf(fp, "%s", buf);
       fprintf(fp, "\n");
       free(buf);
+      fflush(fp);
+  
     }
 
 
