@@ -33,7 +33,29 @@ void load_array(const char* file_name, struct Record *array, int size)
   fclose(fp);
 }
 
-void dispose_string_in_array(struct Record * a, int length) {
+static void shuffle(void *array, size_t n, size_t size) 
+{
+  char tmp[size];
+  char *arr = array;
+  size_t stride = size * sizeof(char);
+
+  if (n > 1)
+  {
+    size_t i;
+    for (i = 0; i < n - 1; ++i)
+    {
+      size_t rnd = (size_t) rand();
+      size_t j = i + rnd / (RAND_MAX / (n - i) + 1);
+
+      memcpy(tmp, arr + j * stride, size);
+      memcpy(arr + j * stride, arr + i * stride, size);
+      memcpy(arr + i * stride, tmp, size);
+    }
+  }
+}
+
+void dispose_string_in_array(struct Record * a, int length) 
+{
   for(int i = 0; i < length; i++)
       free(a[i].field1);
 }
@@ -67,7 +89,7 @@ int main(int argc, char const *argv[])
 
   if(strcmp(input, "qsort") == 0) 
   {
-    double time[5] = {};
+    double time_sort[5] = {};
     enum PivotSelector enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
 
     FILE *fp = fopen("time_log_qsort.csv", "a+");
@@ -77,18 +99,18 @@ int main(int argc, char const *argv[])
     if (c == EOF)
       fprintf(fp, "MEDIAN3; RANDOM; FIRST; MIDDLE; LAST\n");
 
-    for (size_t i = 0; i < NUMBER_OF_TEST_TO_DO; i++)
+    load_array(argv[1], arr, atoi(argv[2]));
+    for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO/5); i++)
     {
+      srand(time(NULL));
       for (int i = 0; i < 5; i++)
       {
-        load_array(argv[1], arr, atoi(argv[2]));
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         clock_t start = clock();
         quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, enums[i]);
         clock_t end = clock();
-        dispose_string_in_array(arr, atoi(argv[2]));
-        time[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
       };
-
       // Prepare log
       char * buf = calloc(100, sizeof(char));
       if(buf == NULL)
@@ -97,16 +119,16 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
       }
       for (int i = 0; i < 5; i++)
-        sprintf(buf,"%s%f%s",buf,time[i], i == 4 ? "" : ";");
+        sprintf(buf,"%s%f%s",buf,time_sort[i], i == 4 ? "" : ";");
 
       // Write log
       fprintf(fp, "%s", buf);
       fprintf(fp, "\n");
       free(buf);
       fflush(fp);
-
     }
 
+    dispose_string_in_array(arr, atoi(argv[2]));
     fclose(fp);
     // printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
     // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
