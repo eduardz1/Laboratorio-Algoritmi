@@ -11,4 +11,10 @@ prof
 **/bin
 **/obj
 **/es2_dataset
-laboratorio-algoritmi-2021-2022.iml
+*.iml
+
+# R
+.Rproj.user
+*.Rproj
+.RData
+.Rhistory
