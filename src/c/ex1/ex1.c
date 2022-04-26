@@ -60,6 +60,23 @@ void dispose_string_in_array(struct Record * a, int length)
       free(a[i].field1);
 }
 
+void checksum(struct Record * a, int length) {
+  bool flag = true;
+  for(int i = 0; i < length - 1; i++)
+  {
+    if(compare_records(&a[i], &a[i+1]) >= 0)
+    {
+      flag = false;
+      break;
+    }
+  }
+
+  if(flag)
+    printf("\033[1m\033[32mchecksum passed\033[0m\n");
+  else
+    printf("\033[1m\033[31mchecksum failed\033[0m\n");
+}
+
 int main(int argc, char const *argv[])
 {
   if(argc < 3) 
@@ -80,12 +97,6 @@ int main(int argc, char const *argv[])
     printf("Error allocating memory\n");
     exit(EXIT_FAILURE);
   }
-
-  #ifdef PRINT_RECORDS
-    printf("\nUnsorted records:\n");
-    print_records(arr, atoi(argv[2]));
-    printf("\n");
-  #endif
 
   if(strcmp(input, "qsort") == 0) 
   {
@@ -163,10 +174,7 @@ int main(int argc, char const *argv[])
       fprintf(fp, "\n");
       free(buf);
       fflush(fp);
-  
     }
-
-
   } 
   else 
   {
@@ -174,12 +182,7 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
-  #ifdef PRINT_RECORDS
-    printf("\nSorted records:\n");
-    print_records(arr, atoi(argv[2]));
-  #endif
-
-  // dispose_string_in_array(arr, atoi(argv[2]));
+  dispose_string_in_array(arr, atoi(argv[2]));
   free(arr);
   return (EXIT_SUCCESS);
 }
