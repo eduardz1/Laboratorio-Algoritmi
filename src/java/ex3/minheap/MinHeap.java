@@ -110,7 +110,7 @@ public class MinHeap<T> {
   }
 
   /**
-   * preservesthe min-heap property
+   * preserves the min-heap property
    * 
    * @param i current node index
    */

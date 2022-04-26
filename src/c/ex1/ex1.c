@@ -38,6 +38,23 @@ void dispose_string_in_array(struct Record * a, int length) {
       free(a[i].field1);
 }
 
+void checksum(struct Record * a, int length) {
+  bool flag = true;
+  for(int i = 0; i < length - 1; i++)
+  {
+    if(compare_records(&a[i], &a[i+1]) >= 0)
+    {
+      flag = false;
+      break;
+    }
+  }
+
+  if(flag)
+    printf("\033[1m\033[32mchecksum passed\033[0m\n");
+  else
+    printf("\033[1m\033[31mchecksum failed\033[0m\n");
+}
+
 int main(int argc, char const *argv[])
 {
   if(argc < 3) 
@@ -60,36 +77,12 @@ int main(int argc, char const *argv[])
   }
   load_array(argv[1], arr, atoi(argv[2]));
 
-  #ifdef PRINT_RECORDS
-    printf("\nUnsorted records:\n");
-    print_records(arr, atoi(argv[2]));
-    printf("\n");
-  #endif
-
   if(strcmp(input, "qsort") == 0) 
   {
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MEDIAN3));
+    printf("\nChoose pivot strategy: \n0: [random]\n1: [first]\n2: [middle]\n3: [last]\n4: [median of three]\n");
+    (void)!scanf("%s", input); // if input is different form 0/1/2/3/4 the number cycle anyway
 
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, RANDOM));
-
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, FIRST));
-    
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, MIDDLE));
-
-    dispose_string_in_array(arr, atoi(argv[2]));
-    load_array(argv[1], arr, atoi(argv[2]));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, LAST));
-    
-    printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
+    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, atoi(input)));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
@@ -101,10 +94,24 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
-  #ifdef PRINT_RECORDS
-    printf("\nSorted records:\n");
-    print_records(arr, atoi(argv[2]));
-  #endif
+  checksum(arr, atoi(argv[2]));
+  printf("\nSave sorted array to file \033[1msorted.csv\033[22m? [Y/n] ");
+  (void)!scanf("%s", input);
+  if(strcmp(input, "n") != 0)
+  {
+    FILE *fp = fopen("sorted.csv", "w");
+    if(fp == NULL)
+    {
+      printf("Error opening file\n");
+      exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < atoi(argv[2]); i++)
+    {
+      fprintf(fp, "%d,%s,%d,%lf\n", arr[i].id, arr[i].field1, arr[i].field2, arr[i].field3);
+    }
+    fclose(fp);
+  }
 
   dispose_string_in_array(arr, atoi(argv[2]));
   free(arr);

@@ -5,6 +5,7 @@
 
 #define FALLBACK_CONST 8
 
+// TODO: add assertion to methods to check for example that array is not null, size is greater than 0 ecc...
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum PivotSelector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
