@@ -81,7 +81,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
         swap(array + middle, array + last, size);
     }
   }
-  return partition(array, size, p, r, comp);
+  return partition2(array, size, p, r, comp);
 }
 
 // TODO: not really necessary but 3-way partition might improve performance and
@@ -99,11 +99,49 @@ int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *
    */
   for (int j = p; j < r; j++)
   {
-    if (comp(array + j * size, pivot) <= 0)
+    if (comp(array + j * size, pivot) < 0)
     {
-      i = i + 1;
+      i++;
       swap(array + i * size, array + j * size, size);
     }
+  }
+  swap(array + (i + 1) * size, array + r * size, size);
+  return i + 1;
+}
+
+int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+{
+  void *pivot = array + r * size;
+  int i = p - 1;
+  
+  char tmp[size];
+  for (int j = p; j < r; j++)
+  {
+    memcpy(tmp, array + j * size, size);/*
+    if (comp(array + j * size, pivot) < 0)
+    {
+      i += 1;
+      memcpy(array + j * size, array + i * size, size);
+      memcpy(array + i * size, tmp, size);
+    }
+    else
+    {
+      i += 0;
+      memcpy(array + j * size, tmp, size);
+      memcpy(array + i * size, array + i * size, size);
+    }*/
+
+    int cond = -(int)(comp(tmp, pivot) < 0); // if true -> s == 0xFFFFFFFF, if false -> s == 0x00000000
+    int delta = cond & (j - i);
+    printf("cond: %x\n", cond);
+
+    j -= cond; // increment when cond true
+    memcpy(array + (j + delta) * size, array + j * size, size);
+    memcpy(array + (i - delta) * size, tmp, size);
+    /*
+    bool r = (comp(array + j * size, pivot) < 0);
+    swap(array + j * size, array + (i) * size, size);
+    i += r;*/
   }
   swap(array + (i + 1) * size, array + r * size, size);
   return i + 1;

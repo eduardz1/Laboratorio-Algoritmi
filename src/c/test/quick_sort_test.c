@@ -127,15 +127,15 @@ int main(void)
 
   RUN_TEST(test_null_array);
   RUN_TEST(test_int_array);
-  RUN_TEST(test_string_array);
-  RUN_TEST(test_float_array);
-  RUN_TEST(test_char_array);
-  RUN_TEST(test_double_array);
-  RUN_TEST(test_long_array);
-  RUN_TEST(test_array_with_only_duplicated_elements);
-  RUN_TEST(test_already_sorted_array);
-  RUN_TEST(test_negative_int_array);
-  RUN_TEST(test_records_array);
+  // RUN_TEST(test_string_array);
+  // RUN_TEST(test_float_array);
+  // RUN_TEST(test_char_array);
+  // RUN_TEST(test_double_array);
+  // RUN_TEST(test_long_array);
+  // RUN_TEST(test_array_with_only_duplicated_elements);
+  // RUN_TEST(test_already_sorted_array);
+  // RUN_TEST(test_negative_int_array);
+  // RUN_TEST(test_records_array);
 
   return UNITY_END();
 }

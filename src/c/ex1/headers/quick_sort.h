@@ -3,6 +3,7 @@
 #include "../../shared/common.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 enum PivotSelector {
   RANDOM,
@@ -45,3 +46,6 @@ int partition(void* array, size_t size, int p, int r, int (*comp)(void*, void*))
  * 
  */
 void swap(void* i, void*j, size_t size);
+
+
+int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
