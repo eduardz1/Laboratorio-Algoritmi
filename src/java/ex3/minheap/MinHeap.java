@@ -2,7 +2,6 @@ package minheap;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.lang.Math;
 import java.util.Collections;
 
 /**
@@ -26,7 +25,7 @@ public class MinHeap<T> {
   public MinHeap(Comparator<? super T> comparator) throws MinHeapException {
     if (comparator == null)
       throw new MinHeapException("MinHeap Constructor:" + " parameter comparator cannot be null");
-    this.heap = new ArrayList();
+    this.heap = new ArrayList<T>();
     this.comparator = comparator;
   }
 
@@ -107,6 +106,7 @@ public class MinHeap<T> {
     T res = this.heap.get(0);
     this.heap.add(0, this.heap.remove(this.heap.size() - 1));
     this.minHeapify(0);
+    return res;
   }
 
   /**
