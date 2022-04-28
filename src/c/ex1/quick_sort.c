@@ -1,5 +1,6 @@
 #include "headers/quick_sort.h"
 #include "headers/binary_insert_sort.h"
+#include "headers/insert_sort.h"
 
 // TODO: implement a loading bar
 
@@ -31,7 +32,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*
       if(q - p > FALLBACK_CONST)
         quick_sort(array, size, p, q - 1, comp, selector);
       else
-        binary_insert_sort(array + p * size, size, q - p, comp);
+        insert_sort(array + p * size, size, q - p, comp);
       p = q + 1;
     }
     else
@@ -39,7 +40,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*
       if(r - q > FALLBACK_CONST)
         quick_sort(array, size, q + 1, r, comp, selector);
       else
-        binary_insert_sort(array + (q + 1) * size, size, r - q, comp);
+        insert_sort(array + (q + 1) * size, size, r - q, comp);
       r = q - 1;
     }
   }
