@@ -26,7 +26,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*
   // depth in the worst case to log(n)
   while (p < r)
   {
-    int q = _part(array, size, p, r, comp, selector);
+    int q = _part2(array, size, p, r, comp, selector);
     if(q - p < r - q)
     {
       if(q - p > FALLBACK_CONST)
@@ -44,6 +44,20 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*
       r = q - 1;
     }
   }
+}
+
+int _part2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
+{
+  int first  = p * size;
+  int middle = (p + (r - p) / 2) * size;
+  int last   = r * size;
+  if(comp(array + middle, array + first) < 0)
+    SWAP(array + first, array + middle, size);
+  if(comp(array + last, array + first) < 0)
+    SWAP(array + first, array + last, size);
+  if(comp(array + middle, array + last) < 0)
+    SWAP(array + middle, array + last, size);
+  return partition(array, size, p, r, comp);
 }
 
 int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
@@ -80,7 +94,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, cons
         swap(array + middle, array + last, size);
     }
   }
-  return partition(array, size, p, r, comp);
+  return partition5(array, size, p, r, comp);
 }
 
 int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
@@ -107,7 +121,6 @@ int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *,
 //       dual pivot might be faster
 int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
-  void *pivot = array + r * size;
   int i = p - 1;
 
   /**
@@ -118,7 +131,7 @@ int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, 
    */
   for (int j = p; j <= r; j++)
   {
-    if (comp(array + j * size, pivot) <= 0)
+    if (comp(array + j * size, array + r * size) <= 0)
     {
       i++;
       SWAP(array + i * size, array + j * size, size);

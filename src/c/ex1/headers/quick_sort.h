@@ -17,6 +17,7 @@ enum PivotSelector {
  * @brief Allows selection of pivot for #partition()
  */
 int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
+int _part2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
 
 /**
  * @brief quick sort of generic array
