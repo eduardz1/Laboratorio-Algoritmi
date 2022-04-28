@@ -2,7 +2,7 @@
 
 // TODO: implement a loading bar
 
-void binary_insert_sort(void* array, size_t size, int length, int (*comp)(void*, void*))
+void binary_insert_sort(void* array, size_t size, int length, int (*comp)(const void*, const void*))
 {
   for(int j=1; j<length; ++j)
   {
@@ -16,7 +16,7 @@ void binary_insert_sort(void* array, size_t size, int length, int (*comp)(void*,
   }
 }
 
-int binary_search(void* array, size_t size, int left, int right, int (*comp)(void*, void*), void* key)
+int binary_search(void* array, size_t size, int left, int right, int (*comp)(const void*, const void*), void* key)
 {
   while(left <= right)
   {

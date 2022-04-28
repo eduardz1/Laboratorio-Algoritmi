@@ -1,6 +1,6 @@
 #include "record.h"
 
-int compare_records(void *a,void*b)
+int compare_records(const void *a, const void*b)
 {
   struct Record *r1 = (struct Record *)a;
   struct Record *r2 = (struct Record *)b;

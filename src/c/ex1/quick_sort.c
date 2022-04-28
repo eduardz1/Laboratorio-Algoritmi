@@ -4,9 +4,21 @@
 // TODO: implement a loading bar
 
 #define FALLBACK_CONST 8
+#define SWAP(a, b, size)                                                      \
+  do                                                                              \
+    {                                                                              \
+      size_t __size = (size);                                                      \
+      char *__a = (a), *__b = (b);                                              \
+      do                                                                      \
+        {                                                                      \
+          char __tmp = *__a;                                                      \
+          *__a++ = *__b;                                                      \
+          *__b++ = __tmp;                                                      \
+        } while (--__size > 0);                                                      \
+    } while (0)
 
 // TODO: add assertion to methods to check for example that array is not null, size is greater than 0 ecc...
-void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum PivotSelector selector) 
+void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*, const void*), enum PivotSelector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
   // function recursively only on the smaller sub-array reduces the call stack
@@ -33,7 +45,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void
   }
 }
 
-int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum PivotSelector selector)
+int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
 {
   void *pivot;
   switch(selector)
@@ -67,10 +79,10 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
         swap(array + middle, array + last, size);
     }
   }
-  return partition5(array, size, p, r, comp);
+  return partition(array, size, p, r, comp);
 }
 
-int partition5(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
   void *pivot = array + (r) * size;
   while(p <= r)
@@ -81,18 +93,18 @@ int partition5(void *array, size_t size, int p, int r, int (*comp)(void *, void 
       r--;
     if(p <= r)
     {
-      swap(array + p * size, array + r * size, size);
+      SWAP(array + p * size, array + r * size, size);
       p++;
       r--;
     }
   }
-  swap(array + p * size, pivot, size);
+  SWAP(array + p * size, pivot, size);
   return p;
 }
 
 // TODO: not really necessary but 3-way partition might improve performance and
 //       dual pivot might be faster
-int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
   void *pivot = array + r * size;
   int i = p - 1;
@@ -108,7 +120,7 @@ int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *
     if (comp(array + j * size, pivot) <= 0)
     {
       i++;
-      swap(array + i * size, array + j * size, size);
+      SWAP(array + i * size, array + j * size, size);
     }
   }
   return i;

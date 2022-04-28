@@ -83,6 +83,7 @@ int main(int argc, char const *argv[])
     (void)!scanf("%s", input); // if input is different form 0/1/2/3/4 the number cycle anyway
 
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, atoi(input)));
+    // TIMING(qsort(arr, atoi(argv[2]), sizeof(arr[0]), compare_records));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {

@@ -22,7 +22,7 @@ struct Record
  * @return -1 if a<b, 0 if a=b, 1 if a>b
  * 
  */
-int compare_records(void *a,void *b);
+int compare_records(const void *a, const void *b);
 
 void print_records(struct Record *array, int size);
 
