@@ -42,7 +42,7 @@ void checksum(struct Record * a, int length) {
   bool flag = true;
   for(int i = 0; i < length - 1; i++)
   {
-    if(compare_records(&a[i], &a[i+1]) >= 0)
+    if(compare_records(&a[i], &a[i+1]) > 0)
     {
       flag = false;
       break;

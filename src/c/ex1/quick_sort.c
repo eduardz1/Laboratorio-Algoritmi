@@ -67,21 +67,26 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
         swap(array + middle, array + last, size);
     }
   }
-  return partition(array, size, p, r, comp);
+  return partition5(array, size, p, r, comp);
 }
 
-int partition4(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+int partition5(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
 {
-  void *pivot = array + (p + r) * size;
-  while(p < r)
+  void *pivot = array + (r) * size;
+  while(p <= r)
   {
     while(comp(array + p * size, pivot) < 0)
       p++;
     while(comp(array + r * size, pivot) > 0)
       r--;
-    if(p < r)
+    if(p <= r)
+    {
       swap(array + p * size, array + r * size, size);
+      p++;
+      r--;
+    }
   }
+  swap(array + p * size, pivot, size);
   return p;
 }
 
@@ -162,7 +167,7 @@ int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void 
   return i - 1;
 }
 
-__attribute__((always_inline)) inline void swap(void *i, void *j, size_t size)
+inline void swap(void *i, void *j, size_t size)
 {
   char tmp[size];
   memmove(tmp, i, size);
@@ -170,8 +175,8 @@ __attribute__((always_inline)) inline void swap(void *i, void *j, size_t size)
   memmove(j, tmp, size);
 }
 
-/*fail
-bool swap_cond(bool cond, void *i, void *j, size_t size)
+//fail
+inline bool swap_cond(bool cond, void *i, void *j, size_t size)
 {
   char tmp[2][size];
   memcpy(tmp[cond], i, size);
@@ -181,10 +186,10 @@ bool swap_cond(bool cond, void *i, void *j, size_t size)
   memcpy(i, tmp[0], size);
   memcpy(j, tmp[1], size);
   return cond;
-}*/
+}
 
-
-__attribute__((always_inline)) inline bool swap_cond(bool cond, void *i, void *j, size_t size)
+/*
+inline bool swap_cond(bool cond, void *i, void *j, size_t size)
 {
   if(cond)
   {
@@ -194,7 +199,7 @@ __attribute__((always_inline)) inline bool swap_cond(bool cond, void *i, void *j
     memcpy(j, tmp, size);
   }
   return cond;
-}
+}*/
 
 /*
 void swap_cond2(bool cond, void *i, void *j, size_t size)

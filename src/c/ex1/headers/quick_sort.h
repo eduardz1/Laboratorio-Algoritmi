@@ -52,3 +52,4 @@ bool swap_cond(bool cond, void* i, void*j, size_t size);
 int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
 int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
 int partition4(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
+int partition5(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
