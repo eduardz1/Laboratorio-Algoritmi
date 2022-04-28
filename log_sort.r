@@ -1,10 +1,12 @@
 library(ggplot2)
 library(Rmisc)
 library(data.table)
+library(tikzDevice)
 fp <- data.frame(fread(
        file = "time_log_qsort.csv",
        sep = ";", header = T, na.strings = "NA"
 ))
+tikz("latex/throughput.tex", width = 5, height = 5)
 
 run_20kk <- data.frame(fp[fp$size == 20000000, ])
 
@@ -17,7 +19,7 @@ boxplot(run_20kk$MEDIAN3,
        outline = FALSE,
        names = c("MEDIAN3", "RANDOM", "FIRST", "MIDDLE", "LAST")
 )
-
+dev.off()
 summary(run_20kk$MEDIAN3)
 ################################################################################
 ################################################################################
