@@ -67,7 +67,22 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), e
         swap(array + middle, array + last, size);
     }
   }
-  return partition2(array, size, p, r, comp);
+  return partition(array, size, p, r, comp);
+}
+
+int partition4(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+{
+  void *pivot = array + (p + r) * size;
+  while(p < r)
+  {
+    while(comp(array + p * size, pivot) < 0)
+      p++;
+    while(comp(array + r * size, pivot) > 0)
+      r--;
+    if(p < r)
+      swap(array + p * size, array + r * size, size);
+  }
+  return p;
 }
 
 // TODO: not really necessary but 3-way partition might improve performance and
@@ -132,7 +147,7 @@ int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void 
 int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
 {
   void *pivot = array + r * size;
-  int i = p - 1;
+  int i = p;
 
   /**
    * @invariant
@@ -142,40 +157,43 @@ int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void 
    */
   for (int j = p; j <= r; j++)
   {
-    bool cond = comp(array + j * size, pivot) <= 0;
-    i += cond;
-    swap_cond(cond, array + i * size, array + j * size, size);
+    i += swap_cond(comp(array + j * size, pivot) <= 0, array + i * size, array + j * size, size);
   }
-  //swap(array + (i + 1) * size, array + r * size, size);
-  return i;
+  return i - 1;
 }
 
-void swap(void *i, void *j, size_t size)
+__attribute__((always_inline)) inline void swap(void *i, void *j, size_t size)
 {
   char tmp[size];
-  memcpy(tmp, i, size);
-  memcpy(i, j, size);
-  memcpy(j, tmp, size);
+  memmove(tmp, i, size);
+  memmove(i, j, size);
+  memmove(j, tmp, size);
 }
 
 /*fail
-void swap_cond(bool cond, void *i, void *j, size_t size)
+bool swap_cond(bool cond, void *i, void *j, size_t size)
 {
-  char tmp[size];
-  memcpy(tmp, i, size);
-  void *v[2] = {tmp, j};
+  char tmp[2][size];
+  memcpy(tmp[cond], i, size);
+  memcpy(tmp[1 - cond], j, size);
+  // void *v[2] = {tmp, j};
 
-  memcpy(i, v[cond], size);
-  memcpy(j, v[1 - cond], size);
+  memcpy(i, tmp[0], size);
+  memcpy(j, tmp[1], size);
+  return cond;
 }*/
 
-void swap_cond(bool cond, void *i, void *j, size_t size)
+
+__attribute__((always_inline)) inline bool swap_cond(bool cond, void *i, void *j, size_t size)
 {
-  if(!cond) return;
-  char tmp[size];
-  memcpy(tmp, i, size);
-  memcpy(i, j, size);
-  memcpy(j, tmp, size);
+  if(cond)
+  {
+    char tmp[size];
+    memcpy(tmp, i, size);
+    memcpy(i, j, size);
+    memcpy(j, tmp, size);
+  }
+  return cond;
 }
 
 /*
