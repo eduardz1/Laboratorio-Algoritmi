@@ -6,7 +6,7 @@ fp <- data.frame(fread(
        file = "time_log_qsort.csv",
        sep = ";", header = T, na.strings = "NA"
 ))
-tikz("latex/throughput.tex", width = 5, height = 5)
+tikz("latex/throughput.tex", width = 5, height = 4)
 
 run_20kk <- data.frame(fp[fp$size == 20000000, ])
 
