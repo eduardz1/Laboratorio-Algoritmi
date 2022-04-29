@@ -57,7 +57,40 @@ int _part2(void *array, size_t size, int p, int r, int (*comp)(const void *, con
     SWAP(array + first, array + last, size);
   if(comp(array + middle, array + last) < 0)
     SWAP(array + middle, array + last, size);
-  return partition(array, size, p, r, comp);
+  return partition5(array, size, p, r, comp);
+}
+
+int _part3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
+{
+  int first  = p * size;
+  int second = ((p + ((p + (r - p) / 2) - p) / 2)) * size;
+  int middle = (p + (r - p) / 2) * size;
+  int third  = (((p + (r - p) / 2) + (r - (p + (r - p) / 2)) / 2)) * size;
+  int last   = r * size;
+  if(comp(array + middle, array + first) < 0)
+    SWAP(array + first, array + middle, size);
+  if(comp(array + third, array + second) < 0)
+    SWAP(array + third, array + second, size);
+  if(comp(array + third, array + middle) < 0)
+  {
+    SWAP(array + middle, array + third, size);
+    SWAP(array + first, array + second, size);
+  }
+  if(comp(array + last, array + second) < 0)
+    SWAP(array + last, array + second, size);
+  if(comp(array + last, array + middle) < 0)
+  {
+    SWAP(array + last, array + middle, size);
+    if(comp(array + middle, array + first) < 0)
+      SWAP(array + middle, array + first, size);
+  }
+  else
+  {
+    if(comp(array + middle, array + second) < 0)
+      SWAP(array + middle, array + second, size);
+  }
+  SWAP(array + middle, array + last, size);
+  return partition5(array, size, p, r, comp);
 }
 
 int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
