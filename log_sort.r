@@ -6,7 +6,7 @@ fp <- data.frame(fread(
        file = "time_log_qsort.csv",
        sep = ";", header = T, na.strings = "NA"
 ))
-tikz("latex/throughput.tex", width = 5, height = 4)
+tikz("latex/qs_boxplot_pivot.tex", width = 5, height = 4)
 
 run_20kk <- data.frame(fp[fp$size == 20000000, ])
 
@@ -23,6 +23,8 @@ dev.off()
 summary(run_20kk$MEDIAN3)
 ################################################################################
 ################################################################################
+tikz("latex/qs_plot_pivot.tex", width = 5, height = 4)
+
 pivot <- data.frame(fp[fp$size != 20000000, ])
 pivot <- na.omit(pivot)
 ## Exponential graph ##
@@ -47,17 +49,22 @@ lines(pivot$size,
        pivot$LAST,
        col = rgb(red = 0.5, green = 0.5, blue = 0, alpha = 1)
 )
+dev.off()
 ## Zoom in on the pivot that don't degenerate in O(n^2) ##
+tikz("latex/qs_plot_zoommed_pivot.tex", width = 5, height = 4)
+
 pivot <- data.frame(fp[fp$size != 20000000, ])
 pivot <- pivot[, c("MEDIAN3", "MIDDLE", "RANDOM", "size")];
 
-ggplot(pivot, aes(pivot$size, pivot$MEDIAN3)) +
-       geom_smooth(aes(pivot$size, pivot$MEDIAN3, group = 1),
+g <- ggplot(pivot, aes(size, MEDIAN3)) +
+       geom_smooth(aes(size, MEDIAN3, group = 1),
               method = "loess", color = "#ff6c29"
        ) +
-       geom_smooth(aes(pivot$size, pivot$MIDDLE, group = 1),
+       geom_smooth(aes(size, MIDDLE, group = 1),
               method = "loess", color = "#84da33"
        ) +
-       geom_smooth(aes(pivot$size, pivot$RANDOM, group = 1),
+       geom_smooth(aes(size, RANDOM, group = 1),
               method = "loess", color = "#2558ff"
        )
+print(g)
+dev.off()
