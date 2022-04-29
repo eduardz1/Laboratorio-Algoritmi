@@ -24,19 +24,60 @@ randomicamente o come mediana di tre numeri ad essere mediamente più lento
 rispetto agli altri 3 casi presi in considerazione. La tabella sottostante 
 riporta il tempo impiegato ad ordinare un array di 20 milioni elementi di tipo \verb|struct Record|
 \include{qs_boxplot_pivot}
+
+La scelta del pivot diventa importante quando l'array in input risulta già
+parzialmente o totalmente ordinato.
+Il grafico sottostante riporta il tempo impiegato da \verb|quick_sort()| 
+per scorrere un array già ordinato.
+
 \include{qs_plot_pivot}
+
+Concentrandoci in particolare sui pivot \verb|median of 3|, \verb|random| e \verb|middle|, 
+possiamo notare che anche tra questi 3 ve ne è uno preferibile rispetto agli altri (aggiungi qualcosa)
 \include{qs_plot_zoommed_pivot}
-\include{sklist_insert}
-\include{sklist_mean_insert}
-\include{sklist_zoommed_insert}
-\include{sklist_search}
-\include{sklist_mean_search}
-\include{sklist_zoommed_search}
+
+\subsection{Fallback a Insertion Sort}
+Quando il \verb|quick_sort()| lavora su un range sufficientemente piccolo, è più
+efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impostato a 8 elementi.
+
+\section{Binary Insertion Sort}`
+Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che finisca in tempi
+sensati l'ordinamento dei 20 milioni di records, facendo due calcoli sui nostri computer
+dovrebbe metterci approssimativmaente 2 anni.
+
 
 \chapter*{Esercizio 2}
-\section{Binary Insertion Sort}
+
 \section{Skip List}
+
+Bla bla bla insertion time decresce in maniera importante
+\include{sklist_insert}
+
+Bla bla bla in particolare zoommando sui livelli più di interesse ci rendiamo conto
+che la distribuzione è concentrata attorno a 19
+\include{sklist_zoommed_insert}
+
+Bla bla bla facendo un grafico delle medie dei tempi di inserimento notiamo che 18
+è il numero ottimale di livelli
+\include{sklist_mean_insert}
+
+Bla bla bla search time decresce in maniera imporante
+\include{sklist_search}
+
+Bla bla bla in particolare zoommando sui livelli più di interesse ci rendiamo conto
+che la distribuzione è concentrata attorno a 19
+\include{sklist_zoommed_search}
+
+Bla bla bla facendo un grafico delle medie dei tempi di inserimento notiamo che 17
+è il numero ottimale di livelli
+\include{sklist_mean_search}
+
+Sorprendentemente il numero ottimale di livelli non coincide esattamente con $ln(n)$
+
+\chapter*{Esercizio 3}
 \section{Minimum Heap}
+
+\chapter*{Esercizio 4}
 \section{Graph}
 
 \end{document}
