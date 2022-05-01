@@ -100,81 +100,114 @@ int main(int argc, char const *argv[])
 
   if(strcmp(input, "qsort") == 0) 
   {
+    printf("Input 1 to run on fixed size, 2 to run on increasing size: ");
+    char input[10];
+    (void)!scanf("%s", input);
+    
     double time_sort[5] = {};
     enum PivotSelector enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
 
-    FILE *fp = fopen("time_log_qsort.csv", "a+");
+    FILE *fp = fopen("time_log_qsort2.csv", "a+");
     
-    // Check fis file is empty
+    // Check if file is empty
     int c = fgetc(fp);
-    if (c == EOF)
-      fprintf(fp, "MEDIAN3; RANDOM; FIRST; MIDDLE; LAST\n");
+    if (c == EOF) fprintf(fp, "time;size;pivot;file\n");
 
     load_array(argv[1], arr, atoi(argv[2]));
-    for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO/5); i++)
+
+    if(strcmp(input, "1") == 0)
     {
-      srand(time(NULL));
-      for (int i = 0; i < 5; i++)
+      for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO / 5); i++)
       {
-        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
-        clock_t start = clock();
-        quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, enums[i]);
-        clock_t end = clock();
-        time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
-      };
-      // Prepare log
-      char * buf = calloc(100, sizeof(char));
-      if(buf == NULL)
-      {
-        printf("Error allocating memory\n");
-        exit(EXIT_FAILURE);
+        for (int i = 0; i < 5; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, enums[i]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
+
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[0], atoi(argv[2]), "MEDIAN3", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[1], atoi(argv[2]), "RANDOM", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[2], atoi(argv[2]), "FIRST", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[3], atoi(argv[2]), "MIDDLE", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[4], atoi(argv[2]), "LAST", argv[1]);
+
+        fflush(fp);
       }
-      for (int i = 0; i < 5; i++)
-        sprintf(buf,"%s%f%s",buf,time_sort[i], i == 4 ? "" : ";");
-
-      // Write log
-      fprintf(fp, "%s", buf);
-      fprintf(fp, "\n");
-      free(buf);
-      fflush(fp);
     }
+    else
+    {
+      for (size_t size = 0; size < atoi(argv[2]); size++)
+      {
+        for (int i = 0; i < 5; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, size - 1, compare_records, enums[i]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
 
-    dispose_string_in_array(arr, atoi(argv[2]));
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[0], size, "MEDIAN3", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[1], size, "RANDOM", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[2], size, "FIRST", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[3], size, "MIDDLE", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[4], size, "LAST", argv[1]);
+
+        fflush(fp);
+      } 
+    }
+    
     fclose(fp);
-    // printf("\nStarting test the first <size/100> sorted elements of the input array to see the difference between MEDIAN3, RANDOM and LAST as pivot\n\n");
-    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, RANDOM));
-    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, MEDIAN3));
-    // TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) / 100 - 1, compare_records, LAST));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
-
-    FILE *fp = fopen("time_log_insertsort.csv", "a+");
+    printf("Input 1 to run on fixed size, 2 to run on increasing size: ");
+    char input[10];
+    (void)!scanf("%s", input);
     
-    double time;
-    for (size_t i = 0; i < NUMBER_OF_TEST_TO_DO; i++) {
-      load_array(argv[1], arr, atoi(argv[2]));
-      clock_t start = clock();
-      binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records);
-      clock_t end = clock();
-      dispose_string_in_array(arr, atoi(argv[2]));
-      time = (double)(end-start)/CLOCKS_PER_SEC;
+    FILE *fp = fopen("time_log_insertsort.csv", "a+");
+    // Check if file is empty
+    int c = fgetc(fp);
+    if (c == EOF) fprintf(fp, "time;size;file\n");
 
-      // Prepare log
-      char * buf = calloc(30, sizeof(char));
-      if(buf == NULL)
+    load_array(argv[1], arr, atoi(argv[2]));
+    double time_sort;
+
+    if(strcmp(input, "1") == 0)
+    {
+      for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO); i++)
       {
-        printf("Error allocating memory\n");
-        exit(EXIT_FAILURE);
-      }
-      sprintf(buf,"%f",time);
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        clock_t start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records);
+        clock_t end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-      // Write log
-      fprintf(fp, "%s", buf);
-      fprintf(fp, "\n");
-      free(buf);
-      fflush(fp);
+        fprintf(fp, "%lf;%d;%s\n", time_sort, atoi(argv[2]), argv[1]);
+
+        fflush(fp);
+      }
     }
+    else
+    {
+      for (size_t size = 0; size < atoi(argv[2]); size++)
+      {
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        clock_t start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), size, compare_records);
+        clock_t end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s\n", time_sort, size, argv[1]);
+
+        fflush(fp);
+      } 
+    }
+    
+    fclose(fp);
   } 
   else 
   {
