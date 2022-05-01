@@ -31,7 +31,7 @@ struct Node
 struct SkipList
 {
   struct Node *head;
-  int (*comp)(void*, void*);
+  int (*comp)(const void*, const void*);
   uint8_t max_level;
   size_t elem_size;
   void (*free)(void *);
@@ -78,7 +78,7 @@ void *search_skip_list(struct SkipList *list, void *elem);
  * @param elem_size specifies the type by size
  * @return pointer to the new list or NULL if an error occurred
  */
-struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size);
+struct SkipList *create_skip_list(int (*comp)(const void*, const void*), void (*free)(void *), size_t elem_size);
 
 /**
  * @brief deallocates every element of a list

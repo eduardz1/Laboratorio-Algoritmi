@@ -5,18 +5,31 @@
 // TODO: implement a loading bar
 
 #define FALLBACK_CONST 8
-#define SWAP(a, b, size)                                                      \
-  do                                                                              \
-    {                                                                              \
-      size_t __size = (size);                                                      \
-      char *__a = (a), *__b = (b);                                              \
-      do                                                                      \
-        {                                                                      \
-          char __tmp = *__a;                                                      \
-          *__a++ = *__b;                                                      \
-          *__b++ = __tmp;                                                      \
-        } while (--__size > 0);                                                      \
-    } while (0)
+#define SWAP(a, b, size)         \
+  do                             \
+  {                              \
+    size_t __size = (size);      \
+    char *__a = (a), *__b = (b); \
+    do                           \
+    {                            \
+      char __tmp = *__a;         \
+      *__a++ = *__b;             \
+      *__b++ = __tmp;            \
+    } while (--__size > 0);      \
+  } while (0)
+
+#define SWAP_IF(a, b, size, cond)        \
+  do                                     \
+  {                                      \
+    size_t __size = (size);              \
+    char *__a = (a), *__b = (b);         \
+    do                                   \
+    {                                    \
+      char __tmp = (cond) ? *__a : *__b; \
+      *__a++ = *__b;                     \
+      *__b++ = __tmp;                    \
+    } while (--__size > 0);              \
+  } while (0)
 
 // TODO: add assertion to methods to check for example that array is not null, size is greater than 0 ecc...
 void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*, const void*), enum PivotSelector selector) 
@@ -26,7 +39,7 @@ void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*
   // depth in the worst case to log(n)
   while (p < r)
   {
-    int q = _part2(array, size, p, r, comp, selector);
+    int q = _part(array, size, p, r, comp, selector);
     if(q - p < r - q)
     {
       if(q - p > FALLBACK_CONST)
@@ -127,7 +140,7 @@ int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, cons
         swap(array + middle, array + last, size);
     }
   }
-  return partition5(array, size, p, r, comp);
+  return partition(array, size, p, r, comp);
 }
 
 int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
@@ -154,7 +167,7 @@ int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *,
 //       dual pivot might be faster
 int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
-  int i = p - 1;
+  int i = (p - 1) * size;
 
   /**
    * @invariant
@@ -162,18 +175,18 @@ int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, 
    *  if i + 1 <0 k <= j - 1, then array[k] > pivot
    *  if k = r, then array[k] = pivot
    */
-  for (int j = p; j <= r; j++)
+  for (int j = p * size; j <= r * size; j += size)
   {
-    if (comp(array + j * size, array + r * size) <= 0)
+    if (comp(array + j, array + r * size) <= 0)
     {
-      i++;
-      SWAP(array + i * size, array + j * size, size);
+      i+=size;
+      SWAP(array + i, array + j, size);
     }
   }
-  return i;
+  return i / size;
 }
 
-int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+int partition2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
   void *pivot = array + r * size;
   int i = p - 1;
@@ -208,11 +221,8 @@ int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void 
   return i;
 }
 
-int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
+int partition3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
-  void *pivot = array + r * size;
-  int i = p;
-
   /**
    * @invariant
    *  if p <= k <0 i, then array[k] <0 pivot
@@ -221,9 +231,9 @@ int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void 
    */
   for (int j = p; j <= r; j++)
   {
-    i += swap_cond(comp(array + j * size, pivot) <= 0, array + i * size, array + j * size, size);
+    p += swap_cond(comp(array + j * size, array + r * size) <= 0, array + p * size, array + j * size, size);
   }
-  return i - 1;
+  return p - 1;
 }
 
 inline void swap(void *i, void *j, size_t size)

@@ -33,7 +33,7 @@ void insert_skip_list(struct SkipList *list, void *elem)
   }
 }
 
-struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
+struct SkipList *create_skip_list(int (*comp)(const void*, const void*), void (*free)(void *), size_t elem_size)
 {
   struct SkipList *new = malloc(sizeof(struct SkipList));
   if(new == NULL) return NULL;

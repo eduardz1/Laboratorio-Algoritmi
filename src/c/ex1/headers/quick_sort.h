@@ -41,7 +41,7 @@ void quick_sort(void* v, size_t size, int left, int right, int (*comp)(const voi
  * @param r index of the last element in #partition range 
  * @param comp pointer to the compare function desired for a type
  */
-int partition(void* array, size_t size, int p, int r, int (*comp)(const void*, const void*));
+int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
 
 /**
  * @brief swaps value of two generic variables
@@ -51,7 +51,7 @@ void swap(void* i, void*j, size_t size);
 bool swap_cond(bool cond, void* i, void*j, size_t size);
 
 
-int partition2(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
-int partition3(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
-int partition4(void *array, size_t size, int p, int r, int (*comp)(void *, void *));
+int partition2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
+int partition3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
+int partition4(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
 int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));

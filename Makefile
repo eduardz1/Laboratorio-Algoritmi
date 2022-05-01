@@ -26,6 +26,9 @@ TSTQS_OBJS := $(patsubst $(TST)/%.c, $(OBJ)/%.o, $(TSTQS_SRCS))
 TSTBIS_SRCS := $(wildcard $(TST)/binary_insert_sort_test.c)
 TSTBIS_OBJS := $(patsubst $(TST)/%.c, $(OBJ)/%.o, $(TSTBIS_SRCS))
 
+TSTIS_SRCS := $(wildcard $(TST)/insert_sort_test.c)
+TSTIS_OBJS := $(patsubst $(TST)/%.c, $(OBJ)/%.o, $(TSTIS_SRCS))
+
 TSTSHD_SRCS := $(wildcard $(TST)/shared_test.c)
 TSTSHD_OBJS := $(patsubst $(TST)/%.c, $(OBJ)/%.o, $(TSTSHD_SRCS))
 
@@ -75,14 +78,19 @@ testbis: $(BIN)/testbis
 $(BIN)/testbis: $(UNITY_OBJS) $(filter-out $(OBJ)/ex1.o, $(EX1_OBJS)) $(TSTBIS_OBJS) $(SHD_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
+testis: $(BIN)/testis
+$(BIN)/testis: $(UNITY_OBJS) $(filter-out $(OBJ)/ex1.o, $(EX1_OBJS)) $(TSTIS_OBJS) $(SHD_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
 testskl: $(BIN)/testskl
 $(BIN)/testskl: $(UNITY_OBJS) $(filter-out $(OBJ)/ex2.o, $(EX2_OBJS)) $(TSTSKL_OBJS) $(SHD_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
-testall: testshd testqs testbis testskl
+testall: testshd testqs testbis testskl testis
 	@./$(BIN)/testshd
 	@./$(BIN)/testqs
 	@./$(BIN)/testbis
+	@./$(BIN)/testis
 	@./$(BIN)/testskl
 
 $(OBJ)/%.o : $(EX1)/%.c $(EX1_HDRS)
