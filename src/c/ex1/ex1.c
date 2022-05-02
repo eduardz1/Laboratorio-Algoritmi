@@ -139,7 +139,7 @@ int main(int argc, char const *argv[])
     }
     else
     {
-      for (size_t size = 0; size < atoi(argv[2]); size++)
+      for (size_t size = 0; size < atoi(argv[2]); size+=10)
       {
         for (int i = 0; i < 5; i++)
         {
@@ -193,7 +193,7 @@ int main(int argc, char const *argv[])
     }
     else
     {
-      for (size_t size = 0; size < atoi(argv[2]); size++)
+      for (size_t size = 0; size < atoi(argv[2]); size+=10)
       {
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         clock_t start = clock();
