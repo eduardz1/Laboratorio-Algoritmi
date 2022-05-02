@@ -16,7 +16,7 @@ enum PivotSelector {
 /**
  * @brief Allows selection of pivot for #partition()
  */
-int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
+int _part(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *), const enum PivotSelector selector);
 int _part2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
 int _part3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
 
@@ -30,7 +30,7 @@ int _part3(void *array, size_t size, int p, int r, int (*comp)(const void *, con
  * @param comp pointer to the compare function desired for a type
  * @param selector allows to choose a pivot between { FIRST, LAST, MIDDLE, RANDOM, MEDIAN3 }, MEDIAN3 is the sggested one
  */
-void quick_sort(void* v, size_t size, int left, int right, int (*comp)(const void*, const void*), enum PivotSelector selector);
+void quick_sort(void *const v, const size_t size, int left, int right, int (*comp)(const void*, const void*), const enum PivotSelector selector);
 
 /**
  * @brief [Lomuto] partions the array in the specified range [p, r] using r as pivot
@@ -41,7 +41,7 @@ void quick_sort(void* v, size_t size, int left, int right, int (*comp)(const voi
  * @param r index of the last element in #partition range 
  * @param comp pointer to the compare function desired for a type
  */
-int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
+int partition(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *));
 
 /**
  * @brief swaps value of two generic variables

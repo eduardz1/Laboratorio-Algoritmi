@@ -32,7 +32,7 @@
   } while (0)
 
 // TODO: add assertion to methods to check for example that array is not null, size is greater than 0 ecc...
-void quick_sort( void* array, size_t size, int p, int r, int (*comp)(const void*, const void*), enum PivotSelector selector) 
+void quick_sort(void *const array, const size_t size, int p, int r, int (*comp)(const void*, const void*), const enum PivotSelector selector) 
 {
   // removing one _qsort call improves constant time complexity, calling the 
   // function recursively only on the smaller sub-array reduces the call stack
@@ -106,39 +106,33 @@ int _part3(void *array, size_t size, int p, int r, int (*comp)(const void *, con
   return partition5(array, size, p, r, comp);
 }
 
-int _part(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector)
+__attribute__((flatten)) int _part(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *), const enum PivotSelector selector)
 {
-  void *pivot;
   switch(selector)
   {
   case RANDOM:
-    pivot = array + RAND(p, r) * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + RAND(p, r) * size, array + r * size, size);
     break;
   case FIRST:
-    pivot = array + p * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + p * size, array + r * size, size);
     break;
   case MIDDLE:
-    pivot = array + (p + (r - p) / 2) * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + (p + (r - p) / 2) * size, array + r * size, size);
     break;
-  case LAST:
-    pivot = array + r * size;
-    swap(pivot, array + r * size, size);
+  case MEDIAN3: 
+  {
+    int first  = p * size;
+    int middle = (p + (r - p) / 2) * size;
+    int last   = r * size;
+    if(comp(array + middle, array + first) < 0)
+      SWAP(array + first, array + middle, size);
+    if(comp(array + last, array + first) < 0)
+      SWAP(array + first, array + last, size);
+    if(comp(array + middle, array + last) < 0)
+      SWAP(array + middle, array + last, size);
+  }
     break;
-  case MEDIAN3: default: 
-    {
-      int first  = p * size;
-      int middle = (p + (r - p) / 2) * size;
-      int last   = r * size;
-      if(comp(array + middle, array + first) < 0)
-        swap(array + first, array + middle, size);
-      if(comp(array + last, array + first) < 0)
-        swap(array + first, array + last, size);
-      if(comp(array + middle, array + last) < 0)
-        swap(array + middle, array + last, size);
-    }
+  default: case LAST: break; // pivot already in place
   }
   return partition(array, size, p, r, comp);
 }
@@ -165,7 +159,7 @@ int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *,
 
 // TODO: not really necessary but 3-way partition might improve performance and
 //       dual pivot might be faster
-int partition(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *))
+int partition(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *))
 {
   int i = (p - 1) * size;
 

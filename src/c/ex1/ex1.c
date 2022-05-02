@@ -69,7 +69,7 @@ int main(int argc, char const *argv[])
   char input[10];
   (void)!scanf("%s", input); // scanf is not really safe, I'm casting the return into the void, we can use a better function
   
-  struct Record *arr = calloc(atoi(argv[2]), sizeof(struct Record));
+  struct Record *const arr = calloc(atoi(argv[2]), sizeof(struct Record));
   if(arr == NULL && atoi(argv[2]) > 0)
   {
     printf("Error allocating memory\n");

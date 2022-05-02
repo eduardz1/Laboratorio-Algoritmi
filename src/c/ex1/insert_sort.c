@@ -1,6 +1,6 @@
 #include "headers/insert_sort.h"
 
-void insert_sort(void* array, size_t size, int length, int (*comp)(const void*, const void*))
+void insert_sort(void *const array, const size_t size, const int length, int (*comp)(const void*, const void*))
 {
   for(int j=1; j<length; ++j)
   {
