@@ -116,7 +116,7 @@ void test_records_array(void)
       {6, "d", 0, 0.0001f},
   };
 
-  insert_sort(actual, sizeof(actual[0]), 8, compare_records);
+  insert_sort(actual, sizeof(actual[0]), 8, compare_records_string);
   for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);

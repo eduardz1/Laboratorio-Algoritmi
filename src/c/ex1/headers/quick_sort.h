@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <assert.h>
 
-enum PivotSelector {
+/**
+ * @brief enumerator used to select different pivot
+ */
+enum Pivot
+{
   RANDOM,
   FIRST,
   MIDDLE,
@@ -14,44 +18,30 @@ enum PivotSelector {
 };
 
 /**
- * @brief Allows selection of pivot for #partition()
- */
-int _part(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *), const enum PivotSelector selector);
-int _part2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
-int _part3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *), enum PivotSelector selector);
-
-/**
  * @brief quick sort of generic array
  * 
  * @param array array of generic elements
- * @param size is the size of single element of the array
- * @param p index of the first element in #partition range
- * @param r index of the last element in #partition range 
+ * @param size size (in bytes) of the single element of the array
+ * @param l index of the leftmost element in #partition() range
+ * @param r index of the rightmost element in #partition() range 
  * @param comp pointer to the compare function desired for a type
  * @param selector allows to choose a pivot between { FIRST, LAST, MIDDLE, RANDOM, MEDIAN3 }, MEDIAN3 is the sggested one
  */
-void quick_sort(void *const v, const size_t size, int left, int right, int (*comp)(const void*, const void*), const enum PivotSelector selector);
+void quick_sort(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector);
 
 /**
- * @brief [Lomuto] partions the array in the specified range [p, r] using r as pivot
+ * @brief wrapper of #partition() that allows selection of pivot
+ */
+int _partition(void *const array, const size_t size, int p, int r, const Comp comp, const enum Pivot selector);
+
+/**
+ * @brief [Lomuto] partions the array in the specified range [l, r] using r as pivot
  *  
  * @param array array of generic elements
  * @param size is the size of single element of the array
- * @param p index of the first element in #partition range
- * @param r index of the last element in #partition range 
+ * @param l index of the leftmost element in partition range
+ * @param r index of the rightmost element in partition range 
  * @param comp pointer to the compare function desired for a type
+ * @returns index of the pivot placed in the correct position
  */
-int partition(void *const array, const size_t size, int p, int r, int (*comp)(const void *, const void *));
-
-/**
- * @brief swaps value of two generic variables
- * 
- */
-void swap(void* i, void*j, size_t size);
-bool swap_cond(bool cond, void* i, void*j, size_t size);
-
-
-int partition2(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
-int partition3(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
-int partition4(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
-int partition5(void *array, size_t size, int p, int r, int (*comp)(const void *, const void *));
+int partition(void *const array, const size_t size, int l, int r, const Comp comp);

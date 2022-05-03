@@ -53,7 +53,7 @@ struct Node *create_node(void *elem, uint32_t level, size_t size);
  * @param list pointer to a list of generic elements
  * @param elem element to insert
  */
-void insert_skip_list(struct SkipList *list, void *elem);
+void insert_skip_list(struct SkipList *list, void *const elem);
 
 /**
  * @brief determines max number of pointer to include in a new Node
@@ -68,7 +68,7 @@ uint32_t random_level();
  * @param elem elements to search
  * @return the element if found or NULL otherwise
  */
-void *search_skip_list(struct SkipList *list, void *elem);
+void *search_skip_list(struct SkipList *list, void *const elem);
 
 /**
  * @brief initializes a new empty skip list

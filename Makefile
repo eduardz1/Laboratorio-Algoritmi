@@ -1,6 +1,6 @@
 CC := clang
 override CFLAGS := -Wall -Ofast -DUNITY_INCLUDE_DOUBLE \
--DUNITY_OUTPUT_COLOR $(CFLAGS) # to permit appending -ggdb3 -O0
+-DUNITY_OUTPUT_COLOR -DNDEBUG $(CFLAGS) # to permit appending -ggdb3 -O0
 
 # Directories ------------------------------------------------------------------
 

@@ -7,8 +7,6 @@
 #include <string.h>
 #include <time.h>
 
-#define comp_func_ptr(a) int (*a)(const void *, const void *)
-
 void load_array(const char* file_name, struct Record *array, int size)
 {
   FILE *fp = fopen(file_name, "r");
@@ -88,10 +86,10 @@ int main(int argc, char const *argv[])
   printf("\nChoose which field you wish to prioritize: \n0: [first]\n1: [second]\n2: [third]\n");
   (void)!scanf("%s", input2);
 
-  comp_func_ptr(comp) = atoi(input2) == 0 ? compare_records_string :
-                       atoi(input2) == 1 ? compare_records_int :
-                       atoi(input2) == 2 ? compare_records_double :
-                       NULL;
+  Comp comp = atoi(input2) == 0 ? compare_records_string :
+              atoi(input2) == 1 ? compare_records_int :
+              atoi(input2) == 2 ? compare_records_double :
+              NULL;
 
   if(comp == NULL)
   {
