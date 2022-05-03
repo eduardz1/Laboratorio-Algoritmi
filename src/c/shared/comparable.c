@@ -1,7 +1,7 @@
 #include "common.h"
 #include "comparable.h"
 
-int compare_int(void *a, void *b)
+int compare_int(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -13,7 +13,7 @@ int compare_int(void *a, void *b)
   return 0;
 }
 
-int compare_long(void *a, void *b)
+int compare_long(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -25,7 +25,7 @@ int compare_long(void *a, void *b)
   return 0;
 }
 
-int compare_float(void *a, void *b)
+int compare_float(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -37,7 +37,7 @@ int compare_float(void *a, void *b)
   return 0;
 }
 
-int compare_double(void *a, void *b)
+int compare_double(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -49,7 +49,7 @@ int compare_double(void *a, void *b)
   return 0;
 }
 
-int compare_char(void *a, void *b)
+int compare_char(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -61,7 +61,7 @@ int compare_char(void *a, void *b)
   return 0; 
 }
 
-int compare_string(void *a, void *b)
+int compare_string(const void *a, const void *b)
 {
   int res;
   if (is_null(a, b, &res)) return res;
@@ -71,7 +71,7 @@ int compare_string(void *a, void *b)
   return strcmp(v1, v2);
 }
 
-int is_null(void *a, void *b, int *res) 
+int is_null(const void *a, const void *b, int *res) 
 {
   if (a != NULL && b != NULL) return 0;
   if (a == NULL && b == NULL) *res = 0;

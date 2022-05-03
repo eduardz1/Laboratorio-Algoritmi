@@ -56,19 +56,18 @@ static void shuffle(void *array, size_t n, size_t size)
 
 void dispose_string_in_array(struct Record * a, int length) 
 {
-  for(int i = 0; i < length; i++)
-      free(a[i].field1);
+  for(int i = 0; i < length; i++) 
+  {
+    free(a[i].field1);
+  }
 }
 
-void checksum(struct Record * a, int length) {
+void checksum(struct Record * a, int length, Comp comp) 
+{
   bool flag = true;
-  for(int i = 0; i < length - 1; i++)
+  for(int i = 0; i < length - 1 && flag; i++)
   {
-    if(compare_records(&a[i], &a[i+1]) >= 0)
-    {
-      flag = false;
-      break;
-    }
+    if(comp(&a[i], &a[i+1]) > 0) flag = false;
   }
 
   if(flag)
@@ -87,11 +86,18 @@ int main(int argc, char const *argv[])
 
   srand(time(NULL));
 
+  // Select algorithm
   printf("Choose a sorting algorithm: [qsort]/[binssort] ");
   char input[10];
-  (void)!scanf("%s", input); // scanf is not really safe, I'm casting the return into the void, we can use a better function
-  
-  struct Record *arr = calloc(atoi(argv[2]), sizeof(struct Record));
+  ISCANF("%s", input);
+  if(strcmp(input, "qsort") != 0 && strcmp(input, "binssort") != 0)
+  {
+    printf("Invalid input\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // Load array
+  struct Record *const arr = calloc(atoi(argv[2]), sizeof(struct Record));
   if(arr == NULL && atoi(argv[2]) > 0)
   {
     printf("Error allocating memory\n");
@@ -104,57 +110,119 @@ int main(int argc, char const *argv[])
     char input[10];
     (void)!scanf("%s", input);
     
-    double time_sort[5] = {};
-    enum PivotSelector enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
+    double time_sort[15] = {};
+    enum Pivot enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
 
     FILE *fp = fopen("time_log_qsort2.csv", "a+");
     
     // Check if file is empty
     int c = fgetc(fp);
-    if (c == EOF) fprintf(fp, "time;size;pivot;file\n");
+    if (c == EOF) fprintf(fp, "time;size;pivot;compare;file\n");
 
     load_array(argv[1], arr, atoi(argv[2]));
 
     if(strcmp(input, "1") == 0)
     {
-      for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO / 5); i++)
+      for (size_t i = 0; i < (NUMBER_OF_TEST_TO_DO / 15); i++)
       {
-        for (int i = 0; i < 5; i++)
+        int i = 0;
+        for (; i < 5; i++)
         {
           shuffle(arr, atoi(argv[2]), sizeof(struct Record));
           clock_t start = clock();
-          quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records, enums[i]);
+          quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records_string, enums[i]);
           clock_t end = clock();
           time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
         }
 
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[0], atoi(argv[2]), "MEDIAN3", argv[1]);
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[1], atoi(argv[2]), "RANDOM", argv[1]);
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[2], atoi(argv[2]), "FIRST", argv[1]);
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[3], atoi(argv[2]), "MIDDLE", argv[1]);
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort[4], atoi(argv[2]), "LAST", argv[1]);
+        for (; i < 10; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records_int, enums[i - 5]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
+
+        for (; i < 15; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, compare_records_double, enums[i - 10]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[0], atoi(argv[2]), "MEDIAN3", "records_string", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[1], atoi(argv[2]), "RANDOM",  "records_string", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[2], atoi(argv[2]), "FIRST",   "records_string", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[3], atoi(argv[2]), "MIDDLE",  "records_string", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[4], atoi(argv[2]), "LAST",    "records_string", argv[1]);
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[5], atoi(argv[2]), "MEDIAN3", "records_int", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[6], atoi(argv[2]), "RANDOM",  "records_int", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[7], atoi(argv[2]), "FIRST",   "records_int", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[8], atoi(argv[2]), "MIDDLE",  "records_int", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[9], atoi(argv[2]), "LAST",    "records_int", argv[1]);
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[10], atoi(argv[2]), "MEDIAN3", "records_double", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[11], atoi(argv[2]), "RANDOM",  "records_double", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[12], atoi(argv[2]), "FIRST",   "records_double", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[13], atoi(argv[2]), "MIDDLE",  "records_double", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort[14], atoi(argv[2]), "LAST",    "records_double", argv[1]);
 
         fflush(fp);
       }
     }
     else
     {
-      for (size_t size = 0; size < atoi(argv[2]); size+=10)
+      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=10)
       {
-        for (int i = 0; i < 5; i++)
+        int i = 0;
+        for (; i < 5; i++)
         {
           shuffle(arr, atoi(argv[2]), sizeof(struct Record));
           clock_t start = clock();
-          quick_sort(arr, sizeof(arr[0]), 0, size - 1, compare_records, enums[i]);
+          quick_sort(arr, sizeof(arr[0]), 0, size - 1, compare_records_string, enums[i]);
           clock_t end = clock();
           time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
         }
 
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[0], size, "MEDIAN3", argv[1]);
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[1], size, "RANDOM", argv[1]);
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[2], size, "FIRST", argv[1]);
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[3], size, "MIDDLE", argv[1]);
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort[4], size, "LAST", argv[1]);
+        for (; i < 10; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, size - 1, compare_records_int, enums[i - 5]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
+
+        for (; i < 15; i++)
+        {
+          shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+          clock_t start = clock();
+          quick_sort(arr, sizeof(arr[0]), 0, size - 1, compare_records_double, enums[i - 10]);
+          clock_t end = clock();
+          time_sort[i] = (double)(end-start)/CLOCKS_PER_SEC;
+        }
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[0], size, "MEDIAN3", "records_string", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[1], size, "RANDOM",  "records_string", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[2], size, "FIRST",   "records_string", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[3], size, "MIDDLE",  "records_string", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[4], size, "LAST",    "records_string", argv[1]);
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[5], size, "MEDIAN3", "records_int", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[6], size, "RANDOM",  "records_int", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[7], size, "FIRST",   "records_int", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[8], size, "MIDDLE",  "records_int", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[9], size, "LAST",    "records_int", argv[1]);
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[10], size, "MEDIAN3", "records_double", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[11], size, "RANDOM",  "records_double", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[12], size, "FIRST",   "records_double", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[13], size, "MIDDLE",  "records_double", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort[14], size, "LAST",    "records_double", argv[1]);
 
         fflush(fp);
       } 
@@ -171,7 +239,7 @@ int main(int argc, char const *argv[])
     FILE *fp = fopen("time_log_insertsort.csv", "a+");
     // Check if file is empty
     int c = fgetc(fp);
-    if (c == EOF) fprintf(fp, "time;size;file\n");
+    if (c == EOF) fprintf(fp, "time;size;compare;file\n");
 
     load_array(argv[1], arr, atoi(argv[2]));
     double time_sort;
@@ -182,26 +250,58 @@ int main(int argc, char const *argv[])
       {
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         clock_t start = clock();
-        binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records);
+        binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
         clock_t end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%d;%s\n", time_sort, atoi(argv[2]), argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_string", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_int", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_double", argv[1]);
 
         fflush(fp);
       }
     }
     else
     {
-      for (size_t size = 0; size < atoi(argv[2]); size+=10)
+      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=10)
       {
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         clock_t start = clock();
-        binary_insert_sort(arr, sizeof(arr[0]), size, compare_records);
+        binary_insert_sort(arr, sizeof(arr[0]), size, compare_records_string);
         clock_t end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%zu;%s\n", time_sort, size, argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_string", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), size, compare_records_int);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_int", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        binary_insert_sort(arr, sizeof(arr[0]), size, compare_records_double);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_double", argv[1]);
 
         fflush(fp);
       } 

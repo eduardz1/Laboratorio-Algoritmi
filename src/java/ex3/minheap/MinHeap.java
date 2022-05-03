@@ -2,7 +2,9 @@ package minheap;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.lang.Math;
+
+import priorityqueue.PriorityQueue;
+
 import java.util.Collections;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Collections;
  * 
  * @param T type of the element in the array
  */
-public class MinHeap<T> {
+public class MinHeap<T> implements PriorityQueue<T>{
   private ArrayList<T> heap = null;
   private Comparator<? super T> comparator = null;
 
@@ -26,7 +28,7 @@ public class MinHeap<T> {
   public MinHeap(Comparator<? super T> comparator) throws MinHeapException {
     if (comparator == null)
       throw new MinHeapException("MinHeap Constructor:" + " parameter comparator cannot be null");
-    this.heap = new ArrayList();
+    this.heap = new ArrayList<T>();
     this.comparator = comparator;
   }
 
@@ -101,12 +103,13 @@ public class MinHeap<T> {
    * @return T element extracted
    * @throws MinHeapException
    */
-  public T extractMinimum() throws MinHeapException {
+  public T extractMaximum() throws MinHeapException {
     if(this.heap == null)
-      throw new MinHeapException("MinHeap extract" + " heap is empty");
+      throw new MinHeapException("extractMaximum" + " heap is empty");
     T res = this.heap.get(0);
     this.heap.add(0, this.heap.remove(this.heap.size() - 1));
     this.minHeapify(0);
+    return res;
   }
 
   /**
@@ -134,5 +137,14 @@ public class MinHeap<T> {
     }
   }
 
-  //public void reduce(int i, )
+  public void increaseKey(int i, T key) throws MinHeapException {
+    if(this.comparator.compare(key, this.heap.get(i))>0 )
+      throw new MinHeapException("increasekay"+"new key is not smaller than current key");
+    
+    this.heap.add(i, key);
+    while(i>0 && this.comparator.compare(this.heap.get(parent(i)), this.heap.get(i))>0 ){
+      Collections.swap(this.heap, i, parent(i));
+      i=parent(i);
+    }
+  }
 }

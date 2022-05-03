@@ -1,118 +1,105 @@
 #include "headers/quick_sort.h"
 #include "headers/binary_insert_sort.h"
+#include "headers/insert_sort.h"
 
 // TODO: implement a loading bar
 
 #define FALLBACK_CONST 8
+#define SWAP(a, b, size)       \
+  do                           \
+  {                            \
+    size_t _size = (size);     \
+    char *_a = (a), *_b = (b); \
+    while (_size-- > 0)        \
+    {                          \
+      char _tmp = *_a;         \
+      *_a++ = *_b;             \
+      *_b++ = _tmp;            \
+    }                          \
+  } while (0)
 
-// TODO: add assertion to methods to check for example that array is not null, size is greater than 0 ecc...
-void quick_sort( void* array, size_t size, int p, int r, int (*comp)(void*, void*), enum PivotSelector selector) 
+void quick_sort(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector)
 {
-  // removing one _qsort call improves constant time complexity, calling the 
-  // function recursively only on the smaller sub-array reduces the call stack
-  // depth in the worst case to log(n)
-  while (p < r)
+  assert(array != NULL && size > 0);
+  /*
+   * removing one quick_sort() call improves constant time complexity, calling the
+   * function recursively only on the smaller sub-array reduces the call stack
+   * depth in the worst case to log(n). When the subarray to order has less than
+   * FALLBACK_CONST elements we use insert_sort() because it performs very well
+   * on small groups of elements
+   */
+  while (l < r)
   {
-    int q = _part(array, size, p, r, comp, selector);
-  #ifndef FALLBACK_BIS
-    if(q - p < r - q)
+    int pivot = _partition(array, size, l, r, comp, selector);
+    if (pivot - l < r - pivot)
     {
-      quick_sort(array, size, p, q - 1, comp, selector);
-      p = q + 1;
+      if (pivot - l > FALLBACK_CONST)
+        quick_sort(array, size, l, pivot - 1, comp, selector);
+      else
+        insert_sort(array + l * size, size, pivot - l, comp);
+      l = pivot + 1;
     }
     else
     {
-      quick_sort(array, size, q + 1, r, comp, selector);
-      r = q - 1;
-    }
-  #endif
-  #ifdef FALLBACK_BIS
-    if(q - p < r - q)
-    {
-      if(q - p > FALLBACK_CONST)
-        quick_sort(array, size, p, q - 1, comp, selector);
+      if (r - pivot > FALLBACK_CONST)
+        quick_sort(array, size, pivot + 1, r, comp, selector);
       else
-        binary_insert_sort(array + p * size, size, q - p, comp);
-      p = q + 1;
+        insert_sort(array + (pivot + 1) * size, size, r - pivot, comp);
+      r = pivot - 1;
     }
-    else
-    {
-      if(r - q > FALLBACK_CONST)
-        quick_sort(array, size, q + 1, r, comp, selector);
-      else
-        binary_insert_sort(array + (q + 1) * size, size, r - q, comp);
-      r = q - 1;
-    }
-  #endif
   }
 }
 
-int _part(void *array, size_t size, int p, int r, int (*comp)(void *, void *), enum PivotSelector selector)
+__attribute__((flatten)) int _partition(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector)
 {
-  void *pivot;
-  switch(selector)
+  switch (selector)
   {
   case RANDOM:
-    pivot = array + RAND(p, r) * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + RAND(l, r) * size, array + r * size, size);
     break;
   case FIRST:
-    pivot = array + p * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + l * size, array + r * size, size);
     break;
   case MIDDLE:
-    pivot = array + (p + (r - p) / 2) * size;
-    swap(pivot, array + r * size, size);
+    SWAP(array + (l + (r - l) / 2) * size, array + r * size, size);
     break;
-  case LAST:
-    pivot = array + r * size;
-    swap(pivot, array + r * size, size);
-    break;
-  case MEDIAN3: default: 
-    {
-      int first  = p * size;
-      int middle = (p + (r - p) / 2) * size;
-      int last   = r * size;
-      if(comp(array + middle, array + first) < 0)
-        swap(array + first, array + middle, size);
-      if(comp(array + last, array + first) < 0)
-        swap(array + first, array + last, size);
-      if(comp(array + middle, array + last) < 0)
-        swap(array + middle, array + last, size);
-    }
-  }
-  return partition(array, size, p, r, comp);
-}
-
-// TODO: not really necessary but 3-way partition might improve performance and
-//       dual pivot might be faster
-int partition(void *array, size_t size, int p, int r, int (*comp)(void *, void *))
-{
-  void *pivot = array + r * size;
-  int i = p - 1;
-
-  /**
-   * @invariant
-   *  if p <= k <0 i, then array[k] <0 pivot
-   *  if i + 1 <0 k <= j - 1, then array[k] > pivot
-   *  if k = r, then array[k] = pivot
-   */
-  for (int j = p; j < r; j++)
+  case MEDIAN3:
   {
-    if (comp(array + j * size, pivot) <= 0)
-    {
-      i = i + 1;
-      swap(array + i * size, array + j * size, size);
-    }
+    int first = l * size;
+    int middle = (l + (r - l) / 2) * size;
+    int last = r * size;
+    if (comp(array + middle, array + first) < 0)
+      SWAP(array + first, array + middle, size);
+    if (comp(array + last, array + first) < 0)
+      SWAP(array + first, array + last, size);
+    if (comp(array + middle, array + last) < 0)
+      SWAP(array + middle, array + last, size);
   }
-  swap(array + (i + 1) * size, array + r * size, size);
-  return i + 1;
+  break;
+  default: case LAST: break; // pivot already in place
+  }
+  return partition(array, size, l, r, comp);
 }
 
-void swap(void *i, void *j, size_t size)
+int partition(void *const array, const size_t size, int l, int r, const Comp comp)
 {
-  char tmp[size];
-  memcpy(tmp, i, size);
-  memcpy(i, j, size);
-  memcpy(j, tmp, size);
+  // avoiding multiplications at every iteration noticeably improves perfomance
+  int i = (l - 1) * size;
+  int pivot_i = r * size;
+
+  /** 
+   * @invariant
+   *  if (l * size <= k <= i)        then (array[k] <= pivot)
+   *  if (i + size <= k <= j - size) then (array[k]  > pivot)
+   *  if (k == r)                    then (array[k] == pivot)
+   */
+  for (int j = l * size; j <= pivot_i; j += size)
+  {
+    if (comp(array + j, array + pivot_i) <= 0)
+    {
+      i += size;
+      SWAP(array + i, array + j, size);
+    }
+  }
+  return i / size;
 }

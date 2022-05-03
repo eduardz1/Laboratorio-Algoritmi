@@ -2,8 +2,9 @@
 #include "../shared/record.h"
 #include <stdlib.h>
 
-void insert_skip_list(struct SkipList *list, void *elem)
+void insert_skip_list(struct SkipList *list, void *const elem)
 {
+  assert(list != NULL);
   struct Node *new = create_node(elem, random_level(), list->elem_size);
   if(new == NULL)
   {
@@ -33,7 +34,7 @@ void insert_skip_list(struct SkipList *list, void *elem)
   }
 }
 
-struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size)
+struct SkipList *create_skip_list(Comp comp, void (*free)(void *), size_t elem_size)
 {
   printf("%d", dynamic_max_height);
   struct SkipList *new = malloc(sizeof(struct SkipList));
@@ -52,6 +53,7 @@ struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *
 
 void delete_skip_list(struct SkipList* list)
 {
+  assert(list != NULL);
   struct Node *curr = NULL;
   while(list->head != NULL) 
   {
@@ -70,8 +72,9 @@ void delete_skip_list(struct SkipList* list)
   free(list);
 }
 
-void *search_skip_list(struct SkipList *list, void *elem)
+void *search_skip_list(struct SkipList *list, void *const elem)
 {
+  assert(list != NULL && elem != NULL);
   struct Node *x = list->head;
 
   /// @invariant x->elem < elem
@@ -88,7 +91,7 @@ void *search_skip_list(struct SkipList *list, void *elem)
     return x->elem;
 }
 
-// TODO: spiegare il vatnaggio di questo algoritmo nella relazione (specificato
+// TODO: spiegare il vantaggio di questo algoritmo nella relazione (specificato
 // nei requisiti che il numero di puntatori deve essere determinato da questo algoritmo)
 uint32_t random_level()
 {

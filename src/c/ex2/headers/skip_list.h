@@ -32,7 +32,7 @@ struct Node
 struct SkipList
 {
   struct Node *head;
-  int (*comp)(void*, void*);
+  int (*comp)(const void*, const void*);
   uint8_t max_level;
   size_t elem_size;
   void (*free)(void *);
@@ -54,7 +54,7 @@ struct Node *create_node(void *elem, uint32_t level, size_t size);
  * @param list pointer to a list of generic elements
  * @param elem element to insert
  */
-void insert_skip_list(struct SkipList *list, void *elem);
+void insert_skip_list(struct SkipList *list, void *const elem);
 
 /**
  * @brief determines max number of pointer to include in a new Node
@@ -69,7 +69,7 @@ uint32_t random_level();
  * @param elem elements to search
  * @return the element if found or NULL otherwise
  */
-void *search_skip_list(struct SkipList *list, void *elem);
+void *search_skip_list(struct SkipList *list, void *const elem);
 
 /**
  * @brief initializes a new empty skip list
@@ -79,7 +79,7 @@ void *search_skip_list(struct SkipList *list, void *elem);
  * @param elem_size specifies the type by size
  * @return pointer to the new list or NULL if an error occurred
  */
-struct SkipList *create_skip_list(int (*comp)(void*, void*), void (*free)(void *), size_t elem_size);
+struct SkipList *create_skip_list(int (*comp)(const void*, const void*), void (*free)(void *), size_t elem_size);
 
 /**
  * @brief deallocates every element of a list

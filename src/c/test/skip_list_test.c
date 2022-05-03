@@ -87,7 +87,7 @@ void test_search_char_skip_list()
 
 void test_search_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_records, NULL, sizeof(struct Record));
+  struct SkipList *l = create_skip_list(compare_records_string, NULL, sizeof(struct Record));
   struct Record actual[8] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},
@@ -119,13 +119,13 @@ void test_search_skip_list()
       {7, "a\0", 0, -0.0001f}
     };
 
-  TEST_ASSERT_EQUAL_INT(0, compare_records(search_skip_list(l, to_search + 0), actual + 0));
+  TEST_ASSERT_EQUAL_INT(0, compare_records_string(search_skip_list(l, to_search + 0), actual + 0));
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 1));
-  TEST_ASSERT_EQUAL_INT(0, compare_records(search_skip_list(l, to_search + 2), actual + 2));
+  TEST_ASSERT_EQUAL_INT(0, compare_records_string(search_skip_list(l, to_search + 2), actual + 2));
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 3));
-  TEST_ASSERT_EQUAL_INT(0, compare_records(search_skip_list(l, to_search + 4), actual + 4));
+  TEST_ASSERT_EQUAL_INT(0, compare_records_string(search_skip_list(l, to_search + 4), actual + 4));
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 5));
-  TEST_ASSERT_EQUAL_INT(0, compare_records(search_skip_list(l, to_search + 6), actual + 6));
+  TEST_ASSERT_EQUAL_INT(0, compare_records_string(search_skip_list(l, to_search + 6), actual + 6));
   TEST_ASSERT_NULL(search_skip_list(l, to_search + 7));
   delete_skip_list(l);
 }
@@ -318,7 +318,7 @@ void test_insert_string_skip_list()
 
 void test_insert_record_skip_list()
 {
-  struct SkipList *l = create_skip_list(compare_records, NULL, sizeof(struct Record));
+  struct SkipList *l = create_skip_list(compare_records_string, NULL, sizeof(struct Record));
   struct Record actual[8] = {
       {0, "a\0", 1, 0.0001f},
       {1, "c\0", 0, 1.0001f},

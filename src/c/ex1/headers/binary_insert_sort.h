@@ -1,7 +1,25 @@
 #pragma once
 #include "../../shared/common.h"
 
-// FIXME: write descriptive comment
-void binary_insert_sort(void* array, size_t size, int lenght, int (*comp)(void*, void*));
-// TODO: write descriptive comment 
-int binary_search(void* array, size_t size, int left, int right, int (*comp)(void*, void*), void* key);
+/**
+ * @brief insertion sort of generic array using binary search
+ * 
+ * @param array array of generic elements
+ * @param size size (in bytes) of the single element of the array
+ * @param lenght number of elements in the array
+ * @param comp pointer to a compare function desired for a type
+ */
+void binary_insert_sort(void *const array, const size_t size, int lenght, const Comp comp);
+
+/**
+ * @brief iterative binary search
+ * 
+ * @param array array of generic elements
+ * @param size size (in bytes) of the single element of the array
+ * @param l left index of the subarray
+ * @param r right index of the subarray
+ * @param comp pointer to a compare function desired for a type
+ * @param key element to search
+ * @return int index of #key in #array
+ */
+int binary_search(void *const array, const size_t size, int l, int r, const Comp comp, const void* key);
