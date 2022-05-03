@@ -21,6 +21,13 @@
     printf("%s: %f sec\n", #a, (double)(end - start) / CLOCKS_PER_SEC); \
   } while (0)
 
+#define ISCANF(a, b)                      \
+  do                                      \
+  {                                       \
+    int ignored __attribute__((unused));  \
+    ignored = scanf(a, b);                \
+  } while (0)                                                                           
+
 typedef int (*Comp)(const void *, const void *);
 
 enum Type

@@ -33,20 +33,20 @@ void load_array(const char* file_name, struct Record *array, int size)
   fclose(fp);
 }
 
-void dispose_string_in_array(struct Record * a, int length) {
-  for(int i = 0; i < length; i++)
-      free(a[i].field1);
+void dispose_string_in_array(struct Record * a, int length) 
+{
+  for(int i = 0; i < length; i++) 
+  {
+    free(a[i].field1);
+  }
 }
 
-void checksum(struct Record * a, int length, int (*comp)(const void *, const void *)) {
+void checksum(struct Record * a, int length, Comp comp) 
+{
   bool flag = true;
-  for(int i = 0; i < length - 1; i++)
+  for(int i = 0; i < length - 1 && flag; i++)
   {
-    if(comp(&a[i], &a[i+1]) > 0)
-    {
-      flag = false;
-      break;
-    }
+    if(comp(&a[i], &a[i+1]) > 0) flag = false;
   }
 
   if(flag)
@@ -65,15 +65,17 @@ int main(int argc, char const *argv[])
 
   srand(time(NULL));
 
+  // Select algorithm
   printf("Choose a sorting algorithm: [qsort]/[binssort] ");
   char input[10];
-  (void)!scanf("%s", input); // scanf is not really safe, I'm casting the return into the void, we can use a better function
+  ISCANF("%s", input);
   if(strcmp(input, "qsort") != 0 && strcmp(input, "binssort") != 0)
   {
     printf("Invalid input\n");
     exit(EXIT_FAILURE);
   }
 
+  // Load array
   struct Record *const arr = calloc(atoi(argv[2]), sizeof(struct Record));
   if(arr == NULL && atoi(argv[2]) > 0)
   {
@@ -82,9 +84,10 @@ int main(int argc, char const *argv[])
   }
   load_array(argv[1], arr, atoi(argv[2]));
   
+  // Select record's field to sort
   char input2[10];
   printf("\nChoose which field you wish to prioritize: \n0: [first]\n1: [second]\n2: [third]\n");
-  (void)!scanf("%s", input2);
+  ISCANF("%s", input2);
 
   Comp comp = atoi(input2) == 0 ? compare_records_string :
               atoi(input2) == 1 ? compare_records_int :
@@ -97,21 +100,30 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
+  // Sort array
   if(strcmp(input, "qsort") == 0) 
   {
     printf("\nChoose pivot strategy: \n0: [random]\n1: [first]\n2: [middle]\n3: [last]\n4: [median of three]\n");
-    (void)!scanf("%s", input); // if input is different form 0/1/2/3/4 the number cycle anyway
+    ISCANF("%s", input);
+    if (atoi(input) > 4 || atoi(input) < 0)
+    {
+      printf("Invalid input\n");
+      exit(EXIT_FAILURE);
+    }
 
+    printf("Start sorting...\n");
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, comp, atoi(input)));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
-    TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, comp, atoi(input)));
+    printf("Start sorting...\n");
+    TIMING(binary_insert_sort(arr, sizeof(arr[0]),  atoi(argv[2]), comp));
   }
 
+  // Check if array is sorted
   checksum(arr, atoi(argv[2]), comp);
   printf("\nSave sorted array to file \033[1msorted.csv\033[22m? [Y/n] ");
-  (void)!scanf("%s", input);
+  ISCANF("%s", input);
   if(strcmp(input, "n") != 0)
   {
     FILE *fp = fopen("sorted.csv", "w");
