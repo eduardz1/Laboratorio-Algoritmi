@@ -30,11 +30,6 @@ enum Pivot
 void quick_sort(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector);
 
 /**
- * @brief wrapper of #partition() that allows selection of pivot
- */
-int _partition(void *const array, const size_t size, int p, int r, const Comp comp, const enum Pivot selector);
-
-/**
  * @brief [Lomuto] partions the array in the specified range [l, r] using r as pivot
  *  
  * @param array array of generic elements
@@ -44,4 +39,4 @@ int _partition(void *const array, const size_t size, int p, int r, const Comp co
  * @param comp pointer to the compare function desired for a type
  * @returns index of the pivot placed in the correct position
  */
-int partition(void *const array, const size_t size, int l, int r, const Comp comp);
+int partition(void *const array, const size_t size, int p, int r, const Comp comp, const enum Pivot selector);

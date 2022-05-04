@@ -10,7 +10,7 @@ prof
 
 **/bin
 **/obj
-**/es2_dataset
+**/es*_dataset
 *.iml
 
 # R

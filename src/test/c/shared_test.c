@@ -184,26 +184,26 @@ void test_compare_record(void)
   TEST_ASSERT_EQUAL_INT(1, result);
 }
 
+// FIXME: What is this for?
+// void test_compare_elem_in_node(void) {
+//   int aa = 1; int bb = 1;
 
-void test_compare_elem_in_node(void) {
-  int aa = 1; int bb = 1;
+//   struct Node * a = malloc(sizeof(struct Node));
+//   if(a == NULL) {
+//     printf("Error: malloc failed\n");
+//     exit(EXIT_FAILURE);
+//   }
+//   a->elem = &aa; a->level = 3;
 
-  struct Node * a = malloc(sizeof(struct Node));
-  if(a == NULL) {
-    printf("Error: malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  a->elem = &aa; a->level = 3;
+//   struct Node * b = malloc(sizeof(struct Node));
+//   if(b == NULL) {
+//     printf("Error: malloc failed\n");
+//     exit(EXIT_FAILURE);
+//   }
+//   b->elem = &bb; b->level = 1;
 
-  struct Node * b = malloc(sizeof(struct Node));
-  if(b == NULL) {
-    printf("Error: malloc failed\n");
-    exit(EXIT_FAILURE);
-  }
-  b->elem = &bb; b->level = 1;
-
-  TEST_ASSERT_TRUE(!compare_int(a->elem, b->elem));
-}
+//   TEST_ASSERT_TRUE(!compare_int(a->elem, b->elem));
+// }
 
 int main(void)
 {
@@ -216,7 +216,7 @@ int main(void)
   RUN_TEST(test_compare_char);
   RUN_TEST(test_compare_string);
   RUN_TEST(test_compare_record);
-  RUN_TEST(test_compare_elem_in_node);
+  // RUN_TEST(test_compare_elem_in_node);
 
   return UNITY_END();
 }

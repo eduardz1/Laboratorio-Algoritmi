@@ -2,10 +2,68 @@
 #include "../shared/record.h"
 #include <stdlib.h>
 
+struct Node
+{
+  void *elem;
+  struct Node **next;
+  uint8_t level;
+  size_t size;
+};
+
+struct SkipList
+{
+  struct Node *head;
+  int (*comp)(const void*, const void*);
+  uint8_t max_level;
+  size_t elem_size;
+  void (*free)(void *);
+};
+
+/**
+ * @brief determines max number of pointer to include in a new Node
+ */
+uint32_t _random_level()
+{
+  int lvl = 1;
+  while(rand() % 2 && lvl < MAX_HEIGHT) lvl++;
+  return lvl;
+}
+
+/**
+ * @brief Create a node object
+ * 
+ * @param elem element of the node
+ * @param level number of pointers to other nodes
+ * @param size specifies size of byte to allocate for the elem
+ * @return pointer to the new node or NULL if an error occurred
+ */
+struct Node *_create_node(void *elem, uint32_t level, size_t size)
+{
+  struct Node *new = malloc(sizeof(struct Node));
+  if(new == NULL) return NULL;
+
+  if(size == 0)
+  { 
+    new->elem = NULL;
+  }
+  else
+  {
+    new->elem = malloc(size);
+    if(new->elem == NULL) return NULL;
+    memcpy(new->elem, elem, size);
+  }
+
+  new->level = level;
+
+  new->next = calloc(level, sizeof(void*));
+  if(new->next == NULL) return NULL;
+  return new;
+}
+
 void insert_skip_list(struct SkipList *list, void *const elem)
 {
   assert(list != NULL);
-  struct Node *new = create_node(elem, random_level(), list->elem_size);
+  struct Node *new = _create_node(elem, _random_level(), list->elem_size);
   if(new == NULL)
   {
     printf("Error creating node\n");
@@ -39,7 +97,7 @@ struct SkipList *create_skip_list(Comp comp, void (*free)(void *), size_t elem_s
   struct SkipList *new = malloc(sizeof(struct SkipList));
   if(new == NULL) return NULL;
 
-  struct Node *sentinel = create_node(NULL, MAX_HEIGHT, 0);
+  struct Node *sentinel = _create_node(NULL, MAX_HEIGHT, 0);
   if(sentinel == NULL) return NULL;
   new->head = sentinel;
 
@@ -88,38 +146,6 @@ void *search_skip_list(struct SkipList *list, void *const elem)
     return NULL;
   else
     return x->elem;
-}
-
-// TODO: spiegare il vantaggio di questo algoritmo nella relazione (specificato
-// nei requisiti che il numero di puntatori deve essere determinato da questo algoritmo)
-uint32_t random_level()
-{
-  int lvl = 1;
-  while(rand() % 2 && lvl < MAX_HEIGHT) lvl++;
-  return lvl;
-}
-
-struct Node *create_node(void *elem, uint32_t level, size_t size)
-{
-  struct Node *new = malloc(sizeof(struct Node));
-  if(new == NULL) return NULL;
-
-  if(size == 0)
-  { 
-    new->elem = NULL;
-  }
-  else
-  {
-    new->elem = malloc(size);
-    if(new->elem == NULL) return NULL;
-    memcpy(new->elem, elem, size);
-  }
-
-  new->level = level;
-
-  new->next = calloc(level, sizeof(void*));
-  if(new->next == NULL) return NULL;
-  return new;
 }
 
 // Redirection doesn't look too good because of the carriage returns, if we find

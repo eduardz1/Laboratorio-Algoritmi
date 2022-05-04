@@ -111,12 +111,14 @@ int main(int argc, char const *argv[])
       exit(EXIT_FAILURE);
     }
 
-    printf("Start sorting...\n");
+    printf("\nSorting ...\r");
+    fflush(stdout);
     TIMING(quick_sort(arr, sizeof(arr[0]), 0, atoi(argv[2]) - 1, comp, atoi(input)));
   } 
   else if(strcmp(input, "binssort") == 0) 
   {
-    printf("Start sorting...\n");
+    printf("\nSorting ...\r");
+    fflush(stdout);
     TIMING(binary_insert_sort(arr, sizeof(arr[0]),  atoi(argv[2]), comp));
   }
 

@@ -114,7 +114,7 @@ void test_records_array(void)
   };
 
   quick_sort(actual, sizeof(actual[0]), 0, 7, compare_records_string, MEDIAN3);
-  for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
+  for (unsigned long i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);
     TEST_ASSERT_EQUAL_INT(expected[i].field2, actual[i].field2);

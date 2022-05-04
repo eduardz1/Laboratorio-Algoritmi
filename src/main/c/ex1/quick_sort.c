@@ -30,7 +30,7 @@ void quick_sort(void *const array, const size_t size, int l, int r, const Comp c
    */
   while (l < r)
   {
-    int pivot = _partition(array, size, l, r, comp, selector);
+    int pivot = partition(array, size, l, r, comp, selector);
     if (pivot - l < r - pivot)
     {
       if (pivot - l > FALLBACK_CONST)
@@ -50,7 +50,30 @@ void quick_sort(void *const array, const size_t size, int l, int r, const Comp c
   }
 }
 
-__attribute__((flatten)) int _partition(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector)
+int _partition(void *const array, const size_t size, int l, int r, const Comp comp)
+{
+  // avoiding multiplications at every iteration noticeably improves perfomance
+  int i = (l - 1) * size;
+  int pivot_i = r * size;
+
+  /** 
+   * @invariant
+   *  if (l * size <= k <= i)        then (array[k] <= pivot)
+   *  if (i + size <= k <= j - size) then (array[k]  > pivot)
+   *  if (k == r)                    then (array[k] == pivot)
+   */
+  for (int j = l * size; j <= pivot_i; j += size)
+  {
+    if (comp(array + j, array + pivot_i) <= 0)
+    {
+      i += size;
+      SWAP(array + i, array + j, size);
+    }
+  }
+  return i / size;
+}
+
+__attribute__((flatten)) int partition(void *const array, const size_t size, int l, int r, const Comp comp, const enum Pivot selector)
 {
   switch (selector)
   {
@@ -78,28 +101,5 @@ __attribute__((flatten)) int _partition(void *const array, const size_t size, in
   break;
   default: case LAST: break; // pivot already in place
   }
-  return partition(array, size, l, r, comp);
-}
-
-int partition(void *const array, const size_t size, int l, int r, const Comp comp)
-{
-  // avoiding multiplications at every iteration noticeably improves perfomance
-  int i = (l - 1) * size;
-  int pivot_i = r * size;
-
-  /** 
-   * @invariant
-   *  if (l * size <= k <= i)        then (array[k] <= pivot)
-   *  if (i + size <= k <= j - size) then (array[k]  > pivot)
-   *  if (k == r)                    then (array[k] == pivot)
-   */
-  for (int j = l * size; j <= pivot_i; j += size)
-  {
-    if (comp(array + j, array + pivot_i) <= 0)
-    {
-      i += size;
-      SWAP(array + i, array + j, size);
-    }
-  }
-  return i / size;
+  return _partition(array, size, l, r, comp);
 }

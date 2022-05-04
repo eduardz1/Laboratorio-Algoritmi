@@ -11,13 +11,7 @@
  * @param level current level of array #next of pointers to Node
  * @param size size_t in bytes of #elem
  */
-struct Node
-{
-  void *elem;
-  struct Node **next;
-  uint8_t level;
-  size_t size;
-};
+struct Node;
 
 /**
  * @brief probabilistic list of ordered elements
@@ -28,24 +22,7 @@ struct Node
  * @param elem_size size_t in bytes of #elem
  * @param free function used to free #elem
  */
-struct SkipList
-{
-  struct Node *head;
-  int (*comp)(const void*, const void*);
-  uint8_t max_level;
-  size_t elem_size;
-  void (*free)(void *);
-};
-
-/**
- * @brief Create a node object
- * 
- * @param elem element of the node
- * @param level number of pointers to other nodes
- * @param size specifies size of byte to allocate for the elem
- * @return pointer to the new node or NULL if an error occurred
- */
-struct Node *create_node(void *elem, uint32_t level, size_t size);
+struct SkipList;
 
 /**
  * @brief insert an element into the list
@@ -54,12 +31,6 @@ struct Node *create_node(void *elem, uint32_t level, size_t size);
  * @param elem element to insert
  */
 void insert_skip_list(struct SkipList *list, void *const elem);
-
-/**
- * @brief determines max number of pointer to include in a new Node
- * 
- */
-uint32_t random_level();
 
 /**
  * @brief verifies if an element is present in the list
@@ -78,13 +49,12 @@ void *search_skip_list(struct SkipList *list, void *const elem);
  * @param elem_size specifies the type by size
  * @return pointer to the new list or NULL if an error occurred
  */
-struct SkipList *create_skip_list(int (*comp)(const void*, const void*), void (*free)(void *), size_t elem_size);
+struct SkipList *create_skip_list(Comp comp, void (*free)(void *), size_t elem_size);
 
 /**
  * @brief deallocates every element of a list
- *
  */
-void delete_skip_list(struct SkipList* list);
+void delete_skip_list(struct SkipList *list);
 
 /**
  * @brief prints skip list formatted vertically
