@@ -113,7 +113,7 @@ int main(int argc, char const *argv[])
     double time_sort[15] = {};
     enum Pivot enums[5] = {MEDIAN3, RANDOM, FIRST, MIDDLE, LAST};
 
-    FILE *fp = fopen("time_log_qsort2.csv", "a+");
+    FILE *fp = fopen("time_log_qsort.csv", "a+");
     
     // Check if file is empty
     int c = fgetc(fp);

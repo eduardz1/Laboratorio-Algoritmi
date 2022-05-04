@@ -21,7 +21,7 @@
     printf("%s: %f sec\n", #a, (double)(end - start) / CLOCKS_PER_SEC); \
   } while (0)
 
-#define NUMBER_OF_TEST_TO_DO 990
+#define NUMBER_OF_TEST_TO_DO 1000
 #define ISCANF(a, b)                      \
   do                                      \
   {                                       \

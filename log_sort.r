@@ -3,19 +3,21 @@ library(Rmisc)
 library(data.table)
 library(tikzDevice)
 fp <- data.frame(fread(
-       file = "time_log_qsort2.csv",
+       file = "time_log_qsort.csv",
        sep = ";", header = T, na.strings = "NA"
 ))
 tikz("latex/figures/qs_boxplot_pivot.tex", width = 5, height = 3)
 
 # section only containing run on 20 million shuffled records
 main <- data.frame(pivot = fp[fp$size == 20000000 & fp$file == "es1_dataset/records.csv", ]$pivot,
-                   time = fp[fp$size == 20000000 & fp$file == "es1_dataset/records.csv", ]$time)
+                   time = fp[fp$size == 20000000 & fp$file == "es1_dataset/records.csv", ]$time,
+                   compare = fp[fp$size == 20000000 & fp$file == "es1_dataset/records.csv", ]$compare)
 
-ggplot(main, aes(x = pivot, y = time)) +
+g <- ggplot(main, aes(x = pivot, y = time, fill = interaction(pivot, compare), dodge = compare)) +
        geom_boxplot() +
        ylab("time (s)") +
        theme_bw()
+print(g)
 dev.off()
 summary(main$time[main$pivot == "MEDIAN3"])
 ################################################################################
