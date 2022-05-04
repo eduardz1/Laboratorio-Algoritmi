@@ -11,14 +11,14 @@ $(info $(shell mkdir -p $(BIN) $(OBJ)))
 
 # Shared library ---------------------------------------------------------------
 
-SHD      := $(SRC)/c/shared
+SHD      := $(SRC)/main/c/shared
 SHD_SRCS := $(wildcard $(SHD)/*.c)
 SHD_OBJS := $(patsubst $(SHD)/%.c, $(OBJ)/%.o, $(SHD_SRCS))
 SHD_HDRS := $(wildcard $(SHD)/*.h)
 
 # Unity tests ------------------------------------------------------------------
 
-TST := $(SRC)/c/test
+TST := $(SRC)/test/c
 
 TSTQS_SRCS := $(wildcard $(TST)/quick_sort_test.c)
 TSTQS_OBJS := $(patsubst $(TST)/%.c, $(OBJ)/%.o, $(TSTQS_SRCS))
@@ -42,14 +42,14 @@ UNITY_HDRS := $(wildcard $(UNITY)/*.h)
 
 # Ex1 --------------------------------------------------------------------------
 
-EX1			 := $(SRC)/c/ex1
+EX1			 := $(SRC)/main/c/ex1
 EX1_SRCS := $(wildcard $(EX1)/*.c)
 EX1_OBJS := $(patsubst $(EX1)/%.c, $(OBJ)/%.o, $(EX1_SRCS))
 EX1_HDRS := $(wildcard $(EX1)/headers/*.h)
 
 # Ex2 --------------------------------------------------------------------------
 
-EX2			 := $(SRC)/c/ex2
+EX2			 := $(SRC)/main/c/ex2
 EX2_SRCS := $(wildcard $(EX2)/*.c)
 EX2_OBJS := $(patsubst $(EX2)/%.c, $(OBJ)/%.o, $(EX2_SRCS))
 EX2_HDRS := $(wildcard $(EX2)/headers/*.h)

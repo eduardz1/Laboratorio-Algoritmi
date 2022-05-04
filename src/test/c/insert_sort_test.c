@@ -1,6 +1,6 @@
 #include "unity/unity.h"
-#include "../ex1/headers/insert_sort.h"
-#include "../shared/record.h"
+#include "../../main/c/ex1/headers/insert_sort.h"
+#include "../../main/c/shared/record.h"
 
 void setUp(void) {}
 void tearDown(void) {}

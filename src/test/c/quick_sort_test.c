@@ -1,6 +1,7 @@
 #include "unity/unity.h"
-#include "../ex1/headers/quick_sort.h"
-#include "../shared/record.h"
+
+#include "../../main/c/ex1/headers/quick_sort.h"
+#include "../../main/c/shared/record.h"
 
 // FIXME: arrays under 8 elements make little sense given that we are testing insert sort that way
 

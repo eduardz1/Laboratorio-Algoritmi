@@ -1,6 +1,6 @@
 #include "unity/unity.h"
-#include "../ex2/headers/skip_list.h"
-#include "../shared/record.h"
+#include "../../main/c/ex2/headers/skip_list.h"
+#include "../../main/c/shared/record.h"
 
 #define PRINT_LISTS false
 
