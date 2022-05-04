@@ -4,6 +4,25 @@
 \usepackage{titlesec}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{RGB}{154,255,77}
+\definecolor{mygray}{gray}{0.5}
+\definecolor{myblue}{RGB}{41,141,255}
+
+\lstset{
+    language=C++,
+    basicstyle=\tiny,
+    keywordstyle=\color{myblue},
+    commentstyle=\color{mygray},
+    numberstyle=\color{mygreen},
+    numbers=left,
+    numberstyle=\tiny\color{mygray},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=2
+}
 
 \renewcommand{\thesection}{\arabic{section}} % removes reference of \chapter to avoid "0."
 \titleformat{\chapter}{\normalfont\huge}{\thechapter}{20pt}{\huge\it}
@@ -44,8 +63,6 @@ per scorrere un array già ordinato.
 \centering
     \include{figures/qs_plot_pivot}
 \end{figure}
-
-\newpage
 Concentrandoci in particolare sui pivot \verb|median of 3|, \verb|random| e \verb|middle|, 
 possiamo notare che anche tra questi 3 ve ne è uno preferibile rispetto agli altri (aggiungi qualcosa)
 \begin{figure}[H]
@@ -58,6 +75,55 @@ possiamo notare che anche tra questi 3 ve ne è uno preferibile rispetto agli al
 Quando il \verb|quick_sort()| lavora su un range sufficientemente piccolo, è più
 efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impostato a 8 elementi.
 
+\subsection{Scelta del partition}
+Lomuto bla bla
+bla bla
+bla bla bla!
+
+\begin{lstlisting}
+    template <typename T>
+    int partition_lomuto(T array, int left, int right)
+    {
+        T pivot = array[right];
+        int i = left - 1;
+        for (int j = left; j < right; j++){
+            if (array[j] <= pivot) {
+                i++;
+                swap(&array[i], &array[j]);
+            }
+        }
+        swap(&array[i + 1], &array[right]);
+        return i + 1;
+    }
+\end{lstlisting}
+
+Hoare blabla
+bla bl a Bla
+BLA!blslablabla
+
+\begin{lstlisting}
+    template <typename T>
+    int partition_hoare(T array, int left, int right)
+    {
+        T pivot = array[(left + right) / 2];
+        int i = left - 1;
+        int j = right + 1;
+        while (1) {
+            do {
+                i++;
+            } while (array[i] < pivot);
+            do {
+                j--;
+            } while (array[j] > pivot);
+            if (i >= j) {
+                return j;
+            }
+            swap(&array[i], &array[j]);
+        }
+    }
+\end{lstlisting}
+
+\newpage
 \section{Binary Insertion Sort}`
 Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che finisca in tempi
 sensati l'ordinamento dei 20 milioni di records, facendo due calcoli sui nostri computer

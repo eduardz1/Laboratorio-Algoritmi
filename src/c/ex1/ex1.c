@@ -1,4 +1,5 @@
 #include "headers/binary_insert_sort.h"
+#include "headers/insert_sort.h"
 #include "headers/quick_sort.h"
 #include "../shared/common.h"
 #include "../shared/record.h"
@@ -6,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#define SHUFFLE true
 
 void load_array(const char* file_name, struct Record *array, int size)
 {
@@ -35,6 +38,9 @@ void load_array(const char* file_name, struct Record *array, int size)
 
 static void shuffle(void *array, size_t n, size_t size) 
 {
+#if(SHUFFLE == false)
+  return;
+#endif
   char tmp[size];
   char *arr = array;
   size_t stride = size * sizeof(char);
@@ -176,7 +182,7 @@ int main(int argc, char const *argv[])
     }
     else
     {
-      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=10)
+      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=100)
       {
         int i = 0;
         for (; i < 5; i++)
@@ -239,7 +245,7 @@ int main(int argc, char const *argv[])
     FILE *fp = fopen("time_log_insertsort.csv", "a+");
     // Check if file is empty
     int c = fgetc(fp);
-    if (c == EOF) fprintf(fp, "time;size;compare;file\n");
+    if (c == EOF) fprintf(fp, "time;size;compare;binary_search;file\n");
 
     load_array(argv[1], arr, atoi(argv[2]));
     double time_sort;
@@ -254,7 +260,7 @@ int main(int argc, char const *argv[])
         clock_t end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_string", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_string", "YES", argv[1]);
 
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         start = clock();
@@ -262,7 +268,7 @@ int main(int argc, char const *argv[])
         end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_int", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_int", "YES", argv[1]);
 
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         start = clock();
@@ -270,14 +276,38 @@ int main(int argc, char const *argv[])
         end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%d;%s;%s\n", time_sort, atoi(argv[2]), "records_double", argv[1]);
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_double", "YES", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_string", "NO", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_int", "NO", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), atoi(argv[2]), compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%d;%s;%s;%s\n", time_sort, atoi(argv[2]), "records_double", "NO", argv[1]);
 
         fflush(fp);
       }
     }
     else
     {
-      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=10)
+      for (size_t size = 0; size < (size_t)atoi(argv[2]); size+=1)
       {
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         clock_t start = clock();
@@ -285,7 +315,7 @@ int main(int argc, char const *argv[])
         clock_t end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_string", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_string", "YES", argv[1]);
 
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         start = clock();
@@ -293,7 +323,7 @@ int main(int argc, char const *argv[])
         end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_int", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_int", "YES", argv[1]);
 
         shuffle(arr, atoi(argv[2]), sizeof(struct Record));
         start = clock();
@@ -301,7 +331,31 @@ int main(int argc, char const *argv[])
         end = clock();
         time_sort = (double)(end-start)/CLOCKS_PER_SEC;
 
-        fprintf(fp, "%lf;%zu;%s;%s\n", time_sort, size, "records_double", argv[1]);
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_double", "YES", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), size, compare_records_string);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_string", "NO", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), size, compare_records_int);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_int", "NO", argv[1]);
+
+        shuffle(arr, atoi(argv[2]), sizeof(struct Record));
+        start = clock();
+        insert_sort(arr, sizeof(arr[0]), size, compare_records_double);
+        end = clock();
+        time_sort = (double)(end-start)/CLOCKS_PER_SEC;
+
+        fprintf(fp, "%lf;%zu;%s;%s;%s\n", time_sort, size, "records_double", "NO", argv[1]);
 
         fflush(fp);
       } 
