@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <assert.h>
+#include "comparable.h"
 
 #define RAND(min, max) ((rand() % (max - min + 1)) + min)
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -27,8 +28,6 @@
     int ignored __attribute__((unused));  \
     ignored = scanf(a, b);                \
   } while (0)                                                                           
-
-typedef int (*Comp)(const void *, const void *);
 
 enum Type
 {

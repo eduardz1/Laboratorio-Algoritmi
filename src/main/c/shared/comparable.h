@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string.h>
+#include <stddef.h>
+
+typedef int (*Comp)(const void *, const void *);
 
 /**
  * @brief compare two integers

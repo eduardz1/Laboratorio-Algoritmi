@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdlib.h>
+
 /**
  * @brief dispose string memory
  * 

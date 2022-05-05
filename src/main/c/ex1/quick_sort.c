@@ -52,7 +52,7 @@ void quick_sort(void *const array, const size_t size, int l, int r, const Comp c
 
 int _partition(void *const array, const size_t size, int l, int r, const Comp comp)
 {
-  // avoiding multiplications at every iteration noticeably improves perfomance
+  // avoiding multiplications at every iteration noticeably improves performance
   int i = (l - 1) * size;
   int pivot_i = r * size;
 
