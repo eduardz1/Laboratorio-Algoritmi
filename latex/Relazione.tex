@@ -42,6 +42,10 @@ di sorting varia. Il \verb|quick_sort()| utilizza \verb|_part()| per scegliere i
 di chiamare \verb|partition()| per dividere gli elementi del range selezionato 
 in un sottoinsieme di elementi maggiori e uno di elementi minori del pivot
 la cui posizione finale viene restituita dal metodo.
+\newline
+Premessa: nella seguente relazione analizzeremo solo i dati raccolti su records
+favorendo il primo \verb|field| nell'ordinamento, i dati per i restanti due field
+sono equivalenti ma con costanti minori.
 
 \newpage
 \subsection{Impatto della scelta del pivot nel quick sort}
@@ -58,17 +62,27 @@ riporta il tempo impiegato ad ordinare un array di 20 milioni elementi di tipo \
 La scelta del pivot diventa importante quando l'array in input risulta già
 parzialmente o totalmente ordinato.
 Il grafico sottostante riporta il tempo impiegato da \verb|quick_sort()| 
-per scorrere un array già ordinato.
+per scorrere un array già ordinato. Come ci aspettiamo, l'algoritmo degenera ad
+$O(n^2)$, sia \verb|LAST| che \verb|FIRST| generano un grafico esponenziale ma con
+costanti diverse, fosse l'array ordinato in ordine inverso ci aspettiamo il comportamento
+opposto tra questi due.
 \begin{figure}[H]
 \centering
     \include{figures/qs_plot_pivot}
 \end{figure}
 Concentrandoci in particolare sui pivot \verb|median of 3|, \verb|random| e \verb|middle|, 
-possiamo notare che anche tra questi 3 ve ne è uno preferibile rispetto agli altri (aggiungi qualcosa)
+possiamo notare che per questi il tempo cresce in maniera costante.  
 \begin{figure}[H]
 \centering
     \include{figures/qs_plot_zoommed_pivot}
 \end{figure}
+In particolare \verb|MIDDLE| è chiaramente il pivot con perfomance migliori, il risultato è quello
+aspettato considerando che in questo contesto qui, \verb|partition()| non deve
+praticamente effettuare \verb|SWAP|. Possiamo comunque notare che il pivot \verb|RANDOM|
+si comporta discretamente, con una variabilità maggiore rispetto agli altri. \verb|MEDIAN3|
+finirà per sceglire lo stesso pivot di \verb|MIDDLE| e quindi il tempo aggiuntivo
+è interamente introdotto dall'overhead causato dal confronto dell'elemento centrale
+con il first e last dell'array.
 
 \newpage
 \subsection{Fallback a Insertion Sort}
@@ -76,9 +90,10 @@ Quando il \verb|quick_sort()| lavora su un range sufficientemente piccolo, è pi
 efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impostato a 8 elementi.
 
 \subsection{Scelta del partition}
-Lomuto bla bla
-bla bla
-bla bla bla!
+Nel nostro dataset ogni \verb|record| è virtualmente univoco, la partition di Lomuto
+si comporta quindi molto bene ed anzi, secondo i nostri test, anche meglio di quella
+di Hoare, nonostante quest'ultima infatti effettua meno SWAP, è più complessa a
+livello di codice e causa alla CPU una probabilità più alta di branch misprediction.
 
 \begin{lstlisting}
     template <typename T>
@@ -97,9 +112,11 @@ bla bla bla!
     }
 \end{lstlisting}
 
-Hoare blabla
-bla bl a Bla
-BLA!blslablabla
+Nel caso però si lavorasse su un dataset con una quantità importante di elementi
+duplicati, la partition di Hoare inizia subito ad avere perfomance molto migliori,
+una buona alternativa è anche una partition di Lomuto modificata in maniera tale
+da restituire due indici, dividendo quindi il subarray in tre parti:
+elementi minori, uguali e maggiori del pivot.
 
 \begin{lstlisting}
     template <typename T>
@@ -128,6 +145,8 @@ BLA!blslablabla
 Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che finisca in tempi
 sensati l'ordinamento dei 20 milioni di records, facendo due calcoli sui nostri computer
 dovrebbe metterci approssimativmaente 2 anni.
+Nel seguente schema possiamo però notare come la ricerca binaria del punto di inserimento
+migliori notevolmente la costante di tempo.
 \begin{figure}[H]
 \centering
     \include{figures/bi_plot_unsorted}

@@ -9,10 +9,10 @@ fp <- data.frame(fread(
 tikz("latex/figures/qs_boxplot_pivot.tex", width = 5, height = 5)
 
 # section only containing run on 20 million shuffled records
-main <- data.frame(pivot = fp[fp$size == 20000000 & 
+main <- data.frame(pivot = fp[fp$size == 20000000 &
                               fp$file == "es1_dataset/records.csv" &
                               fp$compare == "records_string", ]$pivot,
-                   time = fp[fp$size == 20000000 & 
+                   time = fp[fp$size == 20000000 &
                              fp$file == "es1_dataset/records.csv" &
                              fp$compare == "records_string", ]$time)
 
@@ -31,7 +31,7 @@ dev.off()
 summary(main$time[main$pivot == "MEDIAN3"])
 ################################################################################
 ## SORTED ######################################################################
-tikz("latex/figures/qs_plot_pivot.tex", width = 5, height = 2)
+tikz("latex/figures/qs_plot_pivot.tex", width = 5, height = 1.5)
 
 pivot <- data.frame(time = fp[fp$file == "es1_dataset/sorted.csv" &
                               fp$compare == "records_string", ]$time,
@@ -46,7 +46,7 @@ ggplot(pivot, aes(x = size, y = time, color = pivot)) +
        theme_bw()
 dev.off()
 ## Zoom in on the pivot that don't degenerate in O(n^2) ##
-tikz("latex/figures/qs_plot_zoommed_pivot.tex", width = 5, height = 2)
+tikz("latex/figures/qs_plot_zoommed_pivot.tex", width = 5, height = 1.5)
 pivot_sec <- pivot[pivot$pivot == "MEDIAN3" | 
                    pivot$pivot == "RANDOM" | 
                    pivot$pivot == "MIDDLE", ]
@@ -70,8 +70,10 @@ bissort <- data.frame(time = fpp[fpp$file == "es1_dataset/records.csv" &
                       binarySearch = fpp[fpp$file == "es1_dataset/records.csv" &
                                          fpp$compare == "records_string", ]$binary_search)
 
-ggplot(bissort, aes(x = size, y = time, color = binarySearch)) + 
-       geom_line() + #geom_smooth(method = loess, se = FALSE) + 
-       ylab("time (s)") + 
-       theme_bw()
+ggplot(bissort, aes(x = size, y = time, color = binarySearch)) +
+       geom_line() +
+       ylab("time (s)") +
+       theme_bw() +
+       labs(caption = "30000 samples for each algorithm, 10000 for each field \
+                       prioritized, wiht increments of 1")
 dev.off()
