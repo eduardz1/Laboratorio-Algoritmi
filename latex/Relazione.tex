@@ -36,12 +36,13 @@
 
 \chapter*{Esercizio 1}
 \section{Quick Sort}
-Il \verb|quick_sort()| è un algoritmo che ordina una collezione partendo da un pivot, 
-il pivot può essere scelto in vari modi, e in base a quale viene scelto il tempo
+Il \verb|quick_sort()| è un algoritmo che ordina una collezione partendo da un pivot,
+questo può essere scelto in vari modi, e in base a quale viene scelto il tempo
 di sorting varia. Il \verb|quick_sort()| utilizza \verb|_part()| per scegliere il pivot prima 
 di chiamare \verb|partition()| per dividere gli elementi del range selezionato 
 in un sottoinsieme di elementi maggiori e uno di elementi minori del pivot
 la cui posizione finale viene restituita dal metodo.
+\newline
 \newline
 Premessa: nella seguente relazione analizzeremo solo i dati raccolti su records
 favorendo il primo \verb|field| nell'ordinamento, i dati per i restanti due field
@@ -49,16 +50,13 @@ sono equivalenti ma con costanti minori.
 
 \newpage
 \subsection{Impatto della scelta del pivot nel quick sort}
-La chiamata a \verb|rand()| porta il \verb|quick_sort()| con pivot scelto 
-randomicamente o come mediana di tre numeri ad essere mediamente più lento 
-rispetto agli altri 3 casi presi in considerazione. La tabella sottostante 
-riporta il tempo impiegato ad ordinare un array di 20 milioni elementi di tipo \verb|struct Record|
+La tabella sottostante riporta il tempo impiegato ad ordinare un array di 20 milioni elementi di tipo \verb|struct Record|
 \begin{figure}[H]
 \centering
     \include{figures/qs_boxplot_pivot}
 \end{figure}
-
 \newpage
+
 La scelta del pivot diventa importante quando l'array in input risulta già
 parzialmente o totalmente ordinato.
 Il grafico sottostante riporta il tempo impiegato da \verb|quick_sort()| 
@@ -92,12 +90,12 @@ efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impos
 \subsection{Scelta del partition}
 Nel nostro dataset ogni \verb|record| è virtualmente univoco, la partition di Lomuto
 si comporta quindi molto bene ed anzi, secondo i nostri test, anche meglio di quella
-di Hoare, nonostante quest'ultima infatti effettua meno SWAP, è più complessa a
+di Hoare, nonostante quest'ultima infatti effettua meno \verb|SWAP|, è più complessa a
 livello di codice e causa alla CPU una probabilità più alta di branch misprediction.
 
 \begin{lstlisting}
     template <typename T>
-    int partition_lomuto(T array, int left, int right)
+    int partition_lomuto(T array[], int left, int right)
     {
         T pivot = array[right];
         int i = left - 1;
@@ -120,7 +118,7 @@ elementi minori, uguali e maggiori del pivot.
 
 \begin{lstlisting}
     template <typename T>
-    int partition_hoare(T array, int left, int right)
+    int partition_hoare(T array[], int left, int right)
     {
         T pivot = array[(left + right) / 2];
         int i = left - 1;
