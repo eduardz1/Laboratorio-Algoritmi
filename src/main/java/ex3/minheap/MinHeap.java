@@ -1,4 +1,4 @@
-package minheap;
+package ex3.minheap;
 
 import java.util.ArrayList;
 import java.util.Comparator;

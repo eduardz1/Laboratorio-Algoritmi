@@ -1,4 +1,4 @@
-package priorityqueue;
+package ex3.priorityqueue;
 
 public interface PriorityQueue<T> {
 

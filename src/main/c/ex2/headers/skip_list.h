@@ -1,5 +1,6 @@
 #pragma once
 #include "../../shared/common.h"
+#include <stdlib.h>
 
 #define MAX_HEIGHT 19 // ~log_2(NUM_WORDS=661561)
 

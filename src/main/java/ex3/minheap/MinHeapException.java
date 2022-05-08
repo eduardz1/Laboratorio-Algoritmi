@@ -1,4 +1,4 @@
-package minheap;
+package ex3.minheap;
 
 /**
  * Expection throwable by the Min Heap Library
