@@ -1,5 +1,5 @@
 #include "unity/unity.h"
-#include "../../main/c/ex2/headers/skip_list.h"
+#include "../../main/c/ex2/headers/skip_list_private.h"
 #include "../../main/c/shared/record.h"
 
 #define PRINT_LISTS false
@@ -12,55 +12,54 @@ void setUp(void)
 void tearDown(void) {}
 
 #pragma region /// TEST #seach_skip_list()
-// FIXME: certain functions shoudl be left private, what do we do? Do we test them?
-// void test_search_int_skip_list() {
+void test_search_int_skip_list() {
   
-//   int aa = 1;
-//   int bb = 3;
-//   int cc = 5;
-//   int dd = 7;
+  int aa = 1;
+  int bb = 3;
+  int cc = 5;
+  int dd = 7;
 
-//   struct Node * a = create_node(&aa, 3, sizeof(int));
-//   struct Node * b = create_node(&bb, 1, sizeof(int));
-//   struct Node * c = create_node(&cc, 2, sizeof(int));
-//   struct Node * d = create_node(&dd, 3, sizeof(int));
+  struct Node * a = create_node(&aa, 3, sizeof(int));
+  struct Node * b = create_node(&bb, 1, sizeof(int));
+  struct Node * c = create_node(&cc, 2, sizeof(int));
+  struct Node * d = create_node(&dd, 3, sizeof(int));
 
-//   a->next[2] = d; a->next[1] = c; a->next[0] = b;
-//   b->next[0] = c;
-//   c->next[1] = d; c->next[0] = d;
-//   d->next[2] = NULL; d->next[1] = NULL; d->next[0] = NULL;
+  a->next[2] = d; a->next[1] = c; a->next[0] = b;
+  b->next[0] = c;
+  c->next[1] = d; c->next[0] = d;
+  d->next[2] = NULL; d->next[1] = NULL; d->next[0] = NULL;
 
-//   struct Node * dummy = malloc(sizeof(struct Node));
-//   if(dummy == NULL)
-//   {
-//     printf("Malloc failed\n");
-//     exit(EXIT_FAILURE);
-//   }
-//   dummy->next = malloc(sizeof(struct Node *) * 3);
-//   if(dummy->next == NULL)
-//   {
-//     printf("Malloc failed\n");
-//     exit(EXIT_FAILURE);
-//   }
-//   dummy->next[0] = a; dummy->next[1] = a; dummy->next[2] = a;
-//   dummy->elem = NULL;
-//   dummy->level = 3;
+  struct Node * dummy = malloc(sizeof(struct Node));
+  if(dummy == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
+  dummy->next = malloc(sizeof(struct Node *) * 3);
+  if(dummy->next == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
+  dummy->next[0] = a; dummy->next[1] = a; dummy->next[2] = a;
+  dummy->elem = NULL;
+  dummy->level = 3;
 
-//   struct SkipList * list = malloc(sizeof(struct SkipList));
-//   if(list == NULL)
-//   {
-//     printf("Malloc failed\n");
-//     exit(EXIT_FAILURE);
-//   }
-//   list->comp = compare_int;
-//   list->free = NULL;
-//   list->max_level = 3;
-//   list->head = dummy;
+  struct SkipList * list = malloc(sizeof(struct SkipList));
+  if(list == NULL)
+  {
+    printf("Malloc failed\n");
+    exit(EXIT_FAILURE);
+  }
+  list->comp = compare_int;
+  list->free = NULL;
+  list->max_level = 3;
+  list->head = dummy;
 
-//   int to_find = 1;
-//   TEST_ASSERT_EQUAL_INT(0, compare_int(&to_find, (int*)search_skip_list(list, &to_find)));
-//   delete_skip_list(list);
-// }
+  int to_find = 1;
+  TEST_ASSERT_EQUAL_INT(0, compare_int(&to_find, (int*)search_skip_list(list, &to_find)));
+  delete_skip_list(list);
+}
 
 void test_search_char_skip_list()
 {
