@@ -13,7 +13,7 @@ import java.util.Collections;
  * 
  * @param T type of the element in the array
  */
-public class MinHeap<T> implements PriorityQueue<T>{
+public class MinHeap<T> implements PriorityQueue<T> {
   private ArrayList<T> heap = null;
   private Comparator<? super T> comparator = null;
   private HashMap<T, Integer> lookup = null;
@@ -30,13 +30,13 @@ public class MinHeap<T> implements PriorityQueue<T>{
   public MinHeap(Comparator<? super T> comparator) throws MinHeapException {
     if (comparator == null)
       throw new MinHeapException("MinHeap:" + " parameter comparator cannot be null");
-    this.heap = new ArrayList<T>();
+    this.heap = new ArrayList<>();
     this.comparator = comparator;
-    this.lookup = new HashMap<T, Integer>();
+    this.lookup = new HashMap<>();
   }
 
   @Override
-  public boolean isEmpty() { // cannot be null because of how the constructor is declared
+  public boolean isEmpty() {
     return this.heap.isEmpty();
   }
 
@@ -51,7 +51,9 @@ public class MinHeap<T> implements PriorityQueue<T>{
       throw new MinHeapException("insert:" + " elem cannot be null"); 
     if (this.lookup.containsKey(elem))
       throw new MinHeapException("insert:" + " elem already present");
+
     this.heap.add(elem);
+    this.lookup.put(elem, this.heap.size() - 1);
 
     int i = this.heap.size() - 1;
     botHeapify(i);
@@ -129,7 +131,7 @@ public class MinHeap<T> implements PriorityQueue<T>{
     this.heap.add(0, newRoot);
     this.lookup.remove(res);
     this.lookup.put(newRoot, 0);
-    this.topHeapify(0);
+    topHeapify(0);
     return res;
   }
 
@@ -147,17 +149,14 @@ public class MinHeap<T> implements PriorityQueue<T>{
    */
   private void topHeapify(int i) {
     int smallest;
-    int left = this.left(i);
+    int left  = this.left(i);
     int right = this.right(i);
 
-    if(left < this.heap.size() && this.comparator.compare(this.heap.get(left), this.heap.get(i)) < 0) {
-      smallest = left;
-    } else {
-      smallest = i;
-    }
-    if(right < this.heap.size() && this.comparator.compare(this.heap.get(right), this.heap.get(smallest)) < 0) {
-      smallest = right;
-    }
+    boolean cond = this.comparator.compare(this.heap.get(left), this.heap.get(i)) < 0;
+    smallest = (cond) ? left : i;
+    
+    cond = this.comparator.compare(this.heap.get(right), this.heap.get(smallest)) < 0;
+    if(right != i && cond) smallest = right;
 
     if(smallest != i) {
       this.lookup.put(this.heap.get(i), smallest);
@@ -174,7 +173,7 @@ public class MinHeap<T> implements PriorityQueue<T>{
 
     int i = this.lookup.get(key);
     if(this.comparator.compare(newKey, this.heap.get(i))>0 )
-      throw new MinHeapException("increaseKey:"+" new key is not smaller than current key");
+      throw new MinHeapException("increaseKey:" + " new key is not smaller than current key");
     
     this.heap.add(i, key);
     botHeapify(i);
