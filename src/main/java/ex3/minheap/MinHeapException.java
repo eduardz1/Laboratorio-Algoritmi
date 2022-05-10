@@ -1,7 +1,7 @@
 package ex3.minheap;
 
 /**
- * Expection throwable by the Min Heap Library
+ * Exception throwable by the Min Heap Library
  */
 public class MinHeapException extends Exception {
   public MinHeapException(String message) {
