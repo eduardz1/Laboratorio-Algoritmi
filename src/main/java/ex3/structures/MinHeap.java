@@ -1,10 +1,10 @@
-package ex3.minheap;
+package ex3.structures;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import ex3.priorityqueue.PriorityQueue;
+import ex3.exceptions.MinHeapException;
 
 import java.util.Collections;
 
@@ -172,7 +172,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
       throw new MinHeapException("increaseKey:" + " key not found in the heap");
 
     int i = this.lookup.get(key);
-    if(this.comparator.compare(newKey, this.heap.get(i))>0 )
+    if(this.comparator.compare(newKey, this.heap.get(i)) > 0)
       throw new MinHeapException("increaseKey:" + " new key is not smaller than current key");
     
     this.heap.add(i, key);
@@ -206,7 +206,6 @@ public class MinHeap<T> implements PriorityQueue<T> {
   // public boolean isHeapified() {
   //   if(this.heap.isEmpty())
   //     return true;
-    
   //   T root = this.heap.get(0);
 
   // }
