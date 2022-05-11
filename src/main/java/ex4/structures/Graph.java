@@ -1,11 +1,11 @@
-package ex4.structures;
+package main.java.ex4.structures;
 
-import ex3.structures.MinHeap;
+import main.java.ex3.structures.MinHeap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Comparator;
 
-import ex4.exceptions.GraphException;
+import main.java.ex4.exceptions.GraphException;
 
 public class Graph<T>{
    private ArrayList<ArrayList<Integer>> adjacencyMatrix;
@@ -22,12 +22,13 @@ public class Graph<T>{
       this.columns = new HashMap<>();
    }
 
-   public void makeEdge(T to, T from, int weight) {
+   public void makeEdge(T to, T from, int weight) throws GraphException {
       if(weight < 0)
          throw new GraphException("makeEdge:" + " weight must not be negative");
       int indexTo = this.rows.get(to);
       int indexFrom = this.columns.get(from);
 
-      this.adjacencyMatrix.get(indexTo).get(indexFrom).add(weight);
+      // FIXME: Doppio get
+      // this.adjacencyMatrix.get(indexTo).get(indexFrom).add(weight);
    }
 }

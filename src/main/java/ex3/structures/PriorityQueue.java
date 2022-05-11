@@ -1,4 +1,4 @@
-package ex3.structures;
+package main.java.ex3.structures;
 
 public interface PriorityQueue<T> {
   /**
@@ -40,5 +40,5 @@ public interface PriorityQueue<T> {
    * @param newKey new value of element, must be of higher priority
    * @throws Exception
    */
-  public void increaseKey(T key, T newKey) throws Exception;
+  public void decreaseKey(T key, T newKey) throws Exception;
 }

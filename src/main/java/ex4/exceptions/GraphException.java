@@ -1,4 +1,4 @@
-package ex4.exceptions;
+package main.java.ex4.exceptions;
 
 /**
  * Exception throwable by the Graph library
