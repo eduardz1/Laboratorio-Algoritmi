@@ -2,22 +2,21 @@ package main.java.ex3.structures;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-
-import main.java.ex3.exceptions.ElementNotFoundException;
-import main.java.ex3.exceptions.MinHeapException;
-
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import main.java.ex3.exceptions.*;
 
 /**
  * MinHeap
  * 
- * @param T type of the element in the array
+ * @param <T> type of the element in the Heap
  */
 public class MinHeap<T> implements PriorityQueue<T> {
-  private ArrayList<T> heap = null;
-  private Comparator<? super T> comparator = null;
-  private HashMap<T, Integer> lookup = null;
+  private ArrayList<T> heap;
+  private Map<T, Integer> lookup;
+  private final Comparator<? super T> comparator;
 
   /**
    * Creates an empty MinHeap
@@ -66,7 +65,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
    */
   private int parent(int i) {
     if (i == 0) return i;
-    return i / 2;
+    return (i - 1) / 2;
   }
   
   /**
@@ -79,7 +78,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
        throw new ElementNotFoundException("parent: Heap does not contains element " + elem);
     int i = this.lookup.get(elem);
     if (i == 0) return null;
-    return this.heap.get(i / 2);
+    return this.heap.get((i - 1) / 2);
   }
 
   /**
@@ -183,7 +182,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
 
     int i = this.lookup.get(key);
     if(this.comparator.compare(newKey, this.heap.get(i)) > 0)
-      throw new MinHeapException(String.format("decreaseKey: new key {%s} is not smaller than current key {%s}", newKey, key));
+      throw new MinHeapException(String.format("decreaseKey:" + " new key {%s} is not smaller than current key {%s}", newKey, key));
     
     this.heap.add(i, key);
     botHeapify(i);

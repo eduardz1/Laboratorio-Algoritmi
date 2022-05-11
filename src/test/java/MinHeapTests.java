@@ -1,9 +1,8 @@
 package test.java;
 import org.junit.Test;
 
-import main.java.ex3.exceptions.ElementNotFoundException;
-import main.java.ex3.exceptions.MinHeapException;
-import main.java.ex3.structures.MinHeap;
+import main.java.ex3.exceptions.*;
+import main.java.ex3.structures.*;
 import static org.junit.Assert.*;
 
 import java.util.Comparator;
@@ -58,7 +57,7 @@ public class MinHeapTests {
     
     assertNull(heap.parent("a"));
     assertEquals("a", heap.parent("b"));
-    assertEquals("a", heap.parent("c")); //FIXME: Parent method is not i/2 but i/2-1, because we work with 0pos index
+    assertEquals("a", heap.parent("c"));
     assertEquals("b", heap.parent("d"));
   }
 

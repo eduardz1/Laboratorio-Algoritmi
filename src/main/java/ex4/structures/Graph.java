@@ -1,34 +1,102 @@
 package main.java.ex4.structures;
 
-import main.java.ex3.structures.MinHeap;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Comparator;
 
-import main.java.ex4.exceptions.GraphException;
+import main.java.ex4.exceptions.*;
 
-public class Graph<T>{
-   private ArrayList<ArrayList<Integer>> adjacencyMatrix;
-   private Comparator<? super T> comparator = null;
-   private HashMap<T, Integer> rows = null;
-   private HashMap<T, Integer> columns = null;
+/**
+ * A class representing a Graph with generic Vertexes and Edges.
+ * 
+ * @param <V> type of the elements in the Graph
+ * @param <E> type of the edges in the Graph
+ */
+public class Graph<V, E> {
+  private final GraphType<V, E> type;
 
-   public Graph(Comparator<? super T> comparator) throws GraphException {
-      if(comparator == null)
-         throw new GraphException("Graph:" + " parameter comparator cannot be null");
-      this.comparator = comparator;
-      this.adjacencyMatrix = new ArrayList<>();
-      this.rows = new HashMap<>();
-      this.columns = new HashMap<>();
-   }
+  private Map<V, Map<V, E>> adjacencyMatrix;
 
-   public void makeEdge(T to, T from, int weight) throws GraphException {
-      if(weight < 0)
-         throw new GraphException("makeEdge:" + " weight must not be negative");
-      int indexTo = this.rows.get(to);
-      int indexFrom = this.columns.get(from);
+  public Graph(Comparator<? super V> comparator, boolean isDirected) throws GraphException {
+    if(comparator == null)
+      throw new GraphException("Graph:" + " parameter comparator cannot be null");
 
-      // FIXME: Doppio get
-      // this.adjacencyMatrix.get(indexTo).get(indexFrom).add(weight);
-   }
+    type = (isDirected) ? new DirectedGraphType<>() : new UndirectedGraphType<>();
+    this.adjacencyMatrix = new HashMap<>();
+  }
+
+  public void addVertex(V vertex) throws GraphException {
+    if(vertex == null)
+      throw new GraphException("addVertex:" + " vertex cannot be null");
+    
+    Map<V, E> temp = new HashMap<>();
+    temp.put(vertex, null);
+    this.adjacencyMatrix.put(vertex, temp);
+  }
+
+  public void makeEdge(V to, V from, int weight) throws GraphException {
+    this.type.makeEdge(to, from, weight);
+  }
+
+  public boolean isDirected() {
+    return this.type instanceof DirectedGraphType;
+  }
+
+  public boolean containsVertex(V vertex) {
+    return this.adjacencyMatrix.containsKey(vertex);
+  }
+
+  public boolean containsEdge(E edge) {
+    return this.adjacencyMatrix.containsValue(edge);
+  }
+
+  public void removeVertex(V vertex) throws GraphException {
+    if(vertex == null)
+      throw new GraphException("removeVertex:" + " vertex cannot be null");
+    // TODO:
+  }
+
+  public void removeEdge(E edge) throws GraphException {
+    if(edge == null)
+      throw new GraphException("removeEdge:" + " edge cannot be null");
+    // TODO:
+  }
+
+  public int getVertexCount() {
+    return this.adjacencyMatrix.size();
+  }
+
+  /**
+   * @return number of edges in the Graph
+   */
+  public int getEdgeCount() {
+    return this.type.getEdgeCount();
+  }
+
+  public ArrayList<E> getEdges() {
+    return this.type.getEdges();
+  }
+
+  public ArrayList<V> getVertices() {
+    return new ArrayList<>(this.adjacencyMatrix.keySet());
+  }
+
+  public ArrayList<V> getNeighbors(V vertex) throws GraphException {
+    return this.type.getNeighbors(vertex);
+  }
+
+  public E getEdge(V from, V to) throws GraphException {
+    return this.type.getEdge(from, to);
+  }
+
+  public void print() {
+    for(V vertex : this.adjacencyMatrix.keySet()) {
+      System.out.print(vertex + ": ");
+      for(V neighbor : this.adjacencyMatrix.get(vertex).keySet()) {
+        System.out.print(neighbor + " ");
+      }
+      System.out.println();
+    }
+  }
 }
