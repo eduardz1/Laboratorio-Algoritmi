@@ -9,7 +9,7 @@ import java.util.Map;
 import main.java.ex3.exceptions.*;
 
 /**
- * MinHeap
+ * Class that implements a Minimum Heap data structure.
  * 
  * @param <T> type of the element in the Heap
  */
@@ -23,8 +23,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
    * Accepts a comparator as input implementing
    * a previous relation between T elements
    * 
-   * @param comparator: comparator implementing previous relation between T
-   *                    elements
+   * @param comparator: comparator implementing previous relation between T elements
    * @throws MinHeapException throws an Exception when comparator is null
    */
   public MinHeap(Comparator<? super T> comparator) throws MinHeapException {
@@ -71,11 +70,11 @@ public class MinHeap<T> implements PriorityQueue<T> {
   /**
    * @param elem
    * @return parent of {@code}elem{@code} in O(1) time
-   * @throws ElementNotFoundException
+   * @throws ElementNotFoundException when {@code}elem{@code} is not present in the Heap
    */
   public T parent (T elem) throws ElementNotFoundException {
     if (!this.lookup.containsKey(elem))
-       throw new ElementNotFoundException("parent: Heap does not contains element " + elem);
+      throw new ElementNotFoundException("parent:" + " Heap does not contain " + elem);
     int i = this.lookup.get(elem);
     if (i == 0) return null;
     return this.heap.get((i - 1) / 2);
@@ -94,11 +93,11 @@ public class MinHeap<T> implements PriorityQueue<T> {
   /**
    * @param elem
    * @return left child of {@code}elem{@code} in O(1) time
-   * @throws ElementNotFoundException
+   * @throws ElementNotFoundException when {@code}elem{@code} is not present in the Heap
    */
   public T left(T elem) throws ElementNotFoundException {
     if (!this.lookup.containsKey(elem))
-       throw new ElementNotFoundException("parent: Heap does not contains element " + elem);
+      throw new ElementNotFoundException("left:" + " Heap does not contain " + elem);
     int i = this.lookup.get(elem);
     int res = 2 * i + 1;
     if (res >= this.heap.size()) return null;
@@ -118,11 +117,11 @@ public class MinHeap<T> implements PriorityQueue<T> {
   /**
    * @param elem
    * @return right child of {@code}elem{@code} in O(1) time
-   * @throws ElementNotFoundException
+   * @throws ElementNotFoundException when {@code}elem{@code} is not present in the Heap
    */
   public T right(T elem) throws ElementNotFoundException{
     if (!this.lookup.containsKey(elem))
-       throw new ElementNotFoundException("parent: Heap does not contains element " + elem);
+      throw new ElementNotFoundException("right:" + " Heap does not contain " + elem);
     int i = this.lookup.get(elem);
     int res = 2 * i + 2;
     if (res >= this.heap.size()) return null;
@@ -175,6 +174,14 @@ public class MinHeap<T> implements PriorityQueue<T> {
     }
   }
 
+  /**
+   * Decreases {@code}key{@code} to the new value {@code}newKey{@code}
+   * 
+   * @param key key to be decreased
+   * @param newKey new value to be set
+   * @throws ElementNotFoundException when {@code}key{@code} is not present in the Heap
+   * @throws MinHeapException when {@code}newKey{@code} is not smaller than {@code}key{@code}
+   */
   @Override
   public void decreaseKey(T key, T newKey) throws MinHeapException, ElementNotFoundException {
     if (!this.lookup.containsKey(key))

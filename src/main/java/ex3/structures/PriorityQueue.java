@@ -33,12 +33,7 @@ public interface PriorityQueue<T> {
    */
   public T peek() throws Exception;
 
-  /**
-   * increases value of generic element {@code}key{@code} to {@code}newKey{@code}
-   * 
-   * @param key element to be incremented
-   * @param newKey new value of element, must be of higher priority
-   * @throws Exception
-   */
+  // FIXME: decreaseKey as a method to PriorityQueue does not make sense, name 
+  // should be changed to reflect the increase in priority of "key"
   public void decreaseKey(T key, T newKey) throws Exception;
 }
