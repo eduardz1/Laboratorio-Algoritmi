@@ -15,14 +15,15 @@ import main.java.ex4.exceptions.*;
  */
 public class Graph<V, E> {
   private final GraphType<V, E> type;
-
   private Map<V, Map<V, E>> adjacencyMatrix;
 
-  public Graph(Comparator<? super V> comparator, boolean isDirected) throws GraphException {
-    if(comparator == null)
-      throw new GraphException("Graph:" + " parameter comparator cannot be null");
-
-    type = (isDirected) ? new DirectedGraphType<>() : new UndirectedGraphType<>();
+  /**
+   * Creates an empty Graph.
+   * 
+   * @param isDirected set to {@code}true{@code} if the Graph should be directed, {@code}false{@code} otherwise
+   */
+  public Graph(boolean isDirected) {
+    this.type = (isDirected) ? new DirectedGraphType<>() : new UndirectedGraphType<>();
     this.adjacencyMatrix = new HashMap<>();
   }
 
