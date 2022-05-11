@@ -1,8 +1,7 @@
-package test.java;
 import org.junit.Test;
 
-import main.java.ex3.exceptions.*;
-import main.java.ex3.structures.*;
+import ex3.exceptions.*;
+import ex3.structures.*;
 import static org.junit.Assert.*;
 
 import java.util.Comparator;

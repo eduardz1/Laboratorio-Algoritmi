@@ -1,11 +1,10 @@
-package main.java.ex4.structures;
+package ex4.structures;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Comparator;
 
-import main.java.ex4.exceptions.*;
+import ex4.exceptions.*;
 
 /**
  * A class representing a Graph with generic Vertexes and Edges.

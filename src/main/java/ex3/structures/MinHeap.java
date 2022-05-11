@@ -1,4 +1,4 @@
-package main.java.ex3.structures;
+package ex3.structures;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.ex3.exceptions.*;
+import ex3.exceptions.*;
 
 /**
  * Class that implements a Minimum Heap data structure.

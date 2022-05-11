@@ -1,8 +1,8 @@
-package main.java.ex4.structures;
+package ex4.structures;
 
 import java.util.ArrayList;
 
-import main.java.ex4.exceptions.*;
+import ex4.exceptions.*;
 
 public interface GraphType<V, E> {
   public ArrayList<V> getNeighbors(V vertex) throws GraphException;
