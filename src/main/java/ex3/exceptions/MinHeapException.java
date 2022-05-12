@@ -1,4 +1,4 @@
-package main.java.ex3.exceptions;
+package ex3.exceptions;
 
 //TODO: Modificare le eccezioni per suddividere le classi in maniera più specifica
 

@@ -1,39 +1,19 @@
-package main.java.ex4.structures;
+package ex4.structures;
 
-import java.util.ArrayList;
-
-import main.java.ex4.exceptions.GraphException;
+import java.util.Map;
 
 public class DirectedGraphType<V, E> implements GraphType<V, E> {
 
   @Override
-  public ArrayList<V> getNeighbors(V vertex) throws GraphException {
-    // TODO Auto-generated method stub
-    return null;
+  public void makeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight) {
   }
 
   @Override
-  public void makeEdge(V to, V from, int weight) throws GraphException {
-    // TODO Auto-generated method stub
-    
+  public void removeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V from, V to) {
   }
 
   @Override
-  public int getEdgeCount() {
-    // TODO Auto-generated method stub
-    return 0;
+  public int getEdgeCountStrategy(int edges) {
+    return edges;
   }
-
-  @Override
-  public ArrayList<E> getEdges() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public E getEdge(V from, V to) throws GraphException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-    
 }

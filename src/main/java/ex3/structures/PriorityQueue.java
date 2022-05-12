@@ -1,4 +1,4 @@
-package main.java.ex3.structures;
+package ex3.structures;
 
 public interface PriorityQueue<T> {
   /**

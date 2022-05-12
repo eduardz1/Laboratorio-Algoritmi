@@ -357,7 +357,7 @@ void test_insert_record_skip_list()
     i++;
   }
   
-  for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
+  for (unsigned long int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);
     TEST_ASSERT_EQUAL_INT(expected[i].field2, actual[i].field2);

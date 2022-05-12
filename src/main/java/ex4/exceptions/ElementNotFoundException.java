@@ -1,4 +1,4 @@
-package ex3.exceptions;
+package ex4.exceptions;
 
 public class ElementNotFoundException extends Exception {
   public ElementNotFoundException(String message) {

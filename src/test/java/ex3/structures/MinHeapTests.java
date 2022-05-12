@@ -1,8 +1,7 @@
-package test.java;
+package ex3.structures;
 import org.junit.Test;
 
-import main.java.ex3.exceptions.*;
-import main.java.ex3.structures.*;
+import ex3.exceptions.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
