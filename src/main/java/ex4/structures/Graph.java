@@ -3,7 +3,6 @@ package main.java.ex4.structures;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Comparator;
 
 import main.java.ex4.exceptions.*;
 

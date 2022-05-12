@@ -33,7 +33,5 @@ public interface PriorityQueue<T> {
    */
   public T peek() throws Exception;
 
-  // FIXME: decreaseKey as a method to PriorityQueue does not make sense, name 
-  // should be changed to reflect the increase in priority of "key"
-  public void decreaseKey(T key, T newKey) throws Exception;
+  public void increaseKey(T key, T newKey) throws Exception;
 }
