@@ -1,7 +1,7 @@
+package ex3.structures;
 import org.junit.Test;
 
 import ex3.exceptions.*;
-import ex3.structures.*;
 import static org.junit.Assert.*;
 
 import java.util.Comparator;

@@ -1,41 +1,14 @@
 package ex4.structures;
 
-import java.util.ArrayList;
+import java.util.Map;
 
-import ex4.exceptions.GraphException;
+import ex4.exceptions.*;
 
 public class UndirectedGraphType<V, E> implements GraphType<V, E> {
 
-  @Override
-  public ArrayList<V> getNeighbors(V vertex) throws GraphException {
-    if(vertex == null)
-      throw new GraphException("getNeighbors:" + " vertex cannot be null");
-    // TODO Auto-generated method stub
-    return null;
+  public void makeEdge(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight)
+      throws GraphException, ElementNotFoundException {
+    adjacencyMatrix.get(to).put(from, weight);
   }
 
-	@Override
-	public void makeEdge(V to, V from, int weight) throws GraphException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getEdgeCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ArrayList<E> getEdges() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public E getEdge(V from, V to) throws GraphException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
 }

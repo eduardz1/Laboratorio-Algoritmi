@@ -1,13 +1,10 @@
 package ex4.structures;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import ex4.exceptions.*;
 
 public interface GraphType<V, E> {
-  public ArrayList<V> getNeighbors(V vertex) throws GraphException;
-  public void makeEdge(V to, V from, int weight) throws GraphException;
-  public int getEdgeCount();
-  public ArrayList<E> getEdges();
-  public E getEdge(V from, V to) throws GraphException;
+  public void makeEdge(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight)
+      throws GraphException, ElementNotFoundException;
 }
