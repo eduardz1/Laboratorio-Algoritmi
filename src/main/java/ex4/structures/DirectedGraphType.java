@@ -2,11 +2,18 @@ package ex4.structures;
 
 import java.util.Map;
 
-import ex4.exceptions.*;
-
 public class DirectedGraphType<V, E> implements GraphType<V, E> {
 
   @Override
-  public void makeEdge(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight)
-      throws GraphException, ElementNotFoundException { }
+  public void makeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight) {
+  }
+
+  @Override
+  public void removeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V from, V to) {
+  }
+
+  @Override
+  public int getEdgeCountStrategy(int edges) {
+    return edges;
+  }
 }

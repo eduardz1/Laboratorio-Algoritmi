@@ -43,7 +43,7 @@ public class Graph<V, E> {
       throw new ElementNotFoundException("makeEdge:" + " from does not exist");
 
     adjacencyMatrix.get(from).put(to, weight);
-    this.type.makeEdge(adjacencyMatrix, to, from, weight);
+    this.type.makeEdgeStrategy(adjacencyMatrix, to, from, weight);
   }
 
   public boolean isDirected() {
@@ -81,6 +81,7 @@ public class Graph<V, E> {
       throw new ElementNotFoundException("removeEdge:" + " from does not exist");
 
     this.adjacencyMatrix.get(from).put(to, null);
+    this.type.removeEdgeStrategy(this.adjacencyMatrix, from, to);
   }
 
   public int getVertexCount() {
@@ -94,13 +95,17 @@ public class Graph<V, E> {
     int count = 0;
     for (Map<V, E> map : adjacencyMatrix.values())
       count += map.size();
-    return count;
+    
+    return this.type.getEdgeCountStrategy(count);
   }
 
   public ArrayList<E> getEdges() {
     ArrayList<E> edges = new ArrayList<>();
     for (Map<V, E> map : adjacencyMatrix.values())
       edges.addAll(map.values());
+    // Here in reality we could only check half of the edges in a undirected graph
+    // as it is we are returning equivalent pairs which does not make too much sense
+    // for example (3,1) and (1,3) are the same edge in an undirected graph
     return edges;
   }
 
