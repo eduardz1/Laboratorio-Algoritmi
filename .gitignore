@@ -1,17 +1,20 @@
-# Records
+# General
 *.csv
 *.zip
+*.log
+*.iml
+prof
+
+# Directories
+**/bin
+**/obj
+**/cls
+**/out
+**/es*_dataset
 .vscode
 .obsidian
 .idea
 .iml
-*.log
-prof
-
-**/bin
-**/obj
-**/es2_dataset
-*.iml
 
 # R
 .Rproj.user
