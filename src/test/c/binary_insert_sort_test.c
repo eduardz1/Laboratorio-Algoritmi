@@ -117,7 +117,7 @@ void test_records_array(void)
   };
 
   binary_insert_sort(actual, sizeof(actual[0]), 8, compare_records_string);
-  for (int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
+  for (unsigned long int i = 0; i < sizeof(actual) / sizeof(actual[0]); i++)
   {
     TEST_ASSERT_EQUAL_STRING(expected[i].field1, actual[i].field1);
     TEST_ASSERT_EQUAL_INT(expected[i].field2, actual[i].field2);
