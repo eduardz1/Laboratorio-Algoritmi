@@ -1,4 +1,5 @@
 #include "headers/skip_list.h"
+#include "headers/skip_list_private.h"
 #include "../shared/common.h"
 #include "../shared/record.h"
 #include <stdio.h>
