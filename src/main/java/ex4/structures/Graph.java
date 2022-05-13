@@ -1,6 +1,7 @@
 package ex4.structures;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -14,7 +15,11 @@ import ex4.exceptions.*;
  */
 public class Graph<V, E> {
   private final GraphType<V, E> type;
-  private final Map<V, Map<V, E>> adjacencyMatrix;
+  /**
+   * can be viewed as an adjacency list but functions more akin to an adjacency
+   * matrix
+   */
+  private final Map<V, Map<V, E>> adjacencyMap;
 
   /**
    * Creates an empty Graph.
@@ -24,26 +29,34 @@ public class Graph<V, E> {
    */
   public Graph(boolean isDirected) {
     this.type = (isDirected) ? new DirectedGraphType<>() : new UndirectedGraphType<>();
-    this.adjacencyMatrix = new HashMap<>();
+    this.adjacencyMap = new HashMap<>();
   }
 
   public void addVertex(V vertex) throws GraphException {
     if (vertex == null)
       throw new GraphException("addVertex:" + " vertex cannot be null");
 
-    this.adjacencyMatrix.put(vertex, new HashMap<>());
+    this.adjacencyMap.put(vertex, new HashMap<>());
+  }
+
+  public void addAllVertexes(Collection<V> vertexes) throws GraphException {
+    if (vertexes == null)
+      throw new GraphException("addAllVertexes:" + " vertexes cannot be null");
+
+    for (V vertex : vertexes)
+      this.addVertex(vertex);
   }
 
   public void makeEdge(V to, V from, E weight) throws GraphException, ElementNotFoundException {
     if (to == null || from == null)
       throw new GraphException("makeEdge:" + " to and from cannot be null");
-    if (!adjacencyMatrix.containsKey(to))
+    if (!adjacencyMap.containsKey(to))
       throw new ElementNotFoundException("makeEdge:" + " to does not exist");
-    if (!adjacencyMatrix.containsKey(from))
+    if (!adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("makeEdge:" + " from does not exist");
 
-    adjacencyMatrix.get(from).put(to, weight);
-    this.type.makeEdgeStrategy(adjacencyMatrix, to, from, weight);
+    adjacencyMap.get(from).put(to, weight);
+    this.type.makeEdgeStrategy(adjacencyMap, to, from, weight);
   }
 
   public boolean isDirected() {
@@ -51,11 +64,11 @@ public class Graph<V, E> {
   }
 
   public boolean containsVertex(V vertex) {
-    return this.adjacencyMatrix.containsKey(vertex);
+    return this.adjacencyMap.containsKey(vertex);
   }
 
   public boolean containsEdge(V vertex, E edge) {
-    return this.adjacencyMatrix.get(vertex).containsValue(edge);
+    return this.adjacencyMap.get(vertex).containsValue(edge);
   }
 
   /**
@@ -68,24 +81,24 @@ public class Graph<V, E> {
   public void removeVertex(V vertex) throws GraphException, ElementNotFoundException {
     if (vertex == null)
       throw new GraphException("removeVertex:" + " vertex cannot be null");
-    if (!this.adjacencyMatrix.containsKey(vertex))
+    if (!this.adjacencyMap.containsKey(vertex))
       throw new ElementNotFoundException("removeVertex:" + " vertex does not exist");
 
-    this.adjacencyMatrix.values().forEach(map -> map.remove(vertex));
+    this.adjacencyMap.values().forEach(map -> map.remove(vertex));
   }
 
   public void removeEdge(V from, V to) throws GraphException, ElementNotFoundException {
     if (from == null || to == null)
       throw new GraphException("removeEdge:" + " from and to cannot be null");
-    if (!this.adjacencyMatrix.containsKey(from))
+    if (!this.adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("removeEdge:" + " from does not exist");
 
-    this.adjacencyMatrix.get(from).put(to, null);
-    this.type.removeEdgeStrategy(this.adjacencyMatrix, from, to);
+    this.adjacencyMap.get(from).put(to, null);
+    this.type.removeEdgeStrategy(this.adjacencyMap, from, to);
   }
 
   public int getVertexCount() {
-    return this.adjacencyMatrix.size();
+    return this.adjacencyMap.size();
   }
 
   /**
@@ -93,15 +106,15 @@ public class Graph<V, E> {
    */
   public int getEdgeCount() {
     int count = 0;
-    for (Map<V, E> map : adjacencyMatrix.values())
+    for (Map<V, E> map : adjacencyMap.values())
       count += map.size();
-    
+
     return this.type.getEdgeCountStrategy(count);
   }
 
   public ArrayList<E> getEdges() {
     ArrayList<E> edges = new ArrayList<>();
-    for (Map<V, E> map : adjacencyMatrix.values())
+    for (Map<V, E> map : adjacencyMap.values())
       edges.addAll(map.values());
     // Here in reality we could only check half of the edges in a undirected graph
     // as it is we are returning equivalent pairs which does not make too much sense
@@ -110,31 +123,31 @@ public class Graph<V, E> {
   }
 
   public ArrayList<V> getVertices() {
-    return new ArrayList<>(this.adjacencyMatrix.keySet());
+    return new ArrayList<>(this.adjacencyMap.keySet());
   }
 
   public ArrayList<V> getNeighbors(V vertex) throws GraphException, ElementNotFoundException {
     if (vertex == null)
       throw new GraphException("getNeighbors:" + " vertex cannot be null");
-    if (!this.adjacencyMatrix.containsKey(vertex))
+    if (!this.adjacencyMap.containsKey(vertex))
       throw new ElementNotFoundException("getNeighbors:" + " vertex does not exist");
 
-    return new ArrayList<>(this.adjacencyMatrix.get(vertex).keySet());
+    return new ArrayList<>(this.adjacencyMap.get(vertex).keySet());
   }
 
   public E getEdge(V from, V to) throws GraphException, ElementNotFoundException {
     if (from == null || to == null)
       throw new GraphException("getEdge:" + " from and to cannot be null");
-    if (!adjacencyMatrix.containsKey(from))
+    if (!adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("getEdge:" + " from does not exist");
 
-    return adjacencyMatrix.get(from).get(to);
+    return adjacencyMap.get(from).get(to);
   }
 
   public void print() {
-    for (V vertex : this.adjacencyMatrix.keySet()) {
+    for (V vertex : this.adjacencyMap.keySet()) {
       System.out.print(vertex + ": ");
-      for (V neighbor : this.adjacencyMatrix.get(vertex).keySet()) {
+      for (V neighbor : this.adjacencyMap.get(vertex).keySet()) {
         System.out.print(neighbor + " ");
       }
       System.out.println();

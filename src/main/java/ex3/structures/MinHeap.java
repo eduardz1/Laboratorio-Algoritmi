@@ -1,9 +1,11 @@
 package ex3.structures;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ex3.exceptions.*;
@@ -14,7 +16,7 @@ import ex3.exceptions.*;
  * @param <T> type of the element in the Heap
  */
 public class MinHeap<T> implements PriorityQueue<T> {
-  private ArrayList<T> heap;
+  private List<T> heap;
   private Map<T, Integer> lookup;
   private final Comparator<? super T> comparator;
 
@@ -258,6 +260,15 @@ public class MinHeap<T> implements PriorityQueue<T> {
         this.comparator.compare(node, right) < 0 &&
         isHeapified(left) &&
         isHeapified(right);
+  }
+
+  @Override
+  public void insertAll(Collection<T> elements) throws MinHeapException {
+    if(elements == null)
+      throw new MinHeapException("insertAll:" + " elements cannot be null");
+    
+    for(T elem : elements)
+      this.insert(elem);
   }
 
   

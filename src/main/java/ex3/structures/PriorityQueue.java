@@ -1,5 +1,7 @@
 package ex3.structures;
 
+import java.util.Collection;
+
 public interface PriorityQueue<T> {
   /**
    * @return true if queue is empty
@@ -17,6 +19,8 @@ public interface PriorityQueue<T> {
    * @throws MinHeapException throws an Exception when element is null
    */
   public void insert(T element) throws Exception;
+
+  public void insertAll(Collection<T> elements) throws Exception;
 
   /**
    * extracts first element of the queue
