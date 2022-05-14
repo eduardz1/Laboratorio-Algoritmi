@@ -10,7 +10,7 @@ public class UndirectedGraphType<V, E> implements GraphType<V, E> {
 
   @Override
   public void removeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V from, V to) {
-    adjacencyMatrix.get(to).put(from, null);
+    adjacencyMatrix.get(to).remove(from);
   }
 
   @Override

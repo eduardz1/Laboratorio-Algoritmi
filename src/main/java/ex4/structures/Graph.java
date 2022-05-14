@@ -7,10 +7,15 @@ import java.util.HashMap;
 
 import ex4.exceptions.*;
 
+//TODO: Suddividere le exception, i paremtri null in argument dovrebbero throware un ArgumentExcpetion
+
+//FIXME: Specificare il tipo di E a cosa serve? Stiamo un graph con weight, penso la soluzione sia implementare un double e basta, altrimenti
+// dovremmo implementare un comparator maybe. Non sono comunque sicuro sia la scelta giusta parametrizzare il tipo di arco, da studiare
+
 /**
  * A class representing a Graph with generic Vertexes and Edges.
  * 
- * @param <V> type of the elements in the Graph
+ * @param <V> type of the elements in the Graph 
  * @param <E> type of the edges in the Graph
  */
 public class Graph<V, E> {
@@ -47,7 +52,7 @@ public class Graph<V, E> {
       this.addVertex(vertex);
   }
 
-  public void makeEdge(V to, V from, E weight) throws GraphException, ElementNotFoundException {
+  public void makeEdge(V from, V to, E weight) throws GraphException, ElementNotFoundException {
     if (to == null || from == null)
       throw new GraphException("makeEdge:" + " to and from cannot be null");
     if (!adjacencyMap.containsKey(to))
@@ -56,7 +61,9 @@ public class Graph<V, E> {
       throw new ElementNotFoundException("makeEdge:" + " from does not exist");
 
     adjacencyMap.get(from).put(to, weight);
-    this.type.makeEdgeStrategy(adjacencyMap, to, from, weight);
+    this.type.makeEdgeStrategy(adjacencyMap, to, from, weight); 
+    //FIXME: Questa implemntazione del metodo vuoto non mi convince per niente, 
+    // piuttosto modificare la suddivisione delle classi
   }
 
   public boolean isDirected() {
@@ -85,6 +92,7 @@ public class Graph<V, E> {
       throw new ElementNotFoundException("removeVertex:" + " vertex does not exist");
 
     this.adjacencyMap.values().forEach(map -> map.remove(vertex));
+    this.adjacencyMap.remove(vertex);
   }
 
   public void removeEdge(V from, V to) throws GraphException, ElementNotFoundException {
@@ -92,8 +100,10 @@ public class Graph<V, E> {
       throw new GraphException("removeEdge:" + " from and to cannot be null");
     if (!this.adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("removeEdge:" + " from does not exist");
+    if (!this.adjacencyMap.get(from).containsKey(to))
+      throw new ElementNotFoundException("removeEdge:" + " to does not exist");      
 
-    this.adjacencyMap.get(from).put(to, null);
+    this.adjacencyMap.get(from).remove(to);
     this.type.removeEdgeStrategy(this.adjacencyMap, from, to);
   }
 
@@ -140,6 +150,13 @@ public class Graph<V, E> {
       throw new GraphException("getEdge:" + " from and to cannot be null");
     if (!adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("getEdge:" + " from does not exist");
+
+    //FIXME: In questa maniera otteniamo un eccezione se il nodo di arrivo non esiste. Forse però
+    // potrebbe aver senso ottenere null in entrambi i casi anzichè l'eccezione. O ottenere null solo se non esiste l'arrivo
+    // la logica è simile al remove, ma nel remove è giusto dare eccezione perchè è un'operazione distruttiva, a differenza
+    // del get
+    if (!adjacencyMap.get(from).containsKey(to))
+      throw new ElementNotFoundException("getEdge:" + " to does not exist");
 
     return adjacencyMap.get(from).get(to);
   }
