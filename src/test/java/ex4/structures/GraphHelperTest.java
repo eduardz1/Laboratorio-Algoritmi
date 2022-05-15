@@ -38,16 +38,14 @@ public class GraphHelperTest {
     graph.makeEdge("f", "b", 1);
     graph.makeEdge("f", "z", 9);
 
-    // Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
-    // Pair<List<String>, Number> path = GraphHelper.<String>dijkstra(graph,
-    //     comp,
-    //     (Integer)Integer.MIN_VALUE,
-    //     (Integer)Integer.MAX_VALUE,
-    //     "a",
-    //     "z");
-    // assertArrayEquals(Arrays.asList("a", "b", "e", "z").toArray(), path.getFirst().toArray());
-    // assertEquals(7, path.getSecond().intValue());
-
-    GraphHelper.addNumbers(1, 2);
+    Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
+    Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
+        comp,
+        Integer.MIN_VALUE,
+        Integer.MAX_VALUE,
+        "a",
+        "z");
+    assertArrayEquals(Arrays.asList("a", "b", "e", "z").toArray(), path.getFirst().toArray());
+    assertEquals(7, path.getSecond().intValue());
   }
 }
