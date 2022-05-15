@@ -12,7 +12,7 @@ import java.util.List;
 public class MinHeapTests {
   
   @Test(expected = MinHeapException.class)
-    public void createHeapWithoutComparatorThrowsException() throws MinHeapException {
+    public void createHeapWithComparatorNullThrowsException() throws MinHeapException {
     MinHeap<String> heap = new MinHeap<String>(null);
   }
 
