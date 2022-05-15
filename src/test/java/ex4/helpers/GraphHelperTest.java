@@ -1,17 +1,16 @@
-package ex4.structures;
+package ex4.helpers;
 
 import org.junit.Test;
 
-import ex4.exceptions.*;
+import ex4.comparable.NodeComparator;
+import ex4.structures.Graph;
+import ex4.structures.Node;
+import ex4.structures.Pair;
 
-import ex4.structures.GraphHelper;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GraphHelperTest {

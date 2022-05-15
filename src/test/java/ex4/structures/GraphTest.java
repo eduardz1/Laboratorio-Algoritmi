@@ -1,11 +1,13 @@
 package ex4.structures;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import ex4.exceptions.*;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -220,5 +222,35 @@ public class GraphTest {
     assertArrayEquals(Arrays.asList(3, 4).toArray(), g.getNeighbors(1).toArray());
     assertArrayEquals(Arrays.asList(1).toArray(), g.getNeighbors(3).toArray());
     assertArrayEquals(Arrays.asList(1).toArray(), g.getNeighbors(4).toArray());
+  }
+
+  @Test
+  public void getVerticesHandleExpectedResult() throws GraphException, ElementNotFoundException {
+   
+    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+
+    // Check for empty array
+    assertNotNull(g.getVertices());
+    assertEquals(0, g.getVertices().size());
+    
+    List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
+    g.addAllVertexes(els);
+    
+    // Check after insert
+    ArrayList<Integer> vxs =  g.getVertices();
+    assertEquals(els.size(),vxs.size());
+    for (Integer el : els) {
+      assertNotEquals(-1, vxs.indexOf(el));
+    }
+
+    // Check after delete
+    int deleted = 0;
+    for (Integer el : els) {
+      g.removeVertex(el);
+      deleted++;
+      ArrayList<Integer> vertices =  g.getVertices();
+      assertEquals(-1, vertices.indexOf(el));
+      assertEquals(els.size() - deleted, vertices.size());
+    }
   }
 }

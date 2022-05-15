@@ -1,6 +1,8 @@
-package ex4.structures;
+package ex4.comparable;
 
 import java.util.Comparator;
+
+import ex4.structures.Node;
 
 public class NodeComparator<V, E> implements Comparator<Node<V,E>> {
 
@@ -13,9 +15,5 @@ public class NodeComparator<V, E> implements Comparator<Node<V,E>> {
   @Override
   public int compare(Node<V, E> arg0, Node<V, E> arg1) {
     return this.comparator.compare(arg0.priority, arg1.priority);
-  }
-
-  public Comparator<? super E> getComparator() {
-    return this.comparator;
   }
 }

@@ -9,9 +9,6 @@ import ex4.exceptions.*;
 
 //TODO: Suddividere le exception, i paremtri null in argument dovrebbero throware un ArgumentExcpetion
 
-//FIXME: Specificare il tipo di E a cosa serve? Stiamo un graph con weight, penso la soluzione sia implementare un double e basta, altrimenti
-// dovremmo implementare un comparator maybe. Non sono comunque sicuro sia la scelta giusta parametrizzare il tipo di arco, da studiare
-
 /**
  * A class representing a Graph with generic Vertexes and Edges.
  * 

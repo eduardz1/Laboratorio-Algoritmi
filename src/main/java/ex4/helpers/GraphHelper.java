@@ -1,4 +1,4 @@
-package ex4.structures;
+package ex4.helpers;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import ex3.structures.*;
+import ex4.structures.Graph;
+import ex4.structures.Node;
+import ex4.structures.Pair;
 
 class GraphHelper {
 
