@@ -151,10 +151,6 @@ public class Graph<V, E> {
     if (!adjacencyMap.containsKey(from))
       throw new ElementNotFoundException("getEdge:" + " from does not exist");
 
-    //FIXME: In questa maniera otteniamo un eccezione se il nodo di arrivo non esiste. Forse però
-    // potrebbe aver senso ottenere null in entrambi i casi anzichè l'eccezione. O ottenere null solo se non esiste l'arrivo
-    // la logica è simile al remove, ma nel remove è giusto dare eccezione perchè è un'operazione distruttiva, a differenza
-    // del get
     if (!adjacencyMap.get(from).containsKey(to))
       throw new ElementNotFoundException("getEdge:" + " to does not exist");
 

@@ -140,7 +140,7 @@ public class GraphTest {
     g.makeEdge(1, 2, 0.0);
     assertEquals(1, g.getEdgeCount());
     assertNotNull(g.getEdge(1, 2));
-    assertNull(g.getEdge(2, 1));
+    assertThrows(ElementNotFoundException.class, () -> g.getEdge(2, 1));
     assertTrue(g.isDirected());
   }
 
@@ -156,8 +156,8 @@ public class GraphTest {
     assertNotNull(g.getEdge(2, 1));
     g.removeEdge(1, 2);
     assertEquals(0, g.getEdgeCount());
-    assertNull(g.getEdge(1, 2));
-    assertNull(g.getEdge(2, 1));
+    assertThrows(ElementNotFoundException.class, () -> g.getEdge(1, 2));
+    assertThrows(ElementNotFoundException.class, () -> g.getEdge(2, 1));
 
   }
 
