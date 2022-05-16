@@ -27,17 +27,17 @@ public class GraphHelperTest {
       graph.addVertex(el);
     }
 
-    graph.makeEdge("a", "b", 4);
-    graph.makeEdge("a", "c", 6);
-    graph.makeEdge("a", "f", 4);
-    graph.makeEdge("b", "e", 2);
-    graph.makeEdge("b", "d", 8);
-    graph.makeEdge("b", "c", 7);
-    graph.makeEdge("c", "d", 2);
-    graph.makeEdge("d", "e", 4);
-    graph.makeEdge("e", "z", 1);
-    graph.makeEdge("f", "b", 1);
-    graph.makeEdge("f", "z", 9);
+    graph.addEdge("a", "b", 4);
+    graph.addEdge("a", "c", 6);
+    graph.addEdge("a", "f", 4);
+    graph.addEdge("b", "e", 2);
+    graph.addEdge("b", "d", 8);
+    graph.addEdge("b", "c", 7);
+    graph.addEdge("c", "d", 2);
+    graph.addEdge("d", "e", 4);
+    graph.addEdge("e", "z", 1);
+    graph.addEdge("f", "b", 1);
+    graph.addEdge("f", "z", 9);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
@@ -60,11 +60,11 @@ public class GraphHelperTest {
       graph.addVertex(el);
     }
 
-    graph.makeEdge("a", "b", 2);
-    graph.makeEdge("b", "c", 2);
-    graph.makeEdge("c", "d", 2);
-    graph.makeEdge("d", "e", 2);
-    graph.makeEdge("a", "e", 7);
+    graph.addEdge("a", "b", 2);
+    graph.addEdge("b", "c", 2);
+    graph.addEdge("c", "d", 2);
+    graph.addEdge("d", "e", 2);
+    graph.addEdge("a", "e", 7);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
@@ -87,11 +87,11 @@ public class GraphHelperTest {
       graph.addVertex(el);
     }
 
-    graph.makeEdge("a", "b", 1);
-    graph.makeEdge("b", "c", 1);
-    graph.makeEdge("c", "d", 1);
-    graph.makeEdge("d", "b", 1);
-    graph.makeEdge("c", "e", 10);
+    graph.addEdge("a", "b", 1);
+    graph.addEdge("b", "c", 1);
+    graph.addEdge("c", "d", 1);
+    graph.addEdge("d", "b", 1);
+    graph.addEdge("c", "e", 10);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
@@ -114,10 +114,10 @@ public class GraphHelperTest {
       graph.addVertex(el);
     }
 
-    graph.makeEdge("a", "b", 1);
-    graph.makeEdge("b", "c", 1);
-    graph.makeEdge("c", "a", 1);
-    graph.makeEdge("d", "e", 1);
+    graph.addEdge("a", "b", 1);
+    graph.addEdge("b", "c", 1);
+    graph.addEdge("c", "a", 1);
+    graph.addEdge("d", "e", 1);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     GraphHelper.<String, Integer>dijkstra(graph,
@@ -138,10 +138,10 @@ public class GraphHelperTest {
       graph.addVertex(el);
     }
 
-    graph.makeEdge("a", "b", 1);
-    graph.makeEdge("b", "c", 1);
-    graph.makeEdge("c", "d", 1);
-    graph.makeEdge("d", "b", 1);
+    graph.addEdge("a", "b", 1);
+    graph.addEdge("b", "c", 1);
+    graph.addEdge("c", "d", 1);
+    graph.addEdge("d", "b", 1);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     GraphHelper.<String, Integer>dijkstra(graph,
@@ -159,7 +159,7 @@ public class GraphHelperTest {
     for (String el : vertexes) {
       graph.addVertex(el);
     }
-    graph.makeEdge("a", "b", 1);
+    graph.addEdge("a", "b", 1);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     assertThrows(
@@ -190,7 +190,7 @@ public class GraphHelperTest {
     for (String el : vertexes) {
       graph.addVertex(el);
     }
-    graph.makeEdge("a", "b", 1);
+    graph.addEdge("a", "b", 1);
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     assertThrows(

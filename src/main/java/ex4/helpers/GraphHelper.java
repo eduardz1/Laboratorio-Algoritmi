@@ -14,7 +14,7 @@ import ex4.structures.Graph;
 import ex4.structures.Node;
 import ex4.structures.Pair;
 
-class GraphHelper {
+public class GraphHelper {
 
   public static <V, E extends Number> Pair<List<V>, E> dijkstra
   (
