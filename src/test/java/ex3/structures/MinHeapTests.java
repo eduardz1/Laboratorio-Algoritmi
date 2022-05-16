@@ -40,7 +40,7 @@ public class MinHeapTests {
   }
   
   @Test(expected = MinHeapException.class)
-    public void createHeapWithComparatorNullThrowsException() throws MinHeapException {
+  public void createHeapWithComparatorNullThrowsException() throws MinHeapException {
     MinHeap<String> heap = new MinHeap<String>(null);
   }
 

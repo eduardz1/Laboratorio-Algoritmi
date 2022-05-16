@@ -1,12 +1,15 @@
 package ex4.helpers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ex3.structures.*;
+import ex4.exceptions.ArgumentException;
+import ex4.exceptions.DijkstraException;
 import ex4.structures.Graph;
 import ex4.structures.Node;
 import ex4.structures.Pair;
@@ -18,10 +21,14 @@ class GraphHelper {
     Graph<V, E> graph, Comparator<? super Node<V, E>> comparator, E min, E max, V source, V destination
   ) throws Exception 
   {    
+    
+    if (!graph.containsVertex(source) || !graph.containsVertex(destination))
+      throw new ArgumentException("Source or destination are invalid");
+    
     PriorityQueue<Node<V, E>> queue = new MinHeap<>(comparator);
-    Map<V, Node<V, E>> references = new HashMap<>();
+    Map<V, Node<V, E>> references = new HashMap<>(); // Used to mark visited vertices
     Map<V, E> distances = new HashMap<>(); // use null to mark infinity
-    List<V> predecessors = new ArrayList<>(); // use null to mark undefined
+    Map<V, V> prevs = new HashMap<>(); // use null to mark undefined
     
     distances.put(source, min);
     
@@ -34,26 +41,43 @@ class GraphHelper {
       Node<V, E> tmp = new Node<>(v, distances.get(v));
       queue.insert(tmp);
       references.put(v, tmp);
+      prevs.put(v, null);
     }
 
     while(!queue.isEmpty()) {
       Node<V, E> u = queue.remove();
-      // if(u.item.equals(destination)) {
-      //   break;
-      // }
+      references.remove(u.item);
 
       for (V neigh : graph.getNeighbors(u.item)) {
+        if (!references.containsKey(neigh)) continue;
         E alt = addNumbers(distances.get(u.item), graph.getEdge(u.item, neigh));
-        if (isLower(alt ,distances.get(u.item))) {
+        if (isLower(alt ,distances.get(neigh))) {
           distances.put(neigh, alt);
           Node<V, E> newVal = new Node<>(neigh, alt);
           queue.increaseKey(references.get(neigh), newVal);
           references.put(neigh, newVal);
-          predecessors.add(neigh);
+          prevs.put(neigh, u.item);
         }
       }
     }
-    return new Pair<>(predecessors, distances.get(destination));
+
+    // Get shortest part to destination
+    List<V> path = new ArrayList<V>();
+    path.add(destination);
+    V currentV = prevs.get(destination);
+    if (currentV == null)
+      throw new DijkstraException("Path between source and destination does not exist");
+
+    do {
+      path.add(currentV);
+      currentV = prevs.get(currentV);
+    } while (currentV != null);
+    Collections.reverse(path);
+
+    if (!path.get(0).equals(source))
+      throw new DijkstraException("Path between source and destination does not exist");
+
+    return new Pair<List<V>, E>(path, distances.get(destination));
   }
 
   @SuppressWarnings("unchecked")
