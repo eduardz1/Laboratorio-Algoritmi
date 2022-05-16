@@ -18,7 +18,7 @@ public class NodeTest {
 
   @Test(expected = ArgumentException.class)
   public void createNodeWithItemNullThrowsException() throws ArgumentException {
-    Node<String, Integer> node = new Node<>(null, 0);
+    new Node<String, Integer>(null, 0);
   }
 
   @Test

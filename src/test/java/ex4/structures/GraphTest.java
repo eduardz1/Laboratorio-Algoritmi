@@ -1,6 +1,5 @@
 package ex4.structures;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import ex4.exceptions.*;
@@ -15,7 +14,7 @@ public class GraphTest {
 
   @Test
   public void isEmptyAfterCreate() {
-    Graph g = new Graph(true);
+    Graph<Integer, Integer> g = new Graph<>(true);
     assertEquals(0, g.getEdgeCount());
     assertEquals(0, g.getVertexCount());
   }
