@@ -4,16 +4,44 @@ import org.junit.Test;
 import ex3.exceptions.*;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class MinHeapTests {
+
+  /**
+   * Class used for testing purpose inside MinHeap
+   */
+  public class TestObject<A, B> {
+    public A field1;
+    public B field2;
+    
+    TestObject(A a, B b) {
+      this.field1 = a;
+      this.field2 = b;
+    }
+  }
+
+  public class TestObjectComparator<A, B> implements Comparator<TestObject<A,B>> {
+
+    public Comparator<? super B> comparator;
+    
+    public TestObjectComparator(Comparator<? super B> comp) {
+      this.comparator = comp;
+    }
+  
+    @Override
+    public int compare(TestObject<A,B> arg0, TestObject<A,B> arg1) {
+      return this.comparator.compare(arg0.field2, arg1.field2);
+    }
+  }
   
   @Test(expected = MinHeapException.class)
-    public void createHeapWithoutComparatorThrowsException() throws MinHeapException {
-    MinHeap<String> heap = new MinHeap<String>(null);
+  public void createHeapWithComparatorNullThrowsException() throws MinHeapException {
+    new MinHeap<String>(null);
   }
 
   @Test(expected = MinHeapException.class)
@@ -121,8 +149,6 @@ public class MinHeapTests {
     assertEquals("c", heap.peek());
   }
 
-
-
   @Test
   public void isMinHeapifiedAfterInsertSortedArray() throws MinHeapException, ElementNotFoundException {
 
@@ -200,13 +226,13 @@ public class MinHeapTests {
     heap.insert("d");	
     
     heap.increaseKey("d", "c");
-    assertTrue(comp.compare("c", heap.peek()) == 0);
+    assertEquals(0, comp.compare("c", heap.peek()));
 
     heap.increaseKey("c", "b");
-    assertTrue(comp.compare("b", heap.peek()) == 0);
+    assertEquals(0, comp.compare("b", heap.peek()));
 
     heap.increaseKey("b", "a");
-    assertTrue(comp.compare("a", heap.peek()) == 0);
+    assertEquals(0, comp.compare("a", heap.peek()));
   }
 
   @Test
@@ -215,7 +241,63 @@ public class MinHeapTests {
     MinHeap<String> heap = new MinHeap<String>(comp);
     heap.insert("a");
     heap.remove();
-    assertTrue(heap.size() == 0);
+    assertEquals(0, heap.size());
     assertTrue(heap.isEmpty());
+  }
+
+  @Test
+  public void isMinHeapifiedAfterInsertObject() throws MinHeapException, ElementNotFoundException {
+    Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
+    TestObjectComparator<String, Integer> comparator = new TestObjectComparator<>(comp);
+    MinHeap<TestObject<String, Integer>> queue = new MinHeap<>(comparator);
+
+    List<String> els = Arrays.asList("abcdefg".split(""));
+    List<TestObject<String, Integer>> objs = new ArrayList<TestObject<String,Integer>>();    
+    for (int i = 0; i < els.size(); i++) {
+      TestObject<String, Integer> obj = new TestObject<>(els.get(i), i);
+      objs.add(obj);
+    }
+    Collections.shuffle(objs);
+
+    assertTrue(queue.isHeapified());
+    int inserted = 0;
+    for (TestObject<String, Integer> el : objs) {
+      queue.insert(el);
+      inserted++;
+      assertTrue(queue.isHeapified());
+      assertEquals(inserted, queue.size());
+    }
+  }
+
+  @Test
+  public void increaseKeyOfObjectHandleExpectedResult() throws MinHeapException, ElementNotFoundException {
+
+    Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
+    TestObjectComparator<String, Integer> comparator = new TestObjectComparator<>(comp);
+    MinHeap<TestObject<String, Integer>> queue = new MinHeap<>(comparator);
+
+    var prev = new TestObject<>("d", 4);
+    queue.insert(prev);	
+
+    var newT = new TestObject<>("c", 3);
+    queue.increaseKey(prev, newT);
+    assertEquals(0, comparator.compare(newT, queue.peek()));
+    assertEquals("c", queue.peek().field1);
+    assertTrue(queue.peek().field2 == 3);
+    prev = newT;
+
+    newT = new TestObject<>("b", 2);
+    queue.increaseKey(prev, newT);
+    assertEquals(0, comparator.compare(newT, queue.peek()));
+    assertEquals("b", queue.peek().field1);
+    assertTrue(queue.peek().field2 == 2);
+    prev = newT;
+
+    newT = new TestObject<>("a", 1);
+    queue.increaseKey(prev, newT);
+    assertEquals(0, comparator.compare(newT, queue.peek()));
+    assertEquals("a", queue.peek().field1);
+    assertTrue(queue.peek().field2 == 1);
+
   }
 }

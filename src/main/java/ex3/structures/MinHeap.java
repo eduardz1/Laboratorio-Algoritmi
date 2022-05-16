@@ -219,14 +219,6 @@ public class MinHeap<T> implements PriorityQueue<T> {
     }
   }
 
-  
-
-  // public boolean isPartialFilled() {
-
-  //   return true;
-  // }
-
-  
   public boolean isHeapified() throws ElementNotFoundException {
     if(this.heap.isEmpty())
       return true;
@@ -270,11 +262,4 @@ public class MinHeap<T> implements PriorityQueue<T> {
     for(T elem : elements)
       this.insert(elem);
   }
-
-  
-  // private boolean isHeapified(T elem) {
-    
-  // }
-
-
 }

@@ -9,9 +9,6 @@ import ex4.exceptions.*;
 
 //TODO: Suddividere le exception, i paremtri null in argument dovrebbero throware un ArgumentExcpetion
 
-//FIXME: Specificare il tipo di E a cosa serve? Stiamo un graph con weight, penso la soluzione sia implementare un double e basta, altrimenti
-// dovremmo implementare un comparator maybe. Non sono comunque sicuro sia la scelta giusta parametrizzare il tipo di arco, da studiare
-
 /**
  * A class representing a Graph with generic Vertexes and Edges.
  * 
@@ -52,13 +49,26 @@ public class Graph<V, E> {
       this.addVertex(vertex);
   }
 
-  public void makeEdge(V from, V to, E weight) throws GraphException, ElementNotFoundException {
-    if (to == null || from == null)
-      throw new GraphException("makeEdge:" + " to and from cannot be null");
+  public void addEdge(Edge<V, E> edge) throws GraphException {
+    if (edge == null)
+      throw new GraphException("addEdge:" + " edge cannot be null");
+
+    this.addEdge(edge.getFrom(), edge.getTo(), edge.getWeight());
+  }
+
+  public void addAllEdges(Collection<Edge<V, E>> edges) throws GraphException, ElementNotFoundException {
+    if (edges == null)
+      throw new GraphException("addAllEdges:" + " edges cannot be null");
+
+    for (Edge<V, E> edge : edges)
+      this.addEdge(edge);
+  }
+
+  public void addEdge(V from, V to, E weight) throws GraphException {
     if (!adjacencyMap.containsKey(to))
-      throw new ElementNotFoundException("makeEdge:" + " to does not exist");
+      this.addVertex(to);
     if (!adjacencyMap.containsKey(from))
-      throw new ElementNotFoundException("makeEdge:" + " from does not exist");
+      this.addVertex(from);
 
     adjacencyMap.get(from).put(to, weight);
     this.type.makeEdgeStrategy(adjacencyMap, to, from, weight); 
