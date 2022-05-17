@@ -28,14 +28,14 @@ public class GraphTest {
   @Test(expected = GraphException.class)
   public void addAllVertexNullThrowsException() throws GraphException {
     Graph<Integer, Double> g = new Graph<Integer, Double>(true);
-    g.addAllVertexes(null);
+    g.addAllVertices(null);
   }
 
   @Test(expected = GraphException.class)
   public void addAllVertexContainsNullThrowsException() throws GraphException {
     Graph<Integer, Double> g = new Graph<Integer, Double>(true);
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, null, 4, 5, 6 );
-    g.addAllVertexes(els);
+    g.addAllVertices(els);
   }
 
   @Test
@@ -101,7 +101,7 @@ public class GraphTest {
     Graph<Integer, Double> g = new Graph<Integer, Double>(true);
     
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
-    g.addAllVertexes(els);
+    g.addAllVertices(els);
     assertEquals(els.size(), g.getVertexCount());
   }
 
@@ -109,7 +109,7 @@ public class GraphTest {
   public void addEdgeHandleExpectedResult() throws GraphException, ElementNotFoundException {
     Graph<Integer, Double> g = new Graph<Integer, Double>(true);
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
-    g.addAllVertexes(els);
+    g.addAllVertices(els);
 
     for (int i = 0; i < els.size() - 1; i++) {
       g.addEdge(els.get(i), els.get(i + 1), 0.0);
@@ -233,7 +233,7 @@ public class GraphTest {
     assertEquals(0, g.getVertices().size());
     
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
-    g.addAllVertexes(els);
+    g.addAllVertices(els);
     
     // Check after insert
     ArrayList<Integer> vxs =  g.getVertices();

@@ -4,10 +4,18 @@ import java.util.Comparator;
 
 import ex4.structures.Node;
 
-public class NodeComparator<V, E> implements Comparator<Node<V,E>> {
+/** // TODO
+ * @param <V>
+ * @param <E>
+ */
+public class NodeComparator<V, E extends Number> implements Comparator<Node<V,E>> {
 
   private Comparator<? super E> comparator;
   
+  /**
+   * // TODO
+   * @param internalComparator
+   */
   public NodeComparator(Comparator<? super E> internalComparator) {
     this.comparator = internalComparator;
   }

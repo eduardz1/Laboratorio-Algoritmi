@@ -55,7 +55,7 @@ public class GraphHelperTest {
   public void dijkstraOnIndirectGraphHandleExpectedResult() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
-    String[] vertexes = { "a", "b", "c", "d", "e"};
+    String[] vertexes = { "a", "b", "c", "d", "e" };
 
     for (String el : vertexes) {
       graph.addVertex(el);
@@ -82,7 +82,7 @@ public class GraphHelperTest {
   public void dijkstraOnGraphWithInternalLoopHandleExpectedResult() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
-    String[] vertexes = { "a", "b", "c", "d", "e"};
+    String[] vertexes = { "a", "b", "c", "d", "e" };
 
     for (String el : vertexes) {
       graph.addVertex(el);
@@ -102,14 +102,14 @@ public class GraphHelperTest {
         "a",
         "e");
     assertArrayEquals(Arrays.asList("a", "b", "c", "e").toArray(), path.getFirst().toArray());
-    assertEquals(12, path.getSecond().intValue());   
+    assertEquals(12, path.getSecond().intValue());
   }
 
   @Test(expected = DijkstraException.class)
   public void dijkstraWithUnreachableDestinationThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
-    String[] vertexes = { "a", "b", "c", "d", "e"};
+    String[] vertexes = { "a", "b", "c", "d", "e" };
 
     for (String el : vertexes) {
       graph.addVertex(el);
@@ -133,7 +133,7 @@ public class GraphHelperTest {
   public void dijkstraWithDestinationWithoutEdgesThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
-    String[] vertexes = { "a", "b", "c", "d", "e"};
+    String[] vertexes = { "a", "b", "c", "d", "e" };
 
     for (String el : vertexes) {
       graph.addVertex(el);
@@ -156,7 +156,7 @@ public class GraphHelperTest {
   @Test
   public void dijkstraWithInvalidDestinationThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
-    String[] vertexes = { "a", "b"};
+    String[] vertexes = { "a", "b" };
     for (String el : vertexes) {
       graph.addVertex(el);
     }
@@ -164,30 +164,28 @@ public class GraphHelperTest {
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     assertThrows(
-      ArgumentException.class, 
-      () -> GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
-        0,
-        Integer.MAX_VALUE,
-        "a",
-        null)
-    );
+        ArgumentException.class,
+        () -> GraphHelper.<String, Integer>dijkstra(graph,
+            comp,
+            0,
+            Integer.MAX_VALUE,
+            "a",
+            null));
 
     assertThrows(
-      ArgumentException.class, 
-      () -> GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
-        0,
-        Integer.MAX_VALUE,
-        "a",
-        "z")
-    );
+        ArgumentException.class,
+        () -> GraphHelper.<String, Integer>dijkstra(graph,
+            comp,
+            0,
+            Integer.MAX_VALUE,
+            "a",
+            "z"));
   }
 
   @Test
   public void dijkstraWithInvalidSourceThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
-    String[] vertexes = { "a", "b"};
+    String[] vertexes = { "a", "b" };
     for (String el : vertexes) {
       graph.addVertex(el);
     }
@@ -195,26 +193,22 @@ public class GraphHelperTest {
 
     Comparator<Node<String, Integer>> comp = new NodeComparator<>(Comparator.comparingInt((Integer x) -> x));
     assertThrows(
-      ArgumentException.class, 
-      () -> GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
-        0,
-        Integer.MAX_VALUE,
-        null,
-        "e")
-    );
+        ArgumentException.class,
+        () -> GraphHelper.<String, Integer>dijkstra(graph,
+            comp,
+            0,
+            Integer.MAX_VALUE,
+            null,
+            "e"));
 
     assertThrows(
-      ArgumentException.class, 
-      () -> GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
-        0,
-        Integer.MAX_VALUE,
-        "z",
-        "b")
-    );
+        ArgumentException.class,
+        () -> GraphHelper.<String, Integer>dijkstra(graph,
+            comp,
+            0,
+            Integer.MAX_VALUE,
+            "z",
+            "b"));
   }
-
-
 
 }

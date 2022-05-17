@@ -13,43 +13,42 @@ import ex4.helpers.GraphHelper;
 public class Main {
   public static void main(String[] args) throws Exception {
     try {
-      // File file = new File("/home/eduard/Github/laboratorio-algoritmi-2021-2022/es4_dataset/italian_dist_graph.csv");
-      File file = new File("/home/emme/laboratorio-algoritmi-2021-2022/es4_dataset/italian_dist_graph.csv");
-      Scanner scanner = new Scanner(file);
+      String inputs[] = new String[3];
+      Scanner input = new Scanner(System.in);
+
+      System.out.println("Please enter the path of the dataset");
+      inputs[0] = input.nextLine();
+
+      File file = new File(inputs[0]);
       Graph<String, Float> graph = new Graph<>(false);
 
+      Scanner scanner = new Scanner(file);
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        // if(line == "") {
-        // continue;
-        // }
         String[] tokens = line.split(",");
+
         Edge<String, Float> edge = new Edge<>(tokens[0], tokens[1], Float.parseFloat(tokens[2]));
         graph.addEdge(edge);
-
-        // if (!graph.containsVertex(tokens[0]))
-        //   graph.addVertex(tokens[0]);
-
-        // if (!graph.containsVertex(tokens[1]))
-        //   graph.addVertex(tokens[2]);
-
-        // graph.addEdge(tokens[0], tokens[1], Float.parseFloat(tokens[2]));
-  
       }
       scanner.close();
 
+      System.out.println("Please enter the source city");
+      inputs[1] = input.nextLine().toLowerCase();
+      System.out.println("Please enter the destination city");
+      inputs[2] = input.nextLine().toLowerCase();
+      input.close();
+
       Comparator<Node<String, Float>> comp = new NodeComparator<>(Comparator.comparing((Float x) -> x));
-      Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph, 
-          comp, 
-          Float.MIN_VALUE, 
+      Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
+          comp,
+          Float.MIN_VALUE,
           Float.MAX_VALUE,
-          "torino", 
-          "catania");
+          inputs[1],
+          inputs[2]);
 
       for (String string : res.getFirst()) {
         System.out.println(string);
       }
-
       System.out.println(res.getSecond());
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
