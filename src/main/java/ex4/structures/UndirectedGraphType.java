@@ -2,6 +2,11 @@ package ex4.structures;
 
 import java.util.Map;
 
+/**
+ * // TODO
+ * @param <V>
+ * @param <E>
+ */
 public class UndirectedGraphType<V, E> implements GraphType<V, E> {
 
   public void makeEdgeStrategy(Map<V, Map<V, E>> adjacencyMatrix, V to, V from, E weight) {

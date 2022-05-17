@@ -20,6 +20,11 @@ public interface PriorityQueue<T> {
    */
   public void insert(T element) throws Exception;
 
+  /**
+   * // TODO:
+   * @param elements
+   * @throws Exception
+   */
   public void insertAll(Collection<T> elements) throws Exception;
 
   /**
@@ -37,5 +42,12 @@ public interface PriorityQueue<T> {
    */
   public T peek() throws Exception;
 
+  /**
+   * incresease the priority of an element
+   * 
+   * @param key key to be increased in priority
+   * @param newKey new value of {@code}key{@code}
+   * @throws Exception
+   */
   public void increaseKey(T key, T newKey) throws Exception;
 }

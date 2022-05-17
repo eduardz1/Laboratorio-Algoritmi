@@ -2,6 +2,11 @@ package ex4.structures;
 
 import java.util.Map;
 
+/**
+ * // TODO
+ * @param <V>
+ * @param <E>
+ */
 public class DirectedGraphType<V, E> implements GraphType<V, E> {
 
   @Override

@@ -16,6 +16,7 @@ import ex3.exceptions.*;
  * @param <T> type of the element in the Heap
  */
 public class MinHeap<T> implements PriorityQueue<T> {
+
   private List<T> heap;
   private Map<T, Integer> lookup;
   private final Comparator<? super T> comparator;
@@ -182,7 +183,8 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   /**
-   * Decreases {@code}key{@code} to the new value {@code}newKey{@code}
+   * Decreases {@code}key{@code} to the new value {@code}newKey{@code},
+   * increasing its priority in the queue
    * 
    * @param key key to be decreased
    * @param newKey new value to be set
@@ -219,6 +221,11 @@ public class MinHeap<T> implements PriorityQueue<T> {
     }
   }
 
+  /**
+   * // TODO
+   * @return
+   * @throws ElementNotFoundException
+   */
   public boolean isHeapified() throws ElementNotFoundException {
     if(this.heap.isEmpty())
       return true;
@@ -228,6 +235,12 @@ public class MinHeap<T> implements PriorityQueue<T> {
     
   }
 
+  /**
+   * // TODO:
+   * @param node
+   * @return
+   * @throws ElementNotFoundException
+   */
   private boolean isHeapified(T node) throws ElementNotFoundException {
       
     T left = left(node);
@@ -262,4 +275,5 @@ public class MinHeap<T> implements PriorityQueue<T> {
     for(T elem : elements)
       this.insert(elem);
   }
+  
 }
