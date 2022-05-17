@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import ex4.comparable.NodeComparator;
 import ex4.structures.*;
+import ex4.helpers.GraphBuilder;
 import ex4.helpers.GraphHelper;
 
 public class Main {
@@ -20,17 +21,19 @@ public class Main {
       inputs[0] = input.nextLine();
 
       File file = new File(inputs[0]);
-      Graph<String, Float> graph = new Graph<>(false);
+
+      Graph<String, Float> graph;
+      GraphBuilder<String, Float> builder = new GraphBuilder<>();
 
       Scanner scanner = new Scanner(file);
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         String[] tokens = line.split(",");
 
-        Edge<String, Float> edge = new Edge<>(tokens[0], tokens[1], Float.parseFloat(tokens[2]));
-        graph.addEdge(edge);
+        builder.addEdge(tokens[0], tokens[1], Float.parseFloat(tokens[2]));
       }
       scanner.close();
+      graph = builder.build();
 
       System.out.println("Please enter the source city");
       inputs[1] = input.nextLine().toLowerCase();
@@ -38,8 +41,8 @@ public class Main {
       inputs[2] = input.nextLine().toLowerCase();
       input.close();
 
-      Comparator<Node<String, Float>> comp = new NodeComparator<>(Comparator.comparing((Float x) -> x));
-      Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
+      Comparator<GraphHelper.Node<String, Float>> comp = new NodeComparator<>(Comparator.comparing((Float x) -> x));
+      GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
           comp,
           Float.MIN_VALUE,
           Float.MAX_VALUE,

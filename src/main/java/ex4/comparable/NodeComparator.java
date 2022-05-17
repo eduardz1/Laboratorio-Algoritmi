@@ -2,7 +2,7 @@ package ex4.comparable;
 
 import java.util.Comparator;
 
-import ex4.structures.Node;
+import ex4.helpers.GraphHelper.Node;
 
 /** // TODO
  * @param <V>

@@ -47,14 +47,14 @@ public class GraphTest {
     assertThrows(GraphException.class, () -> g.addEdge(null, 2, 0.0));
   }
 
-  // @Test FIXME: bisogna differenziare tra addEdge e makeEdge forse oppure addEdge da sempre successo o bom?
-  // public void addEdgeBetweenInvalidVertexThrowsException() throws GraphException, ElementNotFoundException {
-  //   Graph<Integer, Double> g = new Graph<Integer, Double>(true);
-  //   g.addVertex(1);
-  //   g.addVertex(2);
-  //   assertThrows(ElementNotFoundException.class, () -> g.addEdge(1, 4, 0.0));
-  //   assertThrows(ElementNotFoundException.class, () -> g.addEdge(4, 2, 0.0));
-  // }
+  @Test
+  public void addEdgeBetweenInvalidVertexThrowsException() throws GraphException, ElementNotFoundException {
+    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    g.addVertex(1);
+    g.addVertex(2);
+    assertThrows(ElementNotFoundException.class, () -> g.addEdge(1, 4, 0.0));
+    assertThrows(ElementNotFoundException.class, () -> g.addEdge(4, 2, 0.0));
+  }
 
   @Test
   public void removeEdgeNullOrInvalidThrowsException() throws GraphException, ElementNotFoundException {

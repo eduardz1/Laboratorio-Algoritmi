@@ -2,12 +2,8 @@ package ex4.structures;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
 
 import ex4.exceptions.*;
-
-//TODO: Suddividere le exception, i paremtri null in argument dovrebbero throware un ArgumentExcpetion
 
 /**
  * A class representing a Graph with generic Vertexes and Edges.
@@ -17,21 +13,34 @@ import ex4.exceptions.*;
  */
 public class Graph<V, E> {
 
-  private final GraphType<V, E> type;
-  /**
-   * can be viewed as an adjacency list but functions more akin to a matrix
-   */
-  private final Map<V, Map<V, E>> adjacencyMap;
+  private final AbstractGraph<V, E> internalGraph;
 
   /**
-   * Creates an empty Graph.
-   * 
-   * @param isDirected set to {@code}true{@code} if the Graph should be directed,
-   *                   {@code}false{@code} otherwise
+   * Creates an empty graph.
    */
   public Graph(boolean isDirected) {
-    this.type = (isDirected) ? new DirectedGraphType<>() : new UndirectedGraphType<>();
-    this.adjacencyMap = new HashMap<>();
+    internalGraph = isDirected ? new NewDirectGraph() : new NewIndirectedGraph();
+  }
+
+  /**
+   * @return {@code}true{@code} if is directed or {@code}false{@code} otherwise
+   */
+  public boolean isDirected() {
+    return this.internalGraph instanceof Graph.NewDirectGraph;
+  }
+
+  /**
+   * Add a {@code}Collection{@code} of vertex to the Graph.
+   *
+   * @param vertices is the collection of the vertices to be added.
+   * @throws GraphException when vertices are null
+   */
+  public void addAllVertices(Collection<V> vertices) throws GraphException {
+    if (vertices == null)
+      throw new GraphException("addAllVertexes:" + " vertexes cannot be null");
+
+    for (V vertex : vertices)
+      this.addVertex(vertex);
   }
 
   /**
@@ -44,75 +53,18 @@ public class Graph<V, E> {
     if (vertex == null)
       throw new GraphException("addVertex:" + " vertex cannot be null");
 
-    this.adjacencyMap.put(vertex, new HashMap<>());
+    this.internalGraph.addVertex(vertex);
   }
 
   /**
-   * Add a {@code}Collection{@code} of vertex to the Graph.
+   * Checks whether the graph contains an edge between two vertexes.
    *
-   * @param vertices is the collection of the vertices to be added.
-   * @throws GraphException when vertices are null
+   * @param vertex element associated to the source of the edge.
+   * @param to     element associated to the destination of the edge.
+   * @return {@code}true{@code} if contains edge or {@code}false{@code} otherwise
    */
-  public void addAllVertices(Collection<V> vertices) throws GraphException {
-    if (vertices == null)
-      throw new GraphException("addAllVertices:" + " vertices cannot be null");
-
-    for (V vertex : vertices)
-      this.addVertex(vertex);
-  }
-
-  /**
-   * Add edge to the Graph.
-   *
-   * @param edge is the edge as a object to be added.
-   * @throws GraphException when edge is null.
-   */
-  public void addEdge(Edge<V, E> edge) throws GraphException {
-    if (edge == null)
-      throw new GraphException("addEdge:" + " edge cannot be null");
-
-    this.addEdge(edge.getFrom(), edge.getTo(), edge.getWeight());
-  }
-
-  /**
-   * Add a {@code}Collection{@code} of edges to the Graph.
-   *
-   * @param edges is the collection of the edges to be added.
-   * @throws GraphException when edges are null.
-   */
-  public void addAllEdges(Collection<Edge<V, E>> edges) throws GraphException {
-    if (edges == null)
-      throw new GraphException("addAllEdges:" + " edges cannot be null");
-
-    for (Edge<V, E> edge : edges)
-      this.addEdge(edge);
-  }
-
-  /**
-   * Add a edge to the graph.
-   *
-   * @param from   is the source vertex
-   * @param to     is the destination vertex
-   * @param weight is the weight of the edge
-   * @throws GraphException when {@code}to{@code} or {@code}from{@code} are null
-   */
-  public void addEdge(V from, V to, E weight) throws GraphException {
-    if (!adjacencyMap.containsKey(to))
-      this.addVertex(to);
-    if (!adjacencyMap.containsKey(from))
-      this.addVertex(from);
-
-    adjacencyMap.get(from).put(to, weight);
-    this.type.makeEdgeStrategy(adjacencyMap, to, from, weight);
-    // FIXME: Questa implemntazione del metodo vuoto non mi convince per niente,
-    // piuttosto modificare la suddivisione delle classi
-  }
-
-  /**
-   * @return {@code}true{@code} if is directed or {@code}false{@code} otherwise
-   */
-  public boolean isDirected() {
-    return this.type instanceof DirectedGraphType;
+  public boolean containsEdge(V from, V to) {
+    return this.internalGraph.containsEdge(from, to);
   }
 
   /**
@@ -121,17 +73,121 @@ public class Graph<V, E> {
    *         {@code}false{@code} otherwise
    */
   public boolean containsVertex(V vertex) {
-    return this.adjacencyMap.containsKey(vertex);
+    return this.internalGraph.containsVertex(vertex);
   }
 
   /**
-   *
-   * @param vertex element associated to the edge
-   * @param edge   element to find
-   * @return {@code}true{@code} if contains edge or {@code}false{@code} otherwise
+   * Returns value of the specified edge.
+   * 
+   * @param from is the source vertex of the edge
+   * @param to   is the destination vertex of the edge
+   * @return edge value
+   * @throws GraphException           when {@code}from{@code} or
+   *                                  {@code}to{@code} are null
+   * @throws ElementNotFoundException when {@code}from{@code} or
+   *                                  {@code}to{@code} are not found
    */
-  public boolean containsEdge(V vertex, E edge) {
-    return this.adjacencyMap.get(vertex).containsValue(edge);
+  public E getEdge(V from, V to) throws GraphException, ElementNotFoundException {
+
+    if (from == null || to == null)
+      throw new GraphException("getEdge:" + " from and to cannot be null");
+
+    if (!internalGraph.containsVertex(from))
+      throw new ElementNotFoundException("getEdge:" + " from does not exist");
+
+    if (!internalGraph.containsEdge(from, to))
+      throw new ElementNotFoundException("getEdge:" + " to does not exist");
+
+    return this.internalGraph.getEdge(from, to);
+  }
+
+  /**
+   * @return number of edges in the Graph
+   */
+  public int getEdgeCount() {
+    return this.internalGraph.getEdgeCount();
+  }
+
+  /**
+   * @return list of edges in the Graph.
+   */
+  public ArrayList<E> getEdges() {
+    return this.internalGraph.getEdges();
+  }
+
+  /**
+   * Resturns an an ArrayList of the adjacent vertices of the specified vertex.
+   * 
+   * @param vertex element of which the neighbors are to be found
+   * @return list of neighbors
+   * @throws GraphException           when vertex is null
+   * @throws ElementNotFoundException when vertex is not found
+   */
+  public ArrayList<V> getNeighbors(V vertex) throws GraphException, ElementNotFoundException {
+    if (vertex == null)
+      throw new GraphException("getNeighbors:" + " vertex cannot be null");
+
+    if (!this.internalGraph.containsVertex(vertex))
+      throw new ElementNotFoundException("getNeighbors:" + " vertex does not exist");
+
+    return this.internalGraph.getNeighbors(vertex);
+  }
+
+  /**
+   * @return number of the vertices in the Graph
+   */
+  public int getVertexCount() {
+    return this.internalGraph.getVertexCount();
+  }
+
+  /**
+   * @return list of vertices in the Graph.
+   */
+  public ArrayList<V> getVertices() {
+    return this.internalGraph.getVertices();
+  }
+
+  /**
+   * Add a edge to the graph.
+   *
+   * @param from   is the source vertex
+   * @param to     is the destination vertex
+   * @param weight is the weight of the edge
+   * @throws GraphException           when {@code}to{@code} or
+   *                                  {@code}from{@code} are null
+   * @throws ElementNotFoundException when either {@code}to{@code} or
+   *                                  {@code}from{@code} are not found
+   */
+  public void addEdge(V from, V to, E weight) throws GraphException, ElementNotFoundException {
+    if (to == null || from == null)
+      throw new GraphException("makeEdge:" + " to and from cannot be null");
+
+    if (!internalGraph.containsVertex(to))
+      throw new ElementNotFoundException("addEdge:" + " to does not exist");
+    if (!internalGraph.containsVertex(from))
+      throw new ElementNotFoundException("addEdge:" + " from does not exist");
+
+    this.internalGraph.addEdge(from, to, weight);
+  }
+
+  /**
+   * Removes the specified edge from the Graph.
+   *
+   * @param from is the source vertex of the edge to be removed
+   * @param to   is the destination vertex of the edge to be removed
+   * @throws GraphException           when {@code}from{@code} or
+   *                                  {@code}to{@code} are null
+   * @throws ElementNotFoundException when {@code}from{@code} or
+   *                                  {@code}to{@code} are not found
+   */
+  public void removeEdge(V from, V to) throws GraphException, ElementNotFoundException {
+    if (to == null || from == null)
+      throw new GraphException("makeEdge:" + " to and from cannot be null");
+
+    if (!internalGraph.containsVertex(to))
+      throw new ElementNotFoundException("addEdge:" + " to does not exist");
+
+    this.internalGraph.removeEdge(from, to);
   }
 
   /**
@@ -144,119 +200,69 @@ public class Graph<V, E> {
   public void removeVertex(V vertex) throws GraphException, ElementNotFoundException {
     if (vertex == null)
       throw new GraphException("removeVertex:" + " vertex cannot be null");
-    if (!this.adjacencyMap.containsKey(vertex))
+    if (!internalGraph.containsVertex(vertex))
       throw new ElementNotFoundException("removeVertex:" + " vertex does not exist");
 
-    this.adjacencyMap.values().forEach(map -> map.remove(vertex));
-    this.adjacencyMap.remove(vertex);
+    this.internalGraph.removeVertex(vertex);
   }
 
   /**
-   * 
-   * @param from is the source vertex of the edge to be removed
-   * @param to is the destination vertex of the edge to be removed 
-   * @throws GraphException when {@code}from{@code} or {@code}to{@code} are null
-   * @throws ElementNotFoundException  when {@code}from{@code} or {@code}to{@code} are not found
+   * Private class that extends the AbstractGraph class to make it behave as an
+   * undirected Graph
    */
-  public void removeEdge(V from, V to) throws GraphException, ElementNotFoundException {
-    if (from == null || to == null)
-      throw new GraphException("removeEdge:" + " from and to cannot be null");
-    if (!this.adjacencyMap.containsKey(from))
-      throw new ElementNotFoundException("removeEdge:" + " from does not exist");
-    if (!this.adjacencyMap.get(from).containsKey(to))
-      throw new ElementNotFoundException("removeEdge:" + " to does not exist");
+  private class NewIndirectedGraph extends AbstractGraph<V, E> {
 
-    this.adjacencyMap.get(from).remove(to);
-    this.type.removeEdgeStrategy(this.adjacencyMap, from, to);
-  }
-
-  /**
-   * 
-   * @return number of the vertices in the Graph
-   */
-  public int getVertexCount() {
-    return this.adjacencyMap.size();
-  }
-
-  /**
-   * @return number of edges in the Graph
-   */
-  public int getEdgeCount() {
-    int count = 0;
-    for (Map<V, E> map : adjacencyMap.values())
-      count += map.size();
-
-    return this.type.getEdgeCountStrategy(count);
-  }
-
-  /**
-   * 
-   * @return list of edges in the Graph.
-   */
-  public ArrayList<E> getEdges() {
-    ArrayList<E> edges = new ArrayList<>();
-    for (Map<V, E> map : adjacencyMap.values())
-      edges.addAll(map.values());
-    // Here in reality we could only check half of the edges in a undirected graph
-    // as it is we are returning equivalent pairs which does not make too much sense
-    // for example (3,1) and (1,3) are the same edge in an undirected graph
-    return edges;
-  }
-
-  /**
-   * 
-   * @return list of vertices in the Graph.
-   */
-  public ArrayList<V> getVertices() {
-    return new ArrayList<>(this.adjacencyMap.keySet());
-  }
-
-  /**
-   * 
-   * @param vertex element of which the neighbors are to be found
-   * @return list of neighbors
-   * @throws GraphException when vertex is null
-   * @throws ElementNotFoundException when vertex is not found
-   */
-  public ArrayList<V> getNeighbors(V vertex) throws GraphException, ElementNotFoundException {
-    if (vertex == null)
-      throw new GraphException("getNeighbors:" + " vertex cannot be null");
-    if (!this.adjacencyMap.containsKey(vertex))
-      throw new ElementNotFoundException("getNeighbors:" + " vertex does not exist");
-
-    return new ArrayList<>(this.adjacencyMap.get(vertex).keySet());
-  }
-
-  /**
-   * 
-   * @param from is the source vertex of the edge 
-   * @param to  is the destination vertex of the edge
-   * @return edge
-   * @throws GraphException when {@code}from{@code} or {@code}to{@code} are null
-   * @throws ElementNotFoundException  when {@code}from{@code} or {@code}to{@code} are not found
-   */
-  public E getEdge(V from, V to) throws GraphException, ElementNotFoundException {
-    if (from == null || to == null)
-      throw new GraphException("getEdge:" + " from and to cannot be null");
-    if (!adjacencyMap.containsKey(from))
-      throw new ElementNotFoundException("getEdge:" + " from does not exist");
-
-    if (!adjacencyMap.get(from).containsKey(to))
-      throw new ElementNotFoundException("getEdge:" + " to does not exist");
-
-    return adjacencyMap.get(from).get(to);
-  }
-
-  /**
-   * prints a Graph formatted
-   */
-  public void print() {
-    for (V vertex : this.adjacencyMap.keySet()) {
-      System.out.print(vertex + ": ");
-      for (V neighbor : this.adjacencyMap.get(vertex).keySet()) {
-        System.out.print(neighbor + " ");
-      }
-      System.out.println();
+    /**
+     * {@inheritDoc}
+     * Divides the result into two because a double edge counts as one
+     */
+    @Override
+    public int getEdgeCount() {
+      return super.getEdgeCount() / 2;
     }
+
+    /**
+     * {@inheritDoc}
+     * Calls {@code}addEdge(from, to, weight){@code} twice to add the edge in both
+     * directions.
+     */
+    @Override
+    public void addEdge(V from, V to, E weight) {
+      super.addEdge(from, to, weight);
+      super.addEdge(to, from, weight);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Calls {@code}removeEdge(from, to){@code} twice to remove the edge in both
+     * directions.
+     */
+    @Override // FIXME: siamo costretti a throware un'eccezione se la mappa è privata
+    public void removeEdge(V from, V to) throws ElementNotFoundException {
+      super.removeEdge(from, to);
+      super.removeEdge(to, from);
+    }
+
+  }
+
+  // FIXME: Ma la classe per il direct graph serve a niente se non come
+  // placeholder in realtà?
+  // Non serve overridare, estende e basta, non implementa
+  private class NewDirectGraph extends AbstractGraph<V, E> {
+    // @Override
+    // public int getEdgeCount() {
+    // return super.getEdgeCount();
+    // }
+
+    // @Override
+    // public void addEdge(V from, V to, E weight) {
+    // super.addEdge(from, to, weight);
+    // }
+
+    // @Override
+    // public void removeEdge(V from, V to) {
+    // super.removeEdge(from, to);
+    // }
+
   }
 }

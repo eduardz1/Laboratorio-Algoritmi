@@ -13,12 +13,13 @@ import org.junit.Test;
 
 import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
+import ex4.helpers.GraphHelper;
 
 public class NodeTest {
 
   @Test(expected = ArgumentException.class)
   public void createNodeWithItemNullThrowsException() throws ArgumentException {
-    new Node<String, Integer>(null, 0);
+    new GraphHelper.Node<String, Integer>(null, 0);
   }
 
   @Test
@@ -26,8 +27,8 @@ public class NodeTest {
     Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
     NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
 
-    Node<String, Integer> node = new Node<>("a", 1);
-    Node<String, Integer> node2 = new Node<>("b", 0);
+    GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>("a", 1);
+    GraphHelper.Node<String, Integer> node2 = new GraphHelper.Node<>("b", 0);
 
     assertTrue(comparator.compare(node, node2) > 0);
     assertTrue(comparator.compare(node2, node) < 0);
@@ -42,9 +43,9 @@ public class NodeTest {
     NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
 
     List<String> els = Arrays.asList("abcdefg".split(""));
-    List<Node<String, Integer>> nodes = new ArrayList<Node<String,Integer>>();    
+    List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<GraphHelper.Node<String,Integer>>();    
     for (int i = 0; i < els.size(); i++) {
-      Node<String, Integer> node = new Node<>(els.get(i), i);
+      GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>(els.get(i), i);
       nodes.add(node);
     }
 

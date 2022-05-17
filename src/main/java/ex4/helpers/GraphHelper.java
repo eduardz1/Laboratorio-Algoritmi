@@ -14,8 +14,6 @@ import ex3.structures.*;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.DijkstraException;
 import ex4.structures.Graph;
-import ex4.structures.Node;
-import ex4.structures.Pair;
 
 /**
  * // TODO
@@ -172,4 +170,87 @@ public class GraphHelper {
     }
   }
 
+  /**
+   * Pair of two generic objects
+   * 
+   * @param <V> Type of the first object
+   * @param <E> Type of the second object
+   */
+  public static class Pair<V, E> { // TODO: check se si può tenere statica
+
+    private V first;
+    private E second;
+
+    /**
+     * Creates a new {@code}Pair{@code} object
+     * 
+     * @param first  first element
+     * @param second first element
+     */
+    public Pair(V first, E second) {
+      this.first = first;
+      this.second = second;
+    }
+
+    /**
+     * @return first object
+     */
+    public V getFirst() {
+      return first;
+    }
+
+    /**
+     * @return second object
+     */
+    public E getSecond() {
+      return second;
+    }
+
+    /**
+     * sets first object
+     * 
+     * @param first first element
+     */
+    public void setFirst(V first) {
+      this.first = first;
+    }
+
+    /**
+     * sets second object
+     * 
+     * @param second second element
+     */
+    public void setSecond(E second) {
+      this.second = second;
+    }
+
+  }
+
+  /**
+   * Node for a {@link ex3.structures.PriorityQueue PriorityQueue} composed by
+   * an item with associated priority
+   * 
+   * @param <V> Type of the item
+   * @param <E> Type of the priority, must extend {@code}Number{@code}
+   */
+  public static class Node<V, E extends Number> { // TODO: check se si può tenere statica
+
+    public V item;
+    public E priority;
+
+    /**
+     * Creates a new {@code}Node{@code} object
+     * 
+     * @param item     element
+     * @param priority associated priority
+     * @throws ArgumentException when item is null
+     */
+    public Node(V item, E priority) throws ArgumentException {
+      if (item == null)
+        throw new ArgumentException("Item cannot be null");
+
+      this.item = item;
+      this.priority = priority;
+    }
+  }
 }

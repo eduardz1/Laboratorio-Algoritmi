@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 import ex4.exceptions.ElementNotFoundException;
 import ex4.exceptions.GraphException;
-import ex4.structures.WrapperGraph;
+import ex4.structures.Graph;
 
 public class GraphBuilder<V, E> {
 
-  private WrapperGraph<V, E> graph;
+  private Graph<V, E> graph;
   private HashMap<V, HashMap<V, E>> map;
   private boolean directed;
 
@@ -37,8 +37,8 @@ public class GraphBuilder<V, E> {
     return this;
   }
 
-  public WrapperGraph<V, E> build() throws GraphException, ElementNotFoundException {
-    graph = new WrapperGraph<>(directed);
+  public Graph<V, E> build() throws GraphException, ElementNotFoundException {
+    graph = new Graph<>(directed);
 
     for (V v : this.map.keySet()) {
       graph.addVertex(v);
