@@ -26,7 +26,7 @@ public class Graph<V, E> {
    * @return {@code}true{@code} if is directed or {@code}false{@code} otherwise
    */
   public boolean isDirected() {
-    return this.internalGraph instanceof DirectedGraph;
+    return !(this.internalGraph instanceof UndirectedGraph);
   }
 
   /**
