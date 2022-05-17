@@ -8,6 +8,7 @@ import ex4.exceptions.DijkstraException;
 import ex4.structures.Graph;
 import ex4.structures.Node;
 import ex4.structures.Pair;
+import ex4.structures.WrapperGraph;
 
 import static org.junit.Assert.*;
 
@@ -19,7 +20,7 @@ public class GraphHelperTest {
 
   @Test
   public void dijkstraOnDirectGraphHandleExpectedResult() throws Exception {
-    Graph<String, Integer> graph = new Graph<>(true);
+    WrapperGraph<String, Integer> graph = new WrapperGraph<>(true);
 
     String[] vertexes = { "a", "b", "c", "d", "e", "f", "z" };
 
