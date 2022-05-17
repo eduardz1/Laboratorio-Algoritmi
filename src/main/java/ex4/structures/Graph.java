@@ -13,20 +13,20 @@ import ex4.exceptions.*;
  */
 public class Graph<V, E> {
 
-  private final AbstractGraph<V, E> internalGraph;
+  private final DirectedGraph<V, E> internalGraph;
 
   /**
    * Creates an empty graph.
    */
   public Graph(boolean isDirected) {
-    internalGraph = isDirected ? new NewDirectGraph() : new NewIndirectedGraph();
+    internalGraph = isDirected ? new DirectedGraph<>() : new UndirectedGraph<>();
   }
 
   /**
    * @return {@code}true{@code} if is directed or {@code}false{@code} otherwise
    */
   public boolean isDirected() {
-    return this.internalGraph instanceof Graph.NewDirectGraph;
+    return this.internalGraph instanceof DirectedGraph;
   }
 
   /**
@@ -206,63 +206,8 @@ public class Graph<V, E> {
     this.internalGraph.removeVertex(vertex);
   }
 
-  /**
-   * Private class that extends the AbstractGraph class to make it behave as an
-   * undirected Graph
-   */
-  private class NewIndirectedGraph extends AbstractGraph<V, E> {
-
-    /**
-     * {@inheritDoc}
-     * Divides the result into two because a double edge counts as one
-     */
-    @Override
-    public int getEdgeCount() {
-      return super.getEdgeCount() / 2;
-    }
-
-    /**
-     * {@inheritDoc}
-     * Calls {@code}addEdge(from, to, weight){@code} twice to add the edge in both
-     * directions.
-     */
-    @Override
-    public void addEdge(V from, V to, E weight) {
-      super.addEdge(from, to, weight);
-      super.addEdge(to, from, weight);
-    }
-
-    /**
-     * {@inheritDoc}
-     * Calls {@code}removeEdge(from, to){@code} twice to remove the edge in both
-     * directions.
-     */
-    @Override // FIXME: siamo costretti a throware un'eccezione se la mappa è privata
-    public void removeEdge(V from, V to) throws ElementNotFoundException {
-      super.removeEdge(from, to);
-      super.removeEdge(to, from);
-    }
-
+  public void print() {
+    this.internalGraph.print();
   }
 
-  // FIXME: Ma la classe per il direct graph serve a niente se non come
-  // placeholder in realtà?
-  // Non serve overridare, estende e basta, non implementa
-  private class NewDirectGraph extends AbstractGraph<V, E> {
-    // @Override
-    // public int getEdgeCount() {
-    // return super.getEdgeCount();
-    // }
-
-    // @Override
-    // public void addEdge(V from, V to, E weight) {
-    // super.addEdge(from, to, weight);
-    // }
-
-    // @Override
-    // public void removeEdge(V from, V to) {
-    // super.removeEdge(from, to);
-    // }
-
-  }
 }

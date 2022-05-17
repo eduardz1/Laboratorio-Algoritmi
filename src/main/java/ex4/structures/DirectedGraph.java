@@ -13,7 +13,7 @@ import ex4.exceptions.ElementNotFoundException;
  * @param <V> type of the elements in the Graph
  * @param <E> type of the edges in the Graph
  */
-public abstract class AbstractGraph<V, E> {
+public class DirectedGraph<V, E> {
 
   /**
    * can be viewed as an adjacency list but functions more akin to a matrix
@@ -23,7 +23,7 @@ public abstract class AbstractGraph<V, E> {
   /**
    * Creates an empty Graph.
    */
-  public AbstractGraph() {
+  protected DirectedGraph() {
     this.adjacencyMap = new HashMap<>();
   }
 
