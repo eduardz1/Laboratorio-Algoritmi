@@ -120,6 +120,18 @@ public class DirectedGraph<V, E> {
   }
 
   /**
+   * @see Graph#reverse()
+   */
+  public void reverse() {
+    for (V vertex : this.getVertices()) {
+      for (V neigh : this.getNeighbors(vertex)) {
+        this.addEdge(neigh, vertex, this.getEdge(vertex, neigh));
+        this.removeEdge(vertex, neigh);
+      }
+    }
+  }
+
+  /**
    * prints a Graph formatted
    */
   public void print() {

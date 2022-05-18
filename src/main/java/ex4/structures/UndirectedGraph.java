@@ -38,4 +38,12 @@ public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
         super.removeEdge(to, from);
     }
 
+    /**
+     * {@inheritDoc}
+     * Reverse of an undirected graph it's the same graph.
+     */
+    @Override
+    public void reverse() {
+        // do nothing
+    }
 }

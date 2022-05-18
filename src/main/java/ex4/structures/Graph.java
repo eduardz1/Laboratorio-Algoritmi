@@ -208,6 +208,16 @@ public class Graph<V, E> {
     this.internalGraph.removeVertex(vertex);
   }
 
+  /**
+   * Reverses the edges of the graph.
+   */
+  public void reverse() {
+    this.internalGraph.reverse();
+  }
+
+  /**
+   * prints a Graph formatted
+   */
   public void print() {
     this.internalGraph.print();
   }
