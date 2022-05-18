@@ -186,6 +186,8 @@ public class Graph<V, E> {
 
     if (!internalGraph.containsVertex(to))
       throw new ElementNotFoundException("addEdge:" + " to does not exist");
+    if (!internalGraph.adjacencyMap.get(from).containsKey(to))
+      throw new ElementNotFoundException("addEdge:" + " edge to \"to\" does not exist");
 
     this.internalGraph.removeEdge(from, to);
   }

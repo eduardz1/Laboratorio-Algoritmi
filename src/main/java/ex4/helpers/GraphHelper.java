@@ -176,7 +176,7 @@ public class GraphHelper {
    * @param <V> Type of the first object
    * @param <E> Type of the second object
    */
-  public static class Pair<V, E> { // TODO: check se si può tenere statica
+  public static class Pair<V, E> {
 
     private V first;
     private E second;
@@ -233,7 +233,7 @@ public class GraphHelper {
    * @param <V> Type of the item
    * @param <E> Type of the priority, must extend {@code}Number{@code}
    */
-  public static class Node<V, E extends Number> { // TODO: check se si può tenere statica
+  public static class Node<V, E extends Number> {
 
     public V item;
     public E priority;

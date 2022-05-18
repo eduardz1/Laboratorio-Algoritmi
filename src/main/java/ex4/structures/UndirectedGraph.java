@@ -1,15 +1,14 @@
 package ex4.structures;
 
-import ex4.exceptions.ElementNotFoundException;
-
 /**
- * Private class that extends the AbstractGraph class to make it behave as an
+ * Class that extends the AbstractGraph class to make it behave as an
  * undirected Graph
  */
 public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
 
     /**
      * {@inheritDoc}
+     * @return
      * Divides the result into two because a double edge counts as one
      */
     @Override
@@ -33,8 +32,8 @@ public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
      * Calls {@code}removeEdge(from, to){@code} twice to remove the edge in both
      * directions.
      */
-    @Override // FIXME: siamo costretti a throware un'eccezione se la mappa è privata
-    public void removeEdge(V from, V to) throws ElementNotFoundException {
+    @Override
+    public void removeEdge(V from, V to) {
         super.removeEdge(from, to);
         super.removeEdge(to, from);
     }

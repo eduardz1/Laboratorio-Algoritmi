@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import ex4.exceptions.ElementNotFoundException;
-
 /**
  * An abstract class representing a Graph with generic Vertexes and Edges.
  * Needs to be extended to either be a directed or undirected graph.
@@ -18,7 +16,7 @@ public class DirectedGraph<V, E> {
   /**
    * can be viewed as an adjacency list but functions more akin to a matrix
    */
-  private final Map<V, Map<V, E>> adjacencyMap;
+  protected final Map<V, Map<V, E>> adjacencyMap;
 
   /**
    * Creates an empty Graph.
@@ -64,12 +62,9 @@ public class DirectedGraph<V, E> {
   }
 
   /**
-   * @throws ElementNotFoundException
    * @see Graph#removeEdge(V, V)
    */
-  public void removeEdge(V from, V to) throws ElementNotFoundException {
-    if (!adjacencyMap.get(from).containsKey(to)) // FIXME: siamo costretti a mettere una throw qui se la map rimane privata
-      throw new ElementNotFoundException("addEdge:" + " edge to \"to\" does not exist");
+  public void removeEdge(V from, V to) {
     this.adjacencyMap.get(from).remove(to);
   }
 
