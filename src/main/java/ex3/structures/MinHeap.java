@@ -1,9 +1,11 @@
 package ex3.structures;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ex3.exceptions.*;
@@ -14,7 +16,8 @@ import ex3.exceptions.*;
  * @param <T> type of the element in the Heap
  */
 public class MinHeap<T> implements PriorityQueue<T> {
-  private ArrayList<T> heap;
+
+  private List<T> heap;
   private Map<T, Integer> lookup;
   private final Comparator<? super T> comparator;
 
@@ -136,8 +139,13 @@ public class MinHeap<T> implements PriorityQueue<T> {
     T res = this.heap.get(0);
     T newRoot = this.heap.remove(this.heap.size() - 1);
 
-    this.heap.add(0, newRoot);
     this.lookup.remove(res);
+
+    // Last element was deleted
+    if (this.heap.isEmpty()) 
+      return res;
+
+      this.heap.set(0, newRoot);
     this.lookup.put(newRoot, 0);
     topHeapify(0);
     return res;
@@ -175,7 +183,8 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   /**
-   * Decreases {@code}key{@code} to the new value {@code}newKey{@code}
+   * Decreases {@code}key{@code} to the new value {@code}newKey{@code},
+   * increasing its priority in the queue
    * 
    * @param key key to be decreased
    * @param newKey new value to be set
@@ -183,15 +192,17 @@ public class MinHeap<T> implements PriorityQueue<T> {
    * @throws MinHeapException when {@code}newKey{@code} is not smaller than {@code}key{@code}
    */
   @Override
-  public void decreaseKey(T key, T newKey) throws MinHeapException, ElementNotFoundException {
+  public void increaseKey(T key, T newKey) throws MinHeapException, ElementNotFoundException {
     if (!this.lookup.containsKey(key))
-      throw new ElementNotFoundException("decreaseKey:" + key + " key not found in the heap");
+      throw new ElementNotFoundException("increaseKey:" + key + " key not found in the heap");
 
     int i = this.lookup.get(key);
     if(this.comparator.compare(newKey, this.heap.get(i)) > 0)
-      throw new MinHeapException(String.format("decreaseKey:" + " new key {%s} is not smaller than current key {%s}", newKey, key));
+      throw new MinHeapException(String.format("increaseKey:" + " new key {%s} is not smaller than current key {%s}", newKey, key));
     
-    this.heap.add(i, key);
+    this.heap.set(i, newKey);
+    this.lookup.remove(key);
+    this.lookup.put(newKey, i);
     botHeapify(i);
   }
   
@@ -210,26 +221,59 @@ public class MinHeap<T> implements PriorityQueue<T> {
     }
   }
 
-  
+  /**
+   * // TODO
+   * @return
+   * @throws ElementNotFoundException
+   */
+  public boolean isHeapified() throws ElementNotFoundException {
+    if(this.heap.isEmpty())
+      return true;
 
-  // public boolean isPartialFilled() {
-
-  //   return true;
-  // }
-
-  
-  
-  public boolean isHeapified() {
-  //   if(this.heap.isEmpty())
-  //     return true;
-  //   T root = this.heap.get(0);
-  // TODO: Completare  
-  return true;
+    // Start from root
+    return isHeapified(this.heap.get(0));
+    
   }
 
-  // private boolean isHeapified(T elem) {
+  /**
+   * // TODO:
+   * @param node
+   * @return
+   * @throws ElementNotFoundException
+   */
+  private boolean isHeapified(T node) throws ElementNotFoundException {
+      
+    T left = left(node);
+    T right = right(node);  
+
+    if (left == null && right == null)
+      return true;
+
+    /**
+     * First @return can be simplified by the following code, as we
+     * assume that there are no empty positions in a heap, so if 
+     * right is null, left is the last element of the array 
+     *  
+     * @code
+     * return this.comparator.compare(node, left) > 0;
+    */
+    if (right == null) 
+      return this.comparator.compare(node, left) < 0 && isHeapified(left);
+    else
+      return 
+        this.comparator.compare(node, left) < 0 &&
+        this.comparator.compare(node, right) < 0 &&
+        isHeapified(left) &&
+        isHeapified(right);
+  }
+
+  @Override
+  public void insertAll(Collection<T> elements) throws MinHeapException {
+    if(elements == null)
+      throw new MinHeapException("insertAll:" + " elements cannot be null");
     
-  // }
-
-
+    for(T elem : elements)
+      this.insert(elem);
+  }
+  
 }

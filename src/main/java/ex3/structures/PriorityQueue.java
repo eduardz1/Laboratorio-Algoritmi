@@ -1,5 +1,7 @@
 package ex3.structures;
 
+import java.util.Collection;
+
 public interface PriorityQueue<T> {
   /**
    * @return true if queue is empty
@@ -19,6 +21,13 @@ public interface PriorityQueue<T> {
   public void insert(T element) throws Exception;
 
   /**
+   * // TODO:
+   * @param elements
+   * @throws Exception
+   */
+  public void insertAll(Collection<T> elements) throws Exception;
+
+  /**
    * extracts first element of the queue
    * 
    * @return T element extracted
@@ -33,7 +42,12 @@ public interface PriorityQueue<T> {
    */
   public T peek() throws Exception;
 
-  // FIXME: decreaseKey as a method to PriorityQueue does not make sense, name 
-  // should be changed to reflect the increase in priority of "key"
-  public void decreaseKey(T key, T newKey) throws Exception;
+  /**
+   * incresease the priority of an element
+   * 
+   * @param key key to be increased in priority
+   * @param newKey new value of {@code}key{@code}
+   * @throws Exception
+   */
+  public void increaseKey(T key, T newKey) throws Exception;
 }
