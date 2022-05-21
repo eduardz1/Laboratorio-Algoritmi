@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import ex3.structures.*;
+import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.DijkstraException;
 import ex4.structures.Graph;
@@ -28,7 +29,7 @@ public class GraphHelper {
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comparator  {@code}Comparator{@code} for a genric
+   * @param comp  {@code}Comparator{@code} for a genric
    *                    {@link Node Node} of vertices to edges
    * @param min         {@code}MIN VALUE{@code} of the specified number type
    * @param max         {@code}MAX VALUE{@code} of the specified number type
@@ -40,13 +41,14 @@ public class GraphHelper {
    * @throws Exception
    */
   public static <V, E extends Number> Pair<List<V>, E> dijkstra(
-      Graph<V, E> graph, Comparator<? super Node<V, E>> comparator, E min, E max, V source, V destination)
+      Graph<V, E> graph, Comparator<? super E> comparator, E min, E max, V source, V destination)
       throws Exception {
 
     if (!graph.containsVertex(source) || !graph.containsVertex(destination))
       throw new ArgumentException("Source or destination are invalid");
 
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>(comparator);
+    Comparator<? super Node<V, E>> comp = NodeComparator.<V, E>getComparator(comparator);
+    PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
     Map<V, Node<V, E>> references = new HashMap<>(); // Used to mark visited vertices
     Map<V, E> distances = new HashMap<>(); // use null to mark infinity
     Map<V, V> prevs = new HashMap<>(); // use null to mark undefined

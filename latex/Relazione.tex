@@ -207,19 +207,73 @@ che la distribuzione è concentrata attorno a 19
     \include{figures/sklist_zoommed_search}
 \end{figure}
 
-Bla bla bla facendo un grafico delle medie dei tempi di inserimento notiamo che 17
+Fcendo un grafico delle medie dei tempi di inserimento notiamo che 17
 è il numero ottimale di livelli
 \begin{figure}[H]
 \centering
     \include{figures/sklist_mean_search}
 \end{figure}
-
 Sorprendentemente il numero ottimale di livelli non coincide esattamente con $ln(n)$
 
 \chapter*{Esercizio 3}
 \section{Minimum Heap}
+Per grantire la complessità in $O(1)$ della restituzione del \verb|left|, \verb|right|
+e \verb|parent| di un elemento, a partire dal valore dello stesso, abbiamo usato 
+una strttura dati di supporto, una \verb|HashMap<>|, che memorizza i valori degli 
+elementi e li associa ai relativi indici nell' \verb|ArrayList| che rappresenta il 
+nostro heap.
+\newline
+\newline
+Abbiamo deciso di craere anche un'interfaccia \verb|PriorityQueue<>| che è la Abstract
+Data Structure sulla quale di basa il \verb|MinHeap<>|
 
 \chapter*{Esercizio 4}
 \section{Graph}
+Abbiamo deciso di considerare il grafo diretto come la struttura dati base di un 
+generico grafo, i grafi indiretto possono infatti essere visti come grafi diretti 
+nei quali ad ogni arco viene associato anche un arco oppposto. Abbiamo deciso quindi 
+di craere una classe \verb|UndirectGraph<>| che estende \verb|DirectGraph<>|, con 
+costruttori \verb|protected|, ed una classe \verb|Graph<>| che incapsula i due.
+\newline
+\newline
+Vi sono diversi modi di rappresentare un grafo G(V, E) a livello software, i due metodi 
+più intuitivi sono quelli della lista di adiacenza e della matrice di adiacenza.
+La nostra implementazione sfrutta invece una mappa di vertici associati a mappe di 
+vertici associati al \verb|weight| dell'arco. 
+\newline
+Concettualmente questa \verb|Map<V, Map<V, E>>| può essere vista come una lista di 
+adiacenza ma offre in realtà tutti i vantaggi di una matrice di adiacenza.
+\newline
+\newline
+Per aiutare nell'inizializzazione di un grafo, abbiamo deciso anche di creare una 
+classe \verb|GraphBuilder<>| che sfruta il design pattern \verb|Builder|.
+
+\section{Dijkstra}
+Abbiamo implementato l 'algoritmo di Dijkstra nella classe \verb|GraphHelper<>|, 
+la classe contiene tutta una serie di methodi statici che possono essere di aiuto 
+nell'utilizzo di un grafo. \newline
+Abbiamo deciso di implementare l'algoritmo di Dijkstra qausi completamente generica.
+Il itpo degli archi del grafo è limitatao a \verb|E extends Number| principalmente 
+per via dell'impossibilità in \verb|Java| di effettuare l'override degli \verb|operator|.
+\newline
+La funzione chiede che in input gli venga fornito, oltre all'oggetto grafo, l'elemento 
+source e l'elemento destination, anche un \verb|Comparator<? super E>| che 
+permetta di effettuare la comaprison tra i \verb|weight| degli archi, un "min" che ci 
+permette di capire qual'è il valore minimo di E (ad esempio per \verb|Integer| basta inserire 
+\verb|Integer.MIN_VALUE|) ed un "max" che permette invece di capire il valore massimo di
+E. Il valore minimo è quello che assumerà il \verb|source| non appena inserito nella
+priority queue, il valore massimo invece è quello al quale inizializziamo i vertici
+del grafo. \newline
+La priority queue utilizzata per tenere traccia delle distanze tra \verb|source| e
+i vari vertici è il \verb|MinHeap<>|, gli elementi della priority queue sono dei 
+\verb|Node<vertex, distance from source>|. \newline
+Per memorizzare i predecessori e le distanze abbiamo deciso di usarre delle 
+\verb|HashMap<>|. \newline
+Abbiamo inoltre istanziato una mappa di valori a oggetti nodo in maniera tale da 
+poter cercare in $O(1)$ gli elementi nella priority queue. \newline
+L'algoritmo restituisce un \verb|Pair<>| che è una coppia di elementi nel quale il
+primo rappresenta il percorso minimo tra \verb|source| e \verb|destination| e il 
+secondo contiene la distanza tra i due.
+
 
 \end{document}

@@ -37,10 +37,8 @@ public class GraphHelperTests {
         .addEdge("f", "z", 9)
         .build();
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
+        Comparator.comparingInt((Integer x) -> x),
         0,
         Integer.MAX_VALUE,
         "a",
@@ -64,10 +62,8 @@ public class GraphHelperTests {
         .addEdge("a", "e", 7)
         .build();
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
+        Comparator.comparingInt((Integer x) -> x),
         0,
         Integer.MAX_VALUE,
         "a",
@@ -89,10 +85,8 @@ public class GraphHelperTests {
         .addEdge("c", "e", 10)
         .build();
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
+        Comparator.comparingInt((Integer x) -> x),
         0,
         Integer.MAX_VALUE,
         "a",
@@ -116,10 +110,8 @@ public class GraphHelperTests {
     graph.addEdge("c", "a", 1);
     graph.addEdge("d", "e", 1);
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
+        Comparator.comparingInt((Integer x) -> x),
         0,
         Integer.MAX_VALUE,
         "a",
@@ -141,10 +133,8 @@ public class GraphHelperTests {
     graph.addEdge("c", "d", 1);
     graph.addEdge("d", "b", 1);
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     GraphHelper.<String, Integer>dijkstra(graph,
-        comp,
+        Comparator.comparingInt((Integer x) -> x),
         0,
         Integer.MAX_VALUE,
         "a",
@@ -160,12 +150,10 @@ public class GraphHelperTests {
     }
     graph.addEdge("a", "b", 1);
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     assertThrows(
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
-            comp,
+            Comparator.comparingInt((Integer x) -> x),
             0,
             Integer.MAX_VALUE,
             "a",
@@ -174,7 +162,7 @@ public class GraphHelperTests {
     assertThrows(
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
-            comp,
+            Comparator.comparingInt((Integer x) -> x),
             0,
             Integer.MAX_VALUE,
             "a",
@@ -190,12 +178,10 @@ public class GraphHelperTests {
     }
     graph.addEdge("a", "b", 1);
 
-    Comparator<GraphHelper.Node<String, Integer>> comp = new NodeComparator<>(
-        Comparator.comparingInt((Integer x) -> x));
     assertThrows(
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
-            comp,
+            Comparator.comparingInt((Integer x) -> x),
             0,
             Integer.MAX_VALUE,
             null,
@@ -204,7 +190,7 @@ public class GraphHelperTests {
     assertThrows(
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
-            comp,
+            Comparator.comparingInt((Integer x) -> x),
             0,
             Integer.MAX_VALUE,
             "z",
@@ -237,7 +223,7 @@ public class GraphHelperTests {
     NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
 
     List<String> els = Arrays.asList("abcdefg".split(""));
-    List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<GraphHelper.Node<String,Integer>>();    
+    List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<GraphHelper.Node<String, Integer>>();
     for (int i = 0; i < els.size(); i++) {
       GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>(els.get(i), i);
       nodes.add(node);
@@ -249,6 +235,6 @@ public class GraphHelperTests {
     for (int i = 0; i < els.size() - 1; i++) {
       assertTrue(nodes.get(i).priority < nodes.get(i + 1).priority);
     }
-  }     
-  
+  }
+
 }

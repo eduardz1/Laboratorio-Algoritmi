@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-import ex4.comparable.NodeComparator;
 import ex4.structures.*;
 import ex4.helpers.GraphBuilder;
 import ex4.helpers.GraphHelper;
@@ -41,9 +40,8 @@ public class Main {
       inputs[2] = input.nextLine().toLowerCase();
       input.close();
 
-      Comparator<GraphHelper.Node<String, Float>> comp = new NodeComparator<>(Comparator.comparing((Float x) -> x));
       GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
-          comp,
+          Comparator.comparing((Float x) -> x),
           Float.MIN_VALUE,
           Float.MAX_VALUE,
           inputs[1],
