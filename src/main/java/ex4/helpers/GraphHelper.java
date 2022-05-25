@@ -31,7 +31,6 @@ public class GraphHelper {
    *                    directed or undirected
    * @param comp  {@code}Comparator{@code} for a genric
    *                    {@link Node Node} of vertices to edges
-   * @param min         {@code}MIN VALUE{@code} of the specified number type
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
    * @param destination destination of the path search
@@ -41,19 +40,21 @@ public class GraphHelper {
    * @throws Exception
    */
   public static <V, E extends Number> Pair<List<V>, E> dijkstra(
-      Graph<V, E> graph, Comparator<? super E> comparator, E min, E max, V source, V destination)
+      Graph<V, E> graph, Comparator<? super E> comparator, E max, V source, V destination)
       throws Exception {
 
     if (!graph.containsVertex(source) || !graph.containsVertex(destination))
       throw new ArgumentException("Source or destination are invalid");
+    if(containsNegativeWeight(graph))
+      throw new DijkstraException("Graph contains negative weights"); // TODO: test
 
     Comparator<? super Node<V, E>> comp = NodeComparator.<V, E>getComparator(comparator);
     PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
     Map<V, Node<V, E>> references = new HashMap<>(); // Used to mark visited vertices
     Map<V, E> distances = new HashMap<>(); // use null to mark infinity
     Map<V, V> prevs = new HashMap<>(); // use null to mark undefined
-
-    distances.put(source, min);
+    
+    distances.put(source, getZero(max));
 
     for (V v : graph.getVertices()) {
 
@@ -104,6 +105,14 @@ public class GraphHelper {
     return new Pair<List<V>, E>(path, distances.get(destination));
   }
 
+  private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
+    for(Graph<V, E>.Edge edge : graph.getEdges()) {
+      if(isLower(edge.getWeight(), getZero(edge.getWeight())))
+        return true;
+    }
+    return false;
+  }
+
   /**
    * add two generic {@code}Number{@code} objects
    * 
@@ -113,7 +122,7 @@ public class GraphHelper {
    * @return sum of the two elements
    */
   @SuppressWarnings("unchecked")
-  public static <E extends Number> E addNumbers(E a, E b) {
+  private static <E extends Number> E addNumbers(E a, E b) {
     if (a instanceof Double || b instanceof Double) {
       return (E) (Double) (a.doubleValue() + b.doubleValue());
     } else if (a instanceof Float || b instanceof Float) {
@@ -126,6 +135,22 @@ public class GraphHelper {
   }
 
   /**
+   * @return zero as generic
+   */
+  @SuppressWarnings("unchecked")
+  private static <E extends Number> E getZero(E clazz) {
+    if (clazz instanceof Double) {
+      return (E) (Double) 0d;
+    } else if (clazz instanceof Float) {
+      return (E) (Float) 0f;
+    } else if (clazz instanceof Long) {
+      return (E) (Long) 0L;
+    } else {
+      return (E) (Integer) 0;
+    }
+  }
+
+  /**
    * comparison of two generic objects extending {@code}Number{@code}
    * 
    * @param a first element of comparison
@@ -133,7 +158,7 @@ public class GraphHelper {
    * @return {@code}true{@code} if {@code}a < b{@code},
    *         {@code}false{@code} otherwise
    */
-  public static boolean isLower(Number a, Number b) {
+  private static boolean isLower(Number a, Number b) {
     if (a instanceof Double || b instanceof Double) {
       return a.doubleValue() < b.doubleValue();
     } else if (a instanceof Float || b instanceof Float) {

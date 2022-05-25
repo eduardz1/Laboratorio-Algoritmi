@@ -42,7 +42,6 @@ public class Main {
 
       GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
           Comparator.comparing((Float x) -> x),
-          Float.MIN_VALUE,
           Float.MAX_VALUE,
           inputs[1],
           inputs[2]);

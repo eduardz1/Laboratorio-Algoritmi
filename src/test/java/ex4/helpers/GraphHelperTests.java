@@ -39,7 +39,6 @@ public class GraphHelperTests {
 
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
         Comparator.comparingInt((Integer x) -> x),
-        0,
         Integer.MAX_VALUE,
         "a",
         "z");
@@ -64,7 +63,6 @@ public class GraphHelperTests {
 
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
         Comparator.comparingInt((Integer x) -> x),
-        0,
         Integer.MAX_VALUE,
         "a",
         "e");
@@ -87,7 +85,6 @@ public class GraphHelperTests {
 
     GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
         Comparator.comparingInt((Integer x) -> x),
-        0,
         Integer.MAX_VALUE,
         "a",
         "e");
@@ -112,7 +109,6 @@ public class GraphHelperTests {
 
     GraphHelper.<String, Integer>dijkstra(graph,
         Comparator.comparingInt((Integer x) -> x),
-        0,
         Integer.MAX_VALUE,
         "a",
         "e");
@@ -135,7 +131,6 @@ public class GraphHelperTests {
 
     GraphHelper.<String, Integer>dijkstra(graph,
         Comparator.comparingInt((Integer x) -> x),
-        0,
         Integer.MAX_VALUE,
         "a",
         "e");
@@ -154,7 +149,6 @@ public class GraphHelperTests {
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
             Comparator.comparingInt((Integer x) -> x),
-            0,
             Integer.MAX_VALUE,
             "a",
             null));
@@ -163,7 +157,6 @@ public class GraphHelperTests {
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
             Comparator.comparingInt((Integer x) -> x),
-            0,
             Integer.MAX_VALUE,
             "a",
             "z"));
@@ -182,7 +175,6 @@ public class GraphHelperTests {
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
             Comparator.comparingInt((Integer x) -> x),
-            0,
             Integer.MAX_VALUE,
             null,
             "e"));
@@ -191,7 +183,6 @@ public class GraphHelperTests {
         ArgumentException.class,
         () -> GraphHelper.<String, Integer>dijkstra(graph,
             Comparator.comparingInt((Integer x) -> x),
-            0,
             Integer.MAX_VALUE,
             "z",
             "b"));
