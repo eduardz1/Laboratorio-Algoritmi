@@ -1,4 +1,4 @@
-\documentclass[12pt, letterpaper]{report}
+\documentclass[letterpaper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usepackage{titlesec}
@@ -14,7 +14,7 @@
 
 \lstset{
     language=C++,
-    basicstyle=\tiny,
+    basicstyle=\small,
     keywordstyle=\color{myblue},
     commentstyle=\color{mygray},
     numberstyle=\color{mygreen},
@@ -56,11 +56,12 @@ sono equivalenti ma con costanti minori.
 \subsection{Impatto della scelta del pivot nel quick sort}
 La tabella sottostante riporta il tempo impiegato ad ordinare un array di 
 20 milioni elementi di tipo \verb|struct Record|
+\newline
+\newline
 \begin{figure}[H]
 \centering
     \include{figures/qs_boxplot_pivot}
 \end{figure}
-\newpage
 
 La scelta del pivot diventa importante quando l'array in input risulta già
 parzialmente o totalmente ordinato.
@@ -88,11 +89,11 @@ finirà per sceglire lo stesso pivot di \verb|MIDDLE| e quindi il tempo aggiunti
 è interamente introdotto dall'overhead causato dal confronto dell'elemento centrale
 con il first e last dell'array.
 
-\newpage
 \subsection{Fallback a Insertion Sort}
 Quando il \verb|quick_sort()| lavora su un range sufficientemente piccolo, è più
 efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impostato a 8 elementi.
 
+\newpage
 \subsection{Scelta del partition}
 Nel nostro dataset ogni \verb|record| è virtualmente univoco, la partition di Lomuto
 si comporta quindi molto bene ed anzi, secondo i nostri test, anche meglio di quella
@@ -268,8 +269,8 @@ permette di capire qual'è il valore massimo di E (Ad esempio per \verb|Integer|
 non appena inserito nella priority queue, il valore massimo invece è quello al 
 quale inizializziamo i vertici del grafo. \newline
 La priority queue utilizzata per tenere traccia delle distanze tra \verb|source| e
-i vari vertici è il \verb|MinHeap<>|, gli elementi della priority queue sono dei 
-\verb|Node<vertex, distance from source>|. \newline
+i vari vertici è il \verb|MinHeap<>|, gli elementi della priority queue sono dei\newline 
+\verb|Node<vertex, distance from source>|.
 Per memorizzare i predecessori e le distanze abbiamo deciso di usarre delle 
 \verb|HashMap<>|. \newline
 Abbiamo inoltre istanziato una mappa di valori a oggetti nodo in maniera tale da 
