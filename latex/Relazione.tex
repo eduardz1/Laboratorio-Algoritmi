@@ -263,11 +263,9 @@ per via dell'impossibilità in \verb|Java| di effettuare l'override degli \verb|
 \newline
 La funzione chiede che in input gli venga fornito, oltre all'oggetto grafo, l'elemento 
 source e l'elemento destination, anche un \verb|Comparator<? super E>| che 
-permetta di effettuare la comaprison tra i \verb|weight| degli archi, un "max" che ci 
+permetta di effettuare la comaprison tra i \verb|weight| degli archi ed un "max" che ci 
 permette di capire qual'è il valore massimo di E (Ad esempio per \verb|Integer| basta inserire 
-\verb|Integer.MAX_VALUE|). Il valore minimo è quello che assumerà il \verb|source| 
-non appena inserito nella priority queue, il valore massimo invece è quello al 
-quale inizializziamo i vertici del grafo. \newline
+\verb|Integer.MAX_VALUE|). Il valore massimo è quello al quale inizializziamo i vertici del grafo. \newline
 La priority queue utilizzata per tenere traccia delle distanze tra \verb|source| e
 i vari vertici è il \verb|MinHeap<>|, gli elementi della priority queue sono dei\newline 
 \verb|Node<vertex, distance from source>|.
