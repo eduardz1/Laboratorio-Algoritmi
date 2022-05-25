@@ -86,19 +86,6 @@ public class DirectedGraph<V, E> {
   }
 
   /**
-   * @see Graph#getEdges()
-   */
-  public ArrayList<E> getEdges() {
-    ArrayList<E> edges = new ArrayList<>();
-    for (Map<V, E> map : adjacencyMap.values())
-      edges.addAll(map.values());
-    // FIXME: Here in reality we could only check half of the edges in a undirected graph
-    // as it is we are returning equivalent pairs which does not make too much sense
-    // for example (3,1) and (1,3) are the same edge in an undirected graph
-    return edges;
-  }
-
-  /**
    * @see Graph#getVertices()
    */
   public ArrayList<V> getVertices() {
@@ -120,18 +107,6 @@ public class DirectedGraph<V, E> {
   }
 
   /**
-   * @see Graph#reverse()
-   */
-  public void reverse() {
-    for (V vertex : this.getVertices()) {
-      for (V neigh : this.getNeighbors(vertex)) {
-        this.addEdge(neigh, vertex, this.getEdge(vertex, neigh));
-        this.removeEdge(vertex, neigh);
-      }
-    }
-  }
-
-  /**
    * prints a Graph formatted
    */
   public void print() {
@@ -143,4 +118,5 @@ public class DirectedGraph<V, E> {
       System.out.println();
     }
   }
+
 }

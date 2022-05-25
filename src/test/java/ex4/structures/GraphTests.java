@@ -252,4 +252,35 @@ public class GraphTests {
       assertEquals(els.size() - deleted, vertices.size());
     }
   }
+
+  @Test
+  public void getEdgesHandleExpectedResult() throws GraphException, ElementNotFoundException {
+    Graph<Integer, Double> g = new Graph<>(true);
+
+    // Check for empty array
+    assertNotNull(g.getEdges());
+    assertEquals(0, g.getEdges().size());
+
+    g.addVertex(1);
+    g.addVertex(2);
+    g.addVertex(3);
+    g.addVertex(4);
+
+    g.addEdge(1, 3, 0.0);
+    g.addEdge(1, 4, 0.7);
+
+    List<Graph<Integer, Double>.Edge> edges = g.getEdges();
+    assertEquals(2, edges.size());
+    assertNotNull(edges.get(0));
+    assertNotNull(edges.get(1));
+
+    assertEquals(1, edges.get(0).getSource().intValue());
+    assertEquals(3, edges.get(0).getTarget().intValue());
+    assertEquals(0.0, edges.get(0).getWeight().doubleValue(), 0.0);
+    
+    assertEquals(1, edges.get(1).getSource().intValue());
+    assertEquals(4, edges.get(1).getTarget().intValue());
+    assertEquals(0.7, edges.get(1).getWeight().doubleValue(), 0.0);
+  }
+
 }
