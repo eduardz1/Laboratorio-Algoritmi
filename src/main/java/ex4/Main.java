@@ -40,7 +40,7 @@ public class Main {
       inputs[2] = input.nextLine().toLowerCase();
       input.close();
 
-      GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>dijkstra(graph,
+      GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>findShortestPath(graph,
           Comparator.comparing((Float x) -> x),
           Float.MAX_VALUE,
           inputs[1],
