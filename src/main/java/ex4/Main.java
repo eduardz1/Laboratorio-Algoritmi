@@ -1,19 +1,19 @@
 package ex4;
 
+import ex4.helpers.GraphBuilder;
+import ex4.helpers.GraphHelper;
+import ex4.structures.Graph;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-import ex4.structures.*;
-import ex4.helpers.GraphBuilder;
-import ex4.helpers.GraphHelper;
-
 public class Main {
   public static void main(String[] args) throws Exception {
     try {
-      String inputs[] = new String[3];
+      String[] inputs = new String[3];
       Scanner input = new Scanner(System.in);
 
       System.out.println("Please enter the path of the dataset");
@@ -40,7 +40,7 @@ public class Main {
       inputs[2] = input.nextLine().toLowerCase();
       input.close();
 
-      GraphHelper.Pair<List<String>, Float> res = GraphHelper.<String, Float>findShortestPath(graph,
+      GraphHelper.Pair<List<String>, Float> res = GraphHelper.findShortestPath(graph,
           Comparator.comparing((Float x) -> x),
           Float.MAX_VALUE,
           inputs[1],

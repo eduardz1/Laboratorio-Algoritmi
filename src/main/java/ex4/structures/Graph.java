@@ -1,9 +1,10 @@
 package ex4.structures;
 
+import ex4.exceptions.ElementNotFoundException;
+import ex4.exceptions.GraphException;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import ex4.exceptions.*;
 
 /**
  * A class representing a Graph with generic Vertexes and Edges.
@@ -59,7 +60,7 @@ public class Graph<V, E> {
   /**
    * Checks whether the graph contains an edge between two vertexes.
    *
-   * @param vertex element associated to the source of the edge.
+   * @param from   element associated to the source of the edge.
    * @param to     element associated to the destination of the edge.
    * @return {@code}true{@code} if contains edge or {@code}false{@code} otherwise
    */
@@ -114,19 +115,17 @@ public class Graph<V, E> {
   public ArrayList<Edge> getEdges() {
     ArrayList<Edge> edges = new ArrayList<>();
 
-    this.internalGraph.adjacencyMap.forEach((from, toMap) -> {
-      toMap.forEach((to, weight) -> {
-        edges.add(new Edge(from, weight, to));
-      });
-    });
-    // FIXME: Here in reality we could only check half of the edges in a undirected graph
+    this.internalGraph.adjacencyMap
+        .forEach((from, toMap) -> toMap.forEach((to, weight) -> edges.add(new Edge(from, weight, to))));
+    // FIXME: Here in reality we could only check half of the edges in a undirected
+    // graph
     // as it is we are returning equivalent pairs which does not make too much sense
     // for example (3,1) and (1,3) are the same edge in an undirected graph
     return edges;
   }
 
   /**
-   * Resturns an an ArrayList of the adjacent vertices of the specified vertex.
+   * Returns an ArrayList of the adjacent vertices of the specified vertex.
    * 
    * @param vertex element of which the neighbors are to be found
    * @return list of neighbors
@@ -158,7 +157,7 @@ public class Graph<V, E> {
   }
 
   /**
-   * Add a edge to the graph.
+   * Add an edge to the graph.
    *
    * @param from   is the source vertex
    * @param to     is the destination vertex
@@ -230,9 +229,9 @@ public class Graph<V, E> {
    * Immutable Object representing an Edge in a Graph.
    */
   public class Edge {
-    private V source;
-    private E weight;
-    private V target;
+    private final V source;
+    private final E weight;
+    private final V target;
 
     /**
      * Creates an Edge with the given source, target and weight.

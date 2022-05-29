@@ -1,20 +1,16 @@
 package ex4.helpers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ex3.structures.*;
+import ex3.structures.MinHeap;
+import ex3.structures.PriorityQueue;
 import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.GraphHelperException;
 import ex4.structures.Graph;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * // TODO
@@ -81,7 +77,7 @@ public class GraphHelper {
       }
     }
 
-    return new Pair<Map<V,V>,Map<V,E>>(prevs, distances);
+    return new Pair<>(prevs, distances);
   }
 
   /**
@@ -92,7 +88,7 @@ public class GraphHelper {
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comp        {@code}Comparator{@code} for a genric
+   * @param comparator  {@code}Comparator{@code} for a genric
    *                    {@link Node Node} of vertices to edges
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
@@ -127,8 +123,8 @@ public class GraphHelper {
     Map<V, V> prevs = res.first;
     Map<V, E> distances = res.second;
 
-    // Get shortest part to destination
-    List<V> path = new ArrayList<V>();
+    // Get the shortest part to destination
+    List<V> path = new ArrayList<>();
     path.add(destination);
     V currentV = prevs.get(destination);
     if (currentV == null)
@@ -143,7 +139,7 @@ public class GraphHelper {
     if (!path.get(0).equals(source))
       throw new GraphHelperException("Path between source and destination does not exist");
 
-    return new Pair<List<V>, E>(path, distances.get(destination));
+    return new Pair<>(path, distances.get(destination));
   }
 
   private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
@@ -236,6 +232,7 @@ public class GraphHelper {
       System.out.println("Error writing to file");
       e.printStackTrace();
     }
+    writer.close();
   }
 
   /**
