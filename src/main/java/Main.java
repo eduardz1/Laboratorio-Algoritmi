@@ -1,5 +1,3 @@
-package ex4;
-
 import ex4.helpers.GraphBuilder;
 import ex4.helpers.GraphHelper;
 import ex4.structures.Graph;
