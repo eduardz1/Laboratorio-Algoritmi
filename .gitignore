@@ -67,3 +67,5 @@ gen/**
 .gradle/
 build/
 bin/
+# Ignore Gradle build output directory
+build
