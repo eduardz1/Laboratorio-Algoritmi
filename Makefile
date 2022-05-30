@@ -56,7 +56,9 @@ EX2_HDRS := $(wildcard $(EX2)/headers/*.h)
 
 # Targets ----------------------------------------------------------------------
 
-.PHONY: clean main_ex1 main_ex2 testall testbis testqs testshd testskl
+.PHONY: all clean main_ex1 main_ex2 testall testbis testqs testshd testskl
+
+all: main_ex1 main_ex2 testshd testqs testbis testskl testis
 
 main_ex1: $(BIN)/main_ex1
 $(BIN)/main_ex1: $(EX1_OBJS) $(SHD_OBJS)
