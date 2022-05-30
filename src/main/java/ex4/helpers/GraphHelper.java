@@ -41,9 +41,9 @@ public class GraphHelper {
     PriorityQueue<Node<V, E>> queue
   ) throws Exception {
 
-    Map<V, Node<V, E>> references = new HashMap<>(); // Used to mark visited vertices
-    Map<V, E> distances = new HashMap<>(); // use null to mark infinity
-    Map<V, V> prevs = new HashMap<>(); // use null to mark undefined
+    Map<V, Node<V, E>> references = new HashMap<>(); // used to mark visited vertices
+    Map<V, E> distances = new HashMap<>();
+    Map<V, V> prevs = new HashMap<>(); // uses null to mark undefined
 
     distances.put(source, getZero(max));
 
