@@ -38,16 +38,20 @@ public class Main {
       inputs[2] = input.nextLine().toLowerCase();
       input.close();
 
+      long start = System.currentTimeMillis();
       GraphHelper.Pair<List<String>, Float> res = GraphHelper.findShortestPath(graph,
           Comparator.comparing((Float x) -> x),
           Float.MAX_VALUE,
           inputs[1],
           inputs[2]);
+      long end = System.currentTimeMillis();
+
+      System.out.println("\n\033[1mTIME:\033[0m " + (end - start) + " ms\n");
 
       for (String string : res.getFirst()) {
         System.out.println(string);
       }
-      System.out.println(res.getSecond());
+      System.out.println("\n\033[1mDISTANCE:\033[0m " + res.getSecond() + " m\n");
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
       e.printStackTrace();
