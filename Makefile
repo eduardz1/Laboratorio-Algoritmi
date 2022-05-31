@@ -56,7 +56,7 @@ EX2_HDRS := $(wildcard $(EX2)/headers/*.h)
 
 # Targets ----------------------------------------------------------------------
 
-.PHONY: all clean main_ex1 main_ex2 testall testbis testqs testshd testskl
+.PHONY: all clean main_ex1 main_ex2 test testbis testqs testshd testskl
 
 all: main_ex1 main_ex2 testshd testqs testbis testskl testis
 
@@ -88,7 +88,7 @@ testskl: $(BIN)/testskl
 $(BIN)/testskl: $(UNITY_OBJS) $(filter-out $(OBJ)/ex2.o, $(EX2_OBJS)) $(TSTSKL_OBJS) $(SHD_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
-testall: testshd testqs testbis testskl testis
+test: testshd testqs testbis testskl testis
 	@./$(BIN)/testshd
 	@./$(BIN)/testqs
 	@./$(BIN)/testbis
