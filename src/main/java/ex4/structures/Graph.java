@@ -110,18 +110,10 @@ public class Graph<V, E> {
   }
 
   /**
-   * @return list of {@link Edge Edges} in the Graph.
+   * @return list of {@link DirectedGraph.Edge Edges} in the Graph.
    */
-  public ArrayList<Edge> getEdges() {
-    ArrayList<Edge> edges = new ArrayList<>();
-
-    this.internalGraph.adjacencyMap
-        .forEach((from, toMap) -> toMap.forEach((to, weight) -> edges.add(new Edge(from, weight, to))));
-    // FIXME: Here in reality we could only check half of the edges in a undirected
-    // graph
-    // as it is we are returning equivalent pairs which does not make too much sense
-    // for example (3,1) and (1,3) are the same edge in an undirected graph
-    return edges;
+  public ArrayList<DirectedGraph<V, E>.Edge> getEdges() {
+    return this.internalGraph.getEdges();
   }
 
   /**
@@ -224,46 +216,4 @@ public class Graph<V, E> {
     this.internalGraph.print();
   }
 
-
-  /**
-   * Immutable Object representing an Edge in a Graph.
-   */
-  public class Edge {
-    private final V source;
-    private final E weight;
-    private final V target;
-
-    /**
-     * Creates an Edge with the given source, target and weight.
-     * @param source the source of the Edge
-     * @param weight the weight of the Edge
-     * @param target the target of the Edge
-     */
-    private Edge(V source, E weight, V target) {
-      this.source = source;
-      this.weight = weight;
-      this.target = target;
-    }
-
-    /**
-     * @return the source of the Edge
-     */
-    public V getSource() {
-      return this.source;
-    }
-
-    /**
-     * @return the target of the Edge
-     */
-    public E getWeight() {
-      return this.weight;
-    }
-
-    /**
-     * @return the target of the Edge
-     */
-    public V getTarget() {
-      return this.target;
-    }
-  }
 }

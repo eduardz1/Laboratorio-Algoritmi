@@ -5,6 +5,7 @@ import ex3.structures.PriorityQueue;
 import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.GraphHelperException;
+import ex4.structures.DirectedGraph;
 import ex4.structures.Graph;
 
 import java.io.File;
@@ -143,7 +144,7 @@ public class GraphHelper {
   }
 
   private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
-    for (Graph<V, E>.Edge edge : graph.getEdges()) {
+    for (DirectedGraph<V, E>.Edge edge : graph.getEdges()) {
       if (isLower(edge.getWeight(), getZero(edge.getWeight())))
         return true;
     }

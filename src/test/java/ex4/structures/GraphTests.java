@@ -21,26 +21,26 @@ public class GraphTests {
 
   @Test(expected = GraphException.class)
   public void addVertexNullThrowsException() throws GraphException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(null);
   }
 
   @Test(expected = GraphException.class)
   public void addAllVertexNullThrowsException() throws GraphException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addAllVertices(null);
   }
 
   @Test(expected = GraphException.class)
   public void addAllVertexContainsNullThrowsException() throws GraphException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, null, 4, 5, 6 );
     g.addAllVertices(els);
   }
 
   @Test
-  public void addEdgeNullThrowsException() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+  public void addEdgeNullThrowsException() throws GraphException {
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     g.addVertex(2);
     assertThrows(GraphException.class, () -> g.addEdge(1, null, 0.0));
@@ -48,8 +48,8 @@ public class GraphTests {
   }
 
   @Test
-  public void addEdgeBetweenInvalidVertexThrowsException() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+  public void addEdgeBetweenInvalidVertexThrowsException() throws GraphException {
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     g.addVertex(2);
     assertThrows(ElementNotFoundException.class, () -> g.addEdge(1, 4, 0.0));
@@ -57,8 +57,8 @@ public class GraphTests {
   }
 
   @Test
-  public void removeEdgeNullOrInvalidThrowsException() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+  public void removeEdgeNullOrInvalidThrowsException() throws GraphException {
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     g.addVertex(2);
     assertThrows(ElementNotFoundException.class, () -> g.removeEdge(0, 0));
@@ -69,22 +69,22 @@ public class GraphTests {
   }
 
   @Test
-  public void removeVertexNullOrInvalidThrowsException() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+  public void removeVertexNullOrInvalidThrowsException() {
+    Graph<Integer, Double> g = new Graph<>(true);
     assertThrows(ElementNotFoundException.class, () -> g.removeVertex(0));
     assertThrows(GraphException.class, () -> g.removeVertex(null));
   }
 
   @Test
-  public void getNeighborsFromNullOrInvalidVertexThrowsException() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+  public void getNeighborsFromNullOrInvalidVertexThrowsException() {
+    Graph<Integer, Double> g = new Graph<>(true);
     assertThrows(ElementNotFoundException.class, () -> g.getNeighbors(1));
     assertThrows(GraphException.class, () -> g.getNeighbors(null));
   }
 
   @Test
   public void addVertexHandleExpectedResult() throws GraphException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     
     int count = 0;
     assertEquals(0, g.getVertexCount());
@@ -98,7 +98,7 @@ public class GraphTests {
 
   @Test
   public void addAllVertexHandleExpectedResult() throws GraphException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
     g.addAllVertices(els);
@@ -107,7 +107,7 @@ public class GraphTests {
 
   @Test
   public void addEdgeHandleExpectedResult() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     List<Integer> els = Arrays.asList(-1, 0, 1, 2, 3, 4, 5, 6 );
     g.addAllVertices(els);
 
@@ -119,7 +119,7 @@ public class GraphTests {
 
   @Test
   public void addEdgeOnIndirectGraphAddReversedEdge() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(false);
+    Graph<Integer, Double> g = new Graph<>(false);
 
     g.addVertex(1);
     g.addVertex(2);
@@ -133,7 +133,7 @@ public class GraphTests {
 
   @Test
   public void addEdgeOnDirectGraphDoesNotAddReversedEdge() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
 
     g.addVertex(1);
     g.addVertex(2);
@@ -148,7 +148,7 @@ public class GraphTests {
   @Test
   public void removeEdgeHandleExpectedResult() throws GraphException, ElementNotFoundException {
 
-    Graph<Integer, Double> g = new Graph<Integer, Double>(false);
+    Graph<Integer, Double> g = new Graph<>(false);
     g.addVertex(1);
     g.addVertex(2);
     g.addEdge(1, 2, 0.0);
@@ -165,7 +165,7 @@ public class GraphTests {
   @Test
   public void removeVertexHandleExpectedResult() throws GraphException, ElementNotFoundException {
 
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     assertEquals(1, g.getVertexCount());
     g.removeVertex(1);
@@ -176,7 +176,7 @@ public class GraphTests {
   @Test
   public void removeVertexDeletesEdgesLinkedToRemovedVertex() throws GraphException, ElementNotFoundException {
 
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     g.addVertex(2);
     g.addVertex(3);
@@ -193,7 +193,7 @@ public class GraphTests {
 
   @Test
   public void getNeighborsOnDirectGraphHandleExpectedResult() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
     g.addVertex(1);
     g.addVertex(2);
     g.addVertex(3);
@@ -209,7 +209,7 @@ public class GraphTests {
 
   @Test
   public void getNeighborsOnIndirectGraphHandleExpectedResult() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<Integer, Double>(false);
+    Graph<Integer, Double> g = new Graph<>(false);
     g.addVertex(1);
     g.addVertex(2);
     g.addVertex(3);
@@ -219,14 +219,14 @@ public class GraphTests {
     g.addEdge(1, 4, 0.0);
 
     assertArrayEquals(Arrays.asList(3, 4).toArray(), g.getNeighbors(1).toArray());
-    assertArrayEquals(Arrays.asList(1).toArray(), g.getNeighbors(3).toArray());
-    assertArrayEquals(Arrays.asList(1).toArray(), g.getNeighbors(4).toArray());
+    assertArrayEquals(List.of(1).toArray(), g.getNeighbors(3).toArray());
+    assertArrayEquals(List.of(1).toArray(), g.getNeighbors(4).toArray());
   }
 
   @Test
   public void getVerticesHandleExpectedResult() throws GraphException, ElementNotFoundException {
    
-    Graph<Integer, Double> g = new Graph<Integer, Double>(true);
+    Graph<Integer, Double> g = new Graph<>(true);
 
     // Check for empty array
     assertNotNull(g.getVertices());
@@ -255,7 +255,7 @@ public class GraphTests {
 
   @Test
   public void getEdgesHandleExpectedResult() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<>(true);
+    Graph<Integer, Double> g = new Graph<>(true); // TODO text with undirected graphs
 
     // Check for empty array
     assertNotNull(g.getEdges());
@@ -269,18 +269,18 @@ public class GraphTests {
     g.addEdge(1, 3, 0.0);
     g.addEdge(1, 4, 0.7);
 
-    List<Graph<Integer, Double>.Edge> edges = g.getEdges();
+    List<DirectedGraph<Integer, Double>.Edge> edges = g.getEdges();
     assertEquals(2, edges.size());
     assertNotNull(edges.get(0));
     assertNotNull(edges.get(1));
 
     assertEquals(1, edges.get(0).getSource().intValue());
     assertEquals(3, edges.get(0).getTarget().intValue());
-    assertEquals(0.0, edges.get(0).getWeight().doubleValue(), 0.0);
+    assertEquals(0.0, edges.get(0).getWeight(), 0.0);
     
     assertEquals(1, edges.get(1).getSource().intValue());
     assertEquals(4, edges.get(1).getTarget().intValue());
-    assertEquals(0.7, edges.get(1).getWeight().doubleValue(), 0.0);
+    assertEquals(0.7, edges.get(1).getWeight(), 0.0);
   }
 
 }

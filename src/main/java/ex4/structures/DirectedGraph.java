@@ -107,6 +107,17 @@ public class DirectedGraph<V, E> {
   }
 
   /**
+   * @see Graph#getEdges()
+   */
+  public ArrayList<Edge> getEdges() {
+    ArrayList<Edge> edges = new ArrayList<>();
+
+    adjacencyMap
+        .forEach((from, toMap) -> toMap.forEach((to, weight) -> edges.add(new Edge(from, weight, to))));
+    return edges;
+  }
+
+  /**
    * prints a Graph formatted
    */
   public void print() {
@@ -116,6 +127,56 @@ public class DirectedGraph<V, E> {
         System.out.print(neighbor + " ");
       }
       System.out.println();
+    }
+  }
+
+  /**
+   * Immutable Object representing an Edge in a Graph.
+   */
+  public class Edge {
+    private final V source;
+    private final E weight;
+    private final V target;
+
+    /**
+     * Creates an Edge with the given source, target and weight.
+     * @param source the source of the Edge
+     * @param weight the weight of the Edge
+     * @param target the target of the Edge
+     */
+    private Edge(V source, E weight, V target) {
+      this.source = source;
+      this.weight = weight;
+      this.target = target;
+    }
+
+    /**
+     * @return the source of the Edge
+     */
+    public V getSource() {
+      return this.source;
+    }
+
+    /**
+     * @return the target of the Edge
+     */
+    public E getWeight() {
+      return this.weight;
+    }
+
+    /**
+     * @return the target of the Edge
+     */
+    public V getTarget() {
+      return this.target;
+    }
+
+    public boolean equals(Edge e) {
+      return this.source.equals(e.getSource()) && this.target.equals(e.getTarget()) && this.weight.equals(e.getWeight());
+    }
+
+    public Edge getReverse() {
+      return new Edge(this.target, this.weight, this.source);
     }
   }
 

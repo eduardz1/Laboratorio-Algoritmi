@@ -1,4 +1,6 @@
 package ex4.structures;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Class that extends the AbstractGraph class to make it behave as an
@@ -37,5 +39,13 @@ public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
         super.removeEdge(from, to);
         super.removeEdge(to, from);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     * Calls {@code}getEdges(){@code} and then filters out the ones that are equal
+     */
+    @Override
+    public ArrayList<Edge> getEdges() {
+        return super.getEdges().stream().filter(e -> !e.equals(e.getReverse())).collect(Collectors.toCollection(ArrayList::new));
+    }
 }
