@@ -1,8 +1,8 @@
 package ex4.comparable;
 
-import java.util.Comparator;
-
 import ex4.helpers.GraphHelper.Node;
+
+import java.util.Comparator;
 
 /** // TODO
  * @param <V>
@@ -10,7 +10,7 @@ import ex4.helpers.GraphHelper.Node;
  */
 public class NodeComparator<V, E extends Number> implements Comparator<Node<V,E>> {
 
-  private Comparator<? super E> comparator;
+  private final Comparator<? super E> comparator;
   
   /**
    * // TODO

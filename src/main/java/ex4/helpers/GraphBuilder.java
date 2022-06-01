@@ -1,23 +1,22 @@
 package ex4.helpers;
 
-import java.util.HashMap;
-
 import ex4.exceptions.ElementNotFoundException;
 import ex4.exceptions.GraphException;
 import ex4.structures.Graph;
 
+import java.util.HashMap;
+
 public class GraphBuilder<V, E> {
 
-  private Graph<V, E> graph;
-  private HashMap<V, HashMap<V, E>> map;
+  private final HashMap<V, HashMap<V, E>> map;
   private boolean directed;
 
   public GraphBuilder() {
-    this.map = new HashMap<V, HashMap<V, E>>();
+    this.map = new HashMap<>();
   }
 
   public GraphBuilder<V, E> addVertex(V vertex) {
-    map.put(vertex, new HashMap<V, E>());
+    map.put(vertex, new HashMap<>());
     return this;
   }
 
@@ -38,7 +37,7 @@ public class GraphBuilder<V, E> {
   }
 
   public Graph<V, E> build() throws GraphException, ElementNotFoundException {
-    graph = new Graph<>(directed);
+    Graph<V, E> graph = new Graph<>(directed);
 
     for (V v : this.map.keySet()) {
       graph.addVertex(v);

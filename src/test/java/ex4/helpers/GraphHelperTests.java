@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
-import ex4.exceptions.DijkstraException;
+import ex4.exceptions.GraphHelperException;
 import ex4.structures.Graph;
 
 import static org.junit.Assert.*;
@@ -37,7 +37,7 @@ public class GraphHelperTests {
         .addEdge("f", "z", 9)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
+    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -61,7 +61,7 @@ public class GraphHelperTests {
         .addEdge("a", "e", 7)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
+    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -83,7 +83,7 @@ public class GraphHelperTests {
         .addEdge("c", "e", 10)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.<String, Integer>dijkstra(graph,
+    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -92,7 +92,7 @@ public class GraphHelperTests {
     assertEquals(12, path.getSecond().intValue());
   }
 
-  @Test(expected = DijkstraException.class)
+  @Test(expected = GraphHelperException.class)
   public void dijkstraWithUnreachableDestinationThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
@@ -107,14 +107,14 @@ public class GraphHelperTests {
     graph.addEdge("c", "a", 1);
     graph.addEdge("d", "e", 1);
 
-    GraphHelper.<String, Integer>dijkstra(graph,
+    GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
         "e");
   }
 
-  @Test(expected = DijkstraException.class)
+  @Test(expected = GraphHelperException.class)
   public void dijkstraWithDestinationWithoutEdgesThrowsException() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
@@ -129,7 +129,7 @@ public class GraphHelperTests {
     graph.addEdge("c", "d", 1);
     graph.addEdge("d", "b", 1);
 
-    GraphHelper.<String, Integer>dijkstra(graph,
+    GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -147,7 +147,7 @@ public class GraphHelperTests {
 
     assertThrows(
         ArgumentException.class,
-        () -> GraphHelper.<String, Integer>dijkstra(graph,
+        () -> GraphHelper.findShortestPath(graph,
             Comparator.comparingInt((Integer x) -> x),
             Integer.MAX_VALUE,
             "a",
@@ -155,7 +155,7 @@ public class GraphHelperTests {
 
     assertThrows(
         ArgumentException.class,
-        () -> GraphHelper.<String, Integer>dijkstra(graph,
+        () -> GraphHelper.findShortestPath(graph,
             Comparator.comparingInt((Integer x) -> x),
             Integer.MAX_VALUE,
             "a",
@@ -173,7 +173,7 @@ public class GraphHelperTests {
 
     assertThrows(
         ArgumentException.class,
-        () -> GraphHelper.<String, Integer>dijkstra(graph,
+        () -> GraphHelper.findShortestPath(graph,
             Comparator.comparingInt((Integer x) -> x),
             Integer.MAX_VALUE,
             null,
@@ -181,7 +181,7 @@ public class GraphHelperTests {
 
     assertThrows(
         ArgumentException.class,
-        () -> GraphHelper.<String, Integer>dijkstra(graph,
+        () -> GraphHelper.findShortestPath(graph,
             Comparator.comparingInt((Integer x) -> x),
             Integer.MAX_VALUE,
             "z",
@@ -214,7 +214,7 @@ public class GraphHelperTests {
     NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
 
     List<String> els = Arrays.asList("abcdefg".split(""));
-    List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<GraphHelper.Node<String, Integer>>();
+    List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<>();
     for (int i = 0; i < els.size(); i++) {
       GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>(els.get(i), i);
       nodes.add(node);

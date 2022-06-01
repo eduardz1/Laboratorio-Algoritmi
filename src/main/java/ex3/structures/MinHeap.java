@@ -1,14 +1,9 @@
 package ex3.structures;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ex3.exceptions.ElementNotFoundException;
+import ex3.exceptions.MinHeapException;
 
-import ex3.exceptions.*;
+import java.util.*;
 
 /**
  * Class that implements a Minimum Heap data structure.
@@ -17,8 +12,8 @@ import ex3.exceptions.*;
  */
 public class MinHeap<T> implements PriorityQueue<T> {
 
-  private List<T> heap;
-  private Map<T, Integer> lookup;
+  private final List<T> heap;
+  private final Map<T, Integer> lookup;
   private final Comparator<? super T> comparator;
 
   /**
@@ -62,7 +57,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   /**
-   * @param i
+   * @param i index
    * @return index of the parent of the element at i position
    */
   private int parent(int i) {
@@ -249,7 +244,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
     if (left == null && right == null)
       return true;
 
-    /**
+    /*
      * First @return can be simplified by the following code, as we
      * assume that there are no empty positions in a heap, so if 
      * right is null, left is the last element of the array 

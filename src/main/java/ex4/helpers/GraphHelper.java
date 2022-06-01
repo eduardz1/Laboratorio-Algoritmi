@@ -1,59 +1,51 @@
 package ex4.helpers;
 
+import ex3.structures.MinHeap;
+import ex3.structures.PriorityQueue;
+import ex4.comparable.NodeComparator;
+import ex4.exceptions.ArgumentException;
+import ex4.exceptions.GraphHelperException;
+import ex4.structures.DirectedGraph;
+import ex4.structures.Graph;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ex3.structures.*;
-import ex4.comparable.NodeComparator;
-import ex4.exceptions.ArgumentException;
-import ex4.exceptions.DijkstraException;
-import ex4.structures.Graph;
+import java.util.*;
 
 /**
  * // TODO
  */
 public class GraphHelper {
-
+  
   /**
-   * Finds the shortest path in a graph using the Dijkstra algorithm
+   * Dijkstra's algorithm.
    * 
-   * @param <V>         Type of the elements in the graph
-   * @param <E>         Type of the edges in the graph (aka type of the weight),
-   *                    must extend {@code}Number{@code}
-   * @param graph       {@link Graph Graph} of generic type, can be either
-   *                    directed or undirected
-   * @param comp  {@code}Comparator{@code} for a genric
-   *                    {@link Node Node} of vertices to edges
-   * @param max         {@code}MAX VALUE{@code} of the specified number type
-   * @param source      source node for the path search
-   * @param destination destination of the path search
-   * @return returns a new {@link Pair Pair} where the first element
-   *         is a {@code}List{@code} of the calculated path and the second element
-   *         is the path length
+   * @param <V>    Tyype of the element in the graph
+   * @param <E>    Type of the edges in the graph (aka type of the weight),
+   *               must extend {@code}Number{@code}
+   * @param graph  {@link Graph Graph} of generic type, can be either
+   *               directed or undirected
+   * @param source source node for the path search
+   * @param max    {@code}MAX VALUE{@code} of the specified number type
+   * @param queue  {@link PriorityQueue PriorityQueue} to use
+   * @return {@link GraphHelper.Pair Pair} a {@code}Map{@code} of the shortest
+   *         path from {@code}source{@code} to each verted and a
+   *         {@code}Map{@code} of the distances from each vertex
    * @throws Exception
    */
-  public static <V, E extends Number> Pair<List<V>, E> dijkstra(
-      Graph<V, E> graph, Comparator<? super E> comparator, E max, V source, V destination)
-      throws Exception {
+  private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra
+  (
+    Graph<V, E> graph,
+    V source,
+    E max,
+    PriorityQueue<Node<V, E>> queue
+  ) throws Exception {
 
-    if (!graph.containsVertex(source) || !graph.containsVertex(destination))
-      throw new ArgumentException("Source or destination are invalid");
-    if(containsNegativeWeight(graph))
-      throw new DijkstraException("Graph contains negative weights"); // TODO: test
+    Map<V, Node<V, E>> references = new HashMap<>(); // used to mark visited vertices
+    Map<V, E> distances = new HashMap<>();
+    Map<V, V> prevs = new HashMap<>(); // uses null to mark undefined
 
-    Comparator<? super Node<V, E>> comp = NodeComparator.<V, E>getComparator(comparator);
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
-    Map<V, Node<V, E>> references = new HashMap<>(); // Used to mark visited vertices
-    Map<V, E> distances = new HashMap<>(); // use null to mark infinity
-    Map<V, V> prevs = new HashMap<>(); // use null to mark undefined
-    
     distances.put(source, getZero(max));
 
     for (V v : graph.getVertices()) {
@@ -86,12 +78,58 @@ public class GraphHelper {
       }
     }
 
-    // Get shortest part to destination
-    List<V> path = new ArrayList<V>();
+    return new Pair<>(prevs, distances);
+  }
+
+  /**
+   * Finds the shortest path in a graph
+   * 
+   * @param <V>         Type of the elements in the graph
+   * @param <E>         Type of the edges in the graph (aka type of the weight),
+   *                    must extend {@code}Number{@code}
+   * @param graph       {@link Graph Graph} of generic type, can be either
+   *                    directed or undirected
+   * @param comparator  {@code}Comparator{@code} for a genric
+   *                    {@link Node Node} of vertices to edges
+   * @param max         {@code}MAX VALUE{@code} of the specified number type
+   * @param source      source node for the path search
+   * @param destination destination of the path search
+   * @return returns a new {@link Pair Pair} where the first element
+   *         is a {@code}List{@code} of the calculated path and the second element
+   *         is the path length
+   * @throws Exception
+   */
+  public static <V, E extends Number> Pair<List<V>, E> findShortestPath
+  (
+    Graph<V, E> graph,
+    Comparator<? super E> comparator,
+    E max,
+    V source,
+    V destination
+  ) throws Exception {
+
+    if (graph == null)
+      throw new ArgumentException("Graph is null");
+    if (!graph.containsVertex(source) || !graph.containsVertex(destination))
+      throw new ArgumentException("Source or destination are not in the graph");
+    if (containsNegativeWeight(graph))
+      throw new GraphHelperException("Graph contains negative weights"); // TODO: test
+    if (source.equals(destination))
+      throw new ArgumentException("Source and destination are the same");
+
+    Comparator<? super Node<V, E>> comp = NodeComparator.<V, E>getComparator(comparator);
+    PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
+    
+    Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
+    Map<V, V> prevs = res.first;
+    Map<V, E> distances = res.second;
+
+    // Get the shortest part to destination
+    List<V> path = new ArrayList<>();
     path.add(destination);
     V currentV = prevs.get(destination);
     if (currentV == null)
-      throw new DijkstraException("Path between source and destination does not exist");
+      throw new GraphHelperException("Path between source and destination does not exist");
 
     do {
       path.add(currentV);
@@ -100,14 +138,14 @@ public class GraphHelper {
     Collections.reverse(path);
 
     if (!path.get(0).equals(source))
-      throw new DijkstraException("Path between source and destination does not exist");
+      throw new GraphHelperException("Path between source and destination does not exist");
 
-    return new Pair<List<V>, E>(path, distances.get(destination));
+    return new Pair<>(path, distances.get(destination));
   }
 
   private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
-    for(Graph<V, E>.Edge edge : graph.getEdges()) {
-      if(isLower(edge.getWeight(), getZero(edge.getWeight())))
+    for (DirectedGraph<V, E>.Edge edge : graph.getEdges()) {
+      if (isLower(edge.getWeight(), getZero(edge.getWeight())))
         return true;
     }
     return false;
@@ -195,6 +233,7 @@ public class GraphHelper {
       System.out.println("Error writing to file");
       e.printStackTrace();
     }
+    writer.close();
   }
 
   /**
