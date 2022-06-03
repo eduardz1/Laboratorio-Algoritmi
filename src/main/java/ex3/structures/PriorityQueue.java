@@ -49,5 +49,5 @@ public interface PriorityQueue<T> {
    * @param newKey new value of {@code}key{@code}
    * @throws Exception
    */
-  void increaseKey(T key, T newKey) throws Exception;
+  void increaseKeyPriority(T key, T newKey) throws Exception;
 }

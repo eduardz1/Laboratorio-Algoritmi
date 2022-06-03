@@ -65,7 +65,7 @@ public class GraphHelper {
         if (isLower(alt, distances.get(neigh))) {
           distances.put(neigh, alt);
           Node<V, E> newVal = new Node<>(neigh, alt);
-          queue.increaseKey(references.get(neigh), newVal);
+          queue.increaseKeyPriority(references.get(neigh), newVal);
           references.put(neigh, newVal);
           prevs.put(neigh, u.item);
         }

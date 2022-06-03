@@ -187,7 +187,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
    * @throws MinHeapException when {@code}newKey{@code} is not smaller than {@code}key{@code}
    */
   @Override
-  public void increaseKey(T key, T newKey) throws MinHeapException, ElementNotFoundException {
+  public void increaseKeyPriority(T key, T newKey) throws MinHeapException, ElementNotFoundException {
     if (!this.lookup.containsKey(key))
       throw new ElementNotFoundException("increaseKey:" + key + " key not found in the heap");
 

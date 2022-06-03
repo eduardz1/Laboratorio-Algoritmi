@@ -140,7 +140,7 @@ public class MinHeapTests {
     heap.insert("e");
     assertEquals("b", heap.peek());
 
-    heap.increaseKey("b", "a");
+    heap.increaseKeyPriority("b", "a");
     assertEquals("a", heap.peek());
     
     heap.remove();
@@ -210,7 +210,7 @@ public class MinHeapTests {
 
     assertTrue(heap.isHeapified());
     for (String el : els) {
-      heap.increaseKey(el, el.substring(1));
+      heap.increaseKeyPriority(el, el.substring(1));
       assertTrue(heap.isHeapified());
     }
 
@@ -223,13 +223,13 @@ public class MinHeapTests {
     
     heap.insert("d");	
     
-    heap.increaseKey("d", "c");
+    heap.increaseKeyPriority("d", "c");
     assertEquals(0, comp.compare("c", heap.peek()));
 
-    heap.increaseKey("c", "b");
+    heap.increaseKeyPriority("c", "b");
     assertEquals(0, comp.compare("b", heap.peek()));
 
-    heap.increaseKey("b", "a");
+    heap.increaseKeyPriority("b", "a");
     assertEquals(0, comp.compare("a", heap.peek()));
   }
 
@@ -278,21 +278,21 @@ public class MinHeapTests {
     queue.insert(prev);	
 
     var newT = new TestObject<>("c", 3);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("c", queue.peek().field1);
     assertEquals(3, (int) queue.peek().field2);
     prev = newT;
 
     newT = new TestObject<>("b", 2);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("b", queue.peek().field1);
     assertEquals(2, (int) queue.peek().field2);
     prev = newT;
 
     newT = new TestObject<>("a", 1);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("a", queue.peek().field1);
     assertEquals(1, (int) queue.peek().field2);
