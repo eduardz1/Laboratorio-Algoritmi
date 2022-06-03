@@ -216,5 +216,8 @@ public class GraphHelper {
    * @param <E> Type of the key, must extend {@code}Number{@code}
    */
   public record Node<V, E extends Number> (V item, E key) {
+    public Node {
+      Objects.requireNonNull(item);
+    }
   }
 }

@@ -182,10 +182,10 @@ public class GraphHelperTests {
             "b"));
   }
 
-  // @Test(expected = ArgumentException.class) // FIXME ci serve così tanto sapere che non è null?
-  // public void createNodeWithItemNullThrowsException() throws ArgumentException {
-  //   new GraphHelper.Node<String, Integer>(null, 0);
-  // }
+  @Test(expected = NullPointerException.class)
+  public void createNodeWithItemNullThrowsException() throws NullPointerException {
+    new GraphHelper.Node<String, Integer>(null, 0);
+  }
 
   // @Test
   // public void nodeComparatorHandleExpectedResult() throws ArgumentException {
