@@ -83,7 +83,7 @@ public class GraphHelper {
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comp  {@code}Comparator{@code} for a genric
+   * @param comp        {@code}Comparator{@code} for a genric
    *                    {@link Node Node} of vertices to edges
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
