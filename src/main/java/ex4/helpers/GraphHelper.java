@@ -109,8 +109,7 @@ public class GraphHelper {
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
 
-    Comparator<? super Node<V, E>> comp = (Comparator<Node<V, E>>) (o1, o2) -> comparator.compare(o1.key, o2.key);
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
+    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comparator.compare(n1.key, n2.key));
 
     Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
     Map<V, V> prevs = res.first;
