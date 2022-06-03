@@ -207,23 +207,6 @@ public class GraphHelper {
    * @param <E> Type of the second object
    */
   public record Pair<V, E> (V first, E second) {
-    
-    /**
-     * @return first object
-     */
-    @Override
-    public V first() {
-      return first;
-    }
-
-    /**
-     * @return second object
-     */
-    @Override
-    public E second() {
-      return second;
-    }
-
   }
 
   /**

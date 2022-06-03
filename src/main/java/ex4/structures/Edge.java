@@ -9,30 +9,6 @@ package ex4.structures;
  */
 public record Edge<V, E>(V source, E weight, V target) {
 
-  /**
-   * @return the source of the Edge
-   */
-  @Override
-  public V source() {
-    return this.source;
-  }
-
-  /**
-   * @return the target of the Edge
-   */
-  @Override
-  public E weight() {
-    return this.weight;
-  }
-
-  /**
-   * @return the target of the Edge
-   */
-  @Override
-  public V target() {
-    return this.target;
-  }
-
   @Override
   @SuppressWarnings("unchecked")
   public boolean equals(Object obj) {
