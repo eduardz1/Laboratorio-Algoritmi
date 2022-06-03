@@ -83,7 +83,7 @@ public class GraphHelper {
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comparator  {@code}Comparator{@code} for a genric
+   * @param comp  {@code}Comparator{@code} for a genric
    *                    {@link Node Node} of vertices to edges
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
@@ -95,7 +95,7 @@ public class GraphHelper {
    */
   public static <V, E extends Number> Pair<List<V>, E> findShortestPath(
       Graph<V, E> graph,
-      Comparator<? super E> comparator,
+      Comparator<? super E> comp,
       E max,
       V source,
       V destination) throws Exception {
@@ -109,7 +109,7 @@ public class GraphHelper {
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
 
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comparator.compare(n1.key, n2.key));
+    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
 
     Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
     Map<V, V> prevs = res.first;
