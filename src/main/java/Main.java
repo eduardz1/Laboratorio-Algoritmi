@@ -48,10 +48,10 @@ public class Main {
 
       System.out.println("\n\033[1mTIME:\033[0m " + (end - start) + " ms\n");
 
-      for (String string : res.getFirst()) {
+      for (String string : res.first()) {
         System.out.println(string);
       }
-      System.out.println("\n\033[1mDISTANCE:\033[0m " + res.getSecond() + " m\n");
+      System.out.println("\n\033[1mDISTANCE:\033[0m " + res.second() + " m\n");
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
       e.printStackTrace();

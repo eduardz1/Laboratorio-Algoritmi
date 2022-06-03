@@ -2,22 +2,18 @@ package ex4.helpers;
 
 import ex3.structures.MinHeap;
 import ex3.structures.PriorityQueue;
-import ex4.comparable.NodeComparator;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.GraphHelperException;
-import ex4.structures.DirectedGraph;
+import ex4.structures.Edge;
 import ex4.structures.Graph;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 /**
  * // TODO
  */
 public class GraphHelper {
-  
+
   /**
    * Dijkstra's algorithm.
    * 
@@ -34,13 +30,11 @@ public class GraphHelper {
    *         {@code}Map{@code} of the distances from each vertex
    * @throws Exception
    */
-  private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra
-  (
-    Graph<V, E> graph,
-    V source,
-    E max,
-    PriorityQueue<Node<V, E>> queue
-  ) throws Exception {
+  private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra(
+      Graph<V, E> graph,
+      V source,
+      E max,
+      PriorityQueue<Node<V, E>> queue) throws Exception {
 
     Map<V, Node<V, E>> references = new HashMap<>(); // used to mark visited vertices
     Map<V, E> distances = new HashMap<>();
@@ -99,14 +93,12 @@ public class GraphHelper {
    *         is the path length
    * @throws Exception
    */
-  public static <V, E extends Number> Pair<List<V>, E> findShortestPath
-  (
-    Graph<V, E> graph,
-    Comparator<? super E> comparator,
-    E max,
-    V source,
-    V destination
-  ) throws Exception {
+  public static <V, E extends Number> Pair<List<V>, E> findShortestPath(
+      Graph<V, E> graph,
+      Comparator<? super E> comparator,
+      E max,
+      V source,
+      V destination) throws Exception {
 
     if (graph == null)
       throw new ArgumentException("Graph is null");
@@ -117,9 +109,9 @@ public class GraphHelper {
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
 
-    Comparator<? super Node<V, E>> comp = NodeComparator.<V, E>getComparator(comparator);
+    Comparator<? super Node<V, E>> comp = (Comparator<Node<V, E>>) (o1, o2) -> comparator.compare(o1.key, o2.key);
     PriorityQueue<Node<V, E>> queue = new MinHeap<>(comp);
-    
+
     Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
     Map<V, V> prevs = res.first;
     Map<V, E> distances = res.second;
@@ -144,8 +136,8 @@ public class GraphHelper {
   }
 
   private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
-    for (DirectedGraph<V, E>.Edge edge : graph.getEdges()) {
-      if (isLower(edge.getWeight(), getZero(edge.getWeight())))
+    for (Edge<V, E> edge : graph.getEdges()) {
+      if (isLower(edge.weight(), getZero(edge.weight())))
         return true;
     }
     return false;
@@ -209,114 +201,38 @@ public class GraphHelper {
   }
 
   /**
-   * print a graph formatted in the dot language
-   * 
-   * @param <E>   Type of the edges, must extend {@code}Number{@code}
-   * @param graph {@link Graph Graph} of generic type, can be either
-   *              directed or undirected
-   * @param file  {@code}File{@code} object where the output needs to be written
-   * @throws Exception
-   */
-  public static <E extends Number> void dotPrint(Graph<String, E> graph, File file) throws Exception {
-    FileWriter writer = new FileWriter(file);
-    // TODO: check if it's Directed or not and print accordingly
-    try {
-      writer.write("digraph G {");
-
-      for (String vertex : graph.getVertices()) {
-        for (String neigh : graph.getNeighbors(vertex)) {
-          writer.write(vertex + " -> " + neigh + " [label=" + graph.getEdge(vertex, neigh) + "];");
-        }
-      }
-      writer.write("}");
-    } catch (IOException e) {
-      System.out.println("Error writing to file");
-      e.printStackTrace();
-    }
-    writer.close();
-  }
-
-  /**
    * Pair of two generic objects
-   * 
+   *
    * @param <V> Type of the first object
    * @param <E> Type of the second object
    */
-  public static class Pair<V, E> {
-
-    private V first;
-    private E second;
-
-    /**
-     * Creates a new {@code}Pair{@code} object
-     * 
-     * @param first  first element
-     * @param second first element
-     */
-    public Pair(V first, E second) {
-      this.first = first;
-      this.second = second;
-    }
-
+  public record Pair<V, E> (V first, E second) {
+    
     /**
      * @return first object
      */
-    public V getFirst() {
+    @Override
+    public V first() {
       return first;
     }
 
     /**
      * @return second object
      */
-    public E getSecond() {
+    @Override
+    public E second() {
       return second;
-    }
-
-    /**
-     * sets first object
-     * 
-     * @param first first element
-     */
-    public void setFirst(V first) {
-      this.first = first;
-    }
-
-    /**
-     * sets second object
-     * 
-     * @param second second element
-     */
-    public void setSecond(E second) {
-      this.second = second;
     }
 
   }
 
   /**
-   * Node for a {@link ex3.structures.PriorityQueue PriorityQueue} composed by
+   * Node for a {@link PriorityQueue PriorityQueue} composed by
    * an item with associated priority
-   * 
+   *
    * @param <V> Type of the item
-   * @param <E> Type of the priority, must extend {@code}Number{@code}
+   * @param <E> Type of the key, must extend {@code}Number{@code}
    */
-  public static class Node<V, E extends Number> {
-
-    public V item;
-    public E priority;
-
-    /**
-     * Creates a new {@code}Node{@code} object
-     * 
-     * @param item     element
-     * @param priority associated priority
-     * @throws ArgumentException when item is null
-     */
-    public Node(V item, E priority) throws ArgumentException {
-      if (item == null)
-        throw new ArgumentException("Item cannot be null");
-
-      this.item = item;
-      this.priority = priority;
-    }
+  public record Node<V, E extends Number> (V item, E key) {
   }
 }

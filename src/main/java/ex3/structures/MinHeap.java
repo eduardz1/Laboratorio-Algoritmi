@@ -140,7 +140,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
     if (this.heap.isEmpty()) 
       return res;
 
-      this.heap.set(0, newRoot);
+    this.heap.set(0, newRoot);
     this.lookup.put(newRoot, 0);
     topHeapify(0);
     return res;

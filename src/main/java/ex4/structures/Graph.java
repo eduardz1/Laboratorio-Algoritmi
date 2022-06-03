@@ -110,9 +110,9 @@ public class Graph<V, E> {
   }
 
   /**
-   * @return list of {@link DirectedGraph.Edge Edges} in the Graph.
+   * @return list of {@link Edge Edges} in the Graph.
    */
-  public ArrayList<DirectedGraph<V, E>.Edge> getEdges() {
+  public ArrayList<Edge<V, E>> getEdges() {
     return this.internalGraph.getEdges();
   }
 
