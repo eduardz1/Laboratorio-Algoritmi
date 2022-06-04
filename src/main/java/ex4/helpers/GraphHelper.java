@@ -4,7 +4,6 @@ import ex3.structures.MinHeap;
 import ex3.structures.PriorityQueue;
 import ex4.exceptions.ArgumentException;
 import ex4.exceptions.GraphHelperException;
-import ex4.structures.Edge;
 import ex4.structures.Graph;
 
 import java.util.*;
@@ -28,7 +27,7 @@ public class GraphHelper {
    * @return {@link GraphHelper.Pair Pair} a {@code}Map{@code} of the shortest
    *         path from {@code}source{@code} to each verted and a
    *         {@code}Map{@code} of the distances from each vertex
-   * @throws Exception
+   * @throws Exception when it encounters an edge with negative weight
    */
   private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra(
       Graph<V, E> graph,
@@ -36,54 +35,49 @@ public class GraphHelper {
       E max,
       PriorityQueue<Node<V, E>> queue) throws Exception {
 
-    Map<V, Node<V, E>> references = new HashMap<>(); // used to mark visited vertices
-    Map<V, E> distances = new HashMap<>();
+    Map<V, E> distances = new HashMap<>(); // used to track distances from source to each node
     Map<V, V> prevs = new HashMap<>(); // uses null to mark undefined
 
-    distances.put(source, getZero(max));
-
     for (V v : graph.getVertices()) {
-
-      if (!v.equals(source)) {
-        distances.put(v, max);
-      }
-
-      Node<V, E> tmp = new Node<>(v, distances.get(v));
-      queue.insert(tmp);
-      references.put(v, tmp);
+      distances.put(v, max);
       prevs.put(v, null);
     }
+    queue.insert(new Node<>(source,getZero(max)));
+    distances.put(source, getZero(max));
 
     while (!queue.isEmpty()) {
       Node<V, E> u = queue.remove();
-      references.remove(u.item);
+      if(isLower(distances.get(u.item), u.key)) continue; // ignores stale nodes when we already found a shorter path
 
-      for (V neigh : graph.getNeighbors(u.item)) {
-        if (!references.containsKey(neigh))
-          continue;
-        E alt = addNumbers(distances.get(u.item), graph.getEdge(u.item, neigh));
-        if (isLower(alt, distances.get(neigh))) {
-          distances.put(neigh, alt);
-          Node<V, E> newVal = new Node<>(neigh, alt);
-          queue.increaseKeyPriority(references.get(neigh), newVal);
-          references.put(neigh, newVal);
+      for (V neigh : graph.getNeighbors(u.item)) { // no need to check for visited given that the algorithm is greedy
+        E edgeWeight = graph.getEdge(u.item, neigh);
+        if(isLower(edgeWeight, getZero(max))) throw new GraphHelperException("Encountered an edge with a negative weight");
+        E newDist = addNumbers(distances.get(u.item), edgeWeight);
+
+        if (isLower(newDist, distances.get(neigh))) { // new shortest path found, relax the edge and update the queue
+          Node<V, E> newNode = new Node<>(neigh, newDist);
+          if (!queue.contains(newNode)) {
+            queue.insert(newNode);
+          } else {
+            queue.increaseKeyPriority(new Node<>(neigh, distances.get(neigh)), newNode);
+          }
+          distances.put(neigh, newDist);
           prevs.put(neigh, u.item);
         }
       }
     }
-
     return new Pair<>(prevs, distances);
   }
 
   /**
-   * Finds the shortest path in a graph
+   * Finds the shortest path in a graph starting from the shortest path tree return by {@code}dijkstra{@code}'s algorithm.
    * 
    * @param <V>         Type of the elements in the graph
    * @param <E>         Type of the edges in the graph (aka type of the weight),
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comp        {@code}Comparator{@code} for a genric
+   * @param comp        {@code}Comparator{@code} for a generic
    *                    {@link Node Node} of vertices to edges
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
@@ -91,7 +85,8 @@ public class GraphHelper {
    * @return returns a new {@link Pair Pair} where the first element
    *         is a {@code}List{@code} of the calculated path and the second element
    *         is the path length
-   * @throws Exception
+   * @throws ArgumentException when either graph is null, source and destination are the same or one of the former is not in the graph
+   * @throws GraphHelperException when the graph contains an edge with negative weight
    */
   public static <V, E extends Number> Pair<List<V>, E> findShortestPath(
       Graph<V, E> graph,
@@ -104,42 +99,26 @@ public class GraphHelper {
       throw new ArgumentException("Graph is null");
     if (!graph.containsVertex(source) || !graph.containsVertex(destination))
       throw new ArgumentException("Source or destination are not in the graph");
-    if (containsNegativeWeight(graph))
-      throw new GraphHelperException("Graph contains negative weights"); // TODO: test
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
 
     PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
-
     Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
     Map<V, V> prevs = res.first;
     Map<V, E> distances = res.second;
 
-    // Get the shortest part to destination
     List<V> path = new ArrayList<>();
+    // questo check qui sotto secondo me è più carino così: return new Pair<>(path, getZero(max)); // no path found
+    // alla fine il fatto che nel grafo non ci siano path non è un eccezione, l'utente non ha inserito dati sbagliati, boh idk
+    if(prevs.get(destination) == null) throw new GraphHelperException("Path between source and destination does not exist");
     path.add(destination);
-    V currentV = prevs.get(destination);
-    if (currentV == null)
-      throw new GraphHelperException("Path between source and destination does not exist");
 
-    do {
+    for(V currentV = prevs.get(destination); currentV != null; currentV = prevs.get(currentV)) {
       path.add(currentV);
-      currentV = prevs.get(currentV);
-    } while (currentV != null);
+    }
     Collections.reverse(path);
 
-    if (!path.get(0).equals(source))
-      throw new GraphHelperException("Path between source and destination does not exist");
-
     return new Pair<>(path, distances.get(destination));
-  }
-
-  private static <V, E extends Number> boolean containsNegativeWeight(Graph<V, E> graph) {
-    for (Edge<V, E> edge : graph.getEdges()) {
-      if (isLower(edge.weight(), getZero(edge.weight())))
-        return true;
-    }
-    return false;
   }
 
   /**
@@ -158,7 +137,7 @@ public class GraphHelper {
       return (E) (Float) (a.floatValue() + b.floatValue());
     } else if (a instanceof Long || b instanceof Long) {
       return (E) (Long) (a.longValue() + b.longValue());
-    } else {
+    } else { // don't check for shorts because the addition of two shorts produces an int
       return (E) (Integer) (a.intValue() + b.intValue());
     }
   }
@@ -174,6 +153,8 @@ public class GraphHelper {
       return (E) (Float) 0f;
     } else if (clazz instanceof Long) {
       return (E) (Long) 0L;
+    } else if (clazz instanceof Short) {
+      return (E) (Short) (short) 0;
     } else {
       return (E) (Integer) 0;
     }
@@ -194,6 +175,8 @@ public class GraphHelper {
       return a.floatValue() < b.floatValue();
     } else if (a instanceof Long || b instanceof Long) {
       return a.longValue() < b.longValue();
+    } else if (a instanceof Short) {
+      return a.shortValue() < b.shortValue();
     } else {
       return a.intValue() < b.intValue();
     }

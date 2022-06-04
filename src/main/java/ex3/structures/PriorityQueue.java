@@ -50,4 +50,12 @@ public interface PriorityQueue<T> {
    * @throws Exception
    */
   void increaseKeyPriority(T key, T newKey) throws Exception;
+
+  /**
+   * checks if {@code}element{@code} is in the queue
+   *
+   * @param element element to be checked
+   * @return {@code}true{@code} if {@code}element{@code} is in the queue, {@code}false{@code} otherwise
+   */
+  boolean contains(T element);
 }
