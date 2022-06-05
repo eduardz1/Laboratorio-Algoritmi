@@ -6,8 +6,8 @@ import ex4.structures.Graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -36,7 +36,7 @@ public class Main {
     input.close();
 
     long start = System.currentTimeMillis();
-    GraphHelper.Pair<List<String>, Float> res = GraphHelper.findShortestPath(graph,
+    GraphHelper.Pair<ArrayList<String>, Float> res = GraphHelper.findShortestPath(graph,
         Comparator.comparing((Float x) -> x),
         Float.MAX_VALUE,
         inputs[1],

@@ -85,11 +85,12 @@ public class GraphHelper {
    * @param destination destination of the path search
    * @return returns a new {@link Pair Pair} where the first element
    *         is a {@code}List{@code} of the calculated path and the second element
-   *         is the path length
+   *         is the path length, if there is no path between the two nodes then the
+   *         first element is an empty array and the first element is zero
    * @throws ArgumentException when either graph is null, source and destination are the same or one of the former is not in the graph
    * @throws GraphHelperException when the graph contains an edge with negative weight
    */
-  public static <V, E extends Number> Pair<List<V>, E> findShortestPath(
+  public static <V, E extends Number> Pair<ArrayList<V>, E> findShortestPath(
       Graph<V, E> graph,
       Comparator<? super E> comp,
       E max,
@@ -107,10 +108,8 @@ public class GraphHelper {
     Map<V, V> prevs = res.first;
     Map<V, E> distances = res.second;
 
-    List<V> path = new ArrayList<>();
-    // questo check qui sotto secondo me è più carino così: return new Pair<>(path, getZero(max)); // no path found
-    // alla fine il fatto che nel grafo non ci siano path non è un eccezione, l'utente non ha inserito dati sbagliati, boh idk
-    if(prevs.get(destination) == null) throw new GraphHelperException("Path between source and destination does not exist");
+    ArrayList<V> path = new ArrayList<>();
+    if(prevs.get(destination) == null) return new Pair<>(path, getZero(max));
     path.add(destination);
 
     for(V currentV = prevs.get(destination); currentV != null; currentV = prevs.get(currentV)) {

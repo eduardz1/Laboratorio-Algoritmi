@@ -31,7 +31,7 @@ public class GraphHelperTests {
         .addEdge("f", "z", 9)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
+    GraphHelper.Pair<ArrayList<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -55,7 +55,7 @@ public class GraphHelperTests {
         .addEdge("a", "e", 7)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
+    GraphHelper.Pair<ArrayList<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -77,7 +77,7 @@ public class GraphHelperTests {
         .addEdge("c", "e", 10)
         .build();
 
-    GraphHelper.Pair<List<String>, Integer> path = GraphHelper.findShortestPath(graph,
+    GraphHelper.Pair<ArrayList<String>, Integer> path = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
@@ -86,8 +86,8 @@ public class GraphHelperTests {
     assertEquals(12, path.second().intValue());
   }
 
-  @Test(expected = GraphHelperException.class)
-  public void dijkstraWithUnreachableDestinationThrowsException() throws Exception {
+  @Test
+  public void dijkstraWithUnreachableDestinationReturnsEmptyArray() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
     String[] vertexes = { "a", "b", "c", "d", "e" };
@@ -101,15 +101,17 @@ public class GraphHelperTests {
     graph.addEdge("c", "a", 1);
     graph.addEdge("d", "e", 1);
 
-    GraphHelper.findShortestPath(graph,
+    GraphHelper.Pair<ArrayList<String>, Integer> empty = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
         "e");
+
+    assertArrayEquals(new ArrayList<String>().toArray(), empty.first().toArray());
+    assertEquals(0, empty.second().intValue());
   }
 
-  @Test(expected = GraphHelperException.class)
-  public void dijkstraWithDestinationWithoutEdgesThrowsException() throws Exception {
+  public void dijkstraWithDestinationWithoutEdgesReturnsEmptyArray() throws Exception {
     Graph<String, Integer> graph = new Graph<>(false);
 
     String[] vertexes = { "a", "b", "c", "d", "e" };
@@ -123,11 +125,14 @@ public class GraphHelperTests {
     graph.addEdge("c", "d", 1);
     graph.addEdge("d", "b", 1);
 
-    GraphHelper.findShortestPath(graph,
+     GraphHelper.Pair<ArrayList<String>, Integer> empty = GraphHelper.findShortestPath(graph,
         Comparator.comparingInt((Integer x) -> x),
         Integer.MAX_VALUE,
         "a",
         "e");
+
+    assertArrayEquals(new ArrayList<String>().toArray(), empty.first().toArray());
+    assertEquals(0, empty.second().intValue());
   }
 
   @Test
@@ -186,40 +191,5 @@ public class GraphHelperTests {
   public void createNodeWithItemNullThrowsException() throws NullPointerException {
     new GraphHelper.Node<String, Integer>(null, 0);
   }
-
-  // @Test
-  // public void nodeComparatorHandleExpectedResult() throws ArgumentException {
-  //   Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
-  //   // NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
-
-  //   GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>("a", 1);
-  //   GraphHelper.Node<String, Integer> node2 = new GraphHelper.Node<>("b", 0);
-
-  //   assertTrue(comparator.compare(node, node2) > 0);
-  //   assertTrue(comparator.compare(node2, node) < 0);
-
-  //   //node.priority = 0;
-  //   //assertEquals(0, comparator.compare(node2, node));
-  // }
-
-  // @Test
-  // public void nodeComparatorInsideSortingFunctionHandleExpectedResult() throws ArgumentException {
-  //   Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
-  //   NodeComparator<String, Integer> comparator = new NodeComparator<>(comp);
-
-  //   List<String> els = Arrays.asList("abcdefg".split(""));
-  //   List<GraphHelper.Node<String, Integer>> nodes = new ArrayList<>();
-  //   for (int i = 0; i < els.size(); i++) {
-  //     GraphHelper.Node<String, Integer> node = new GraphHelper.Node<>(els.get(i), i);
-  //     nodes.add(node);
-  //   }
-
-  //   Collections.shuffle(nodes);
-  //   nodes.sort(comparator);
-
-  //   for (int i = 0; i < els.size() - 1; i++) {
-  //     assertTrue(nodes.get(i).key < nodes.get(i + 1).key);
-  //   }
-  // }
 
 }
