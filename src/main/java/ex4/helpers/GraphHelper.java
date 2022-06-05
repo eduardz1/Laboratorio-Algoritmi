@@ -31,10 +31,11 @@ public class GraphHelper {
    */
   private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra(
       Graph<V, E> graph,
-      V source,
+      Comparator<? super E> comp,
       E max,
-      PriorityQueue<Node<V, E>> queue) throws Exception {
+      V source) throws Exception {
 
+    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
     Map<V, E> distances = new HashMap<>(); // used to track distances from source to each node
     Map<V, V> prevs = new HashMap<>(); // uses null to mark undefined
 
@@ -42,19 +43,19 @@ public class GraphHelper {
       distances.put(v, max);
       prevs.put(v, null);
     }
-    queue.insert(new Node<>(source,getZero(max)));
+    queue.insert(new Node<>(source, (getZero(max))));
     distances.put(source, getZero(max));
 
     while (!queue.isEmpty()) {
       Node<V, E> u = queue.remove();
-      if(isLower(distances.get(u.item), u.key)) continue; // ignores stale nodes when we already found a shorter path
+      if(comp.compare(distances.get(u.item), u.key) < 0) continue; // ignores stale nodes when we already found a shorter path
 
       for (V neigh : graph.getNeighbors(u.item)) { // no need to check for visited given that the algorithm is greedy
         E edgeWeight = graph.getEdge(u.item, neigh);
-        if(isLower(edgeWeight, getZero(max))) throw new GraphHelperException("Encountered an edge with a negative weight");
+        if(comp.compare(edgeWeight, getZero(max)) < 0) throw new GraphHelperException("Encountered an edge with a negative weight");
         E newDist = addNumbers(distances.get(u.item), edgeWeight);
 
-        if (isLower(newDist, distances.get(neigh))) { // new shortest path found, relax the edge and update the queue
+        if (comp.compare(newDist, distances.get(neigh)) < 0) { // new shortest path found, relax the edge and update the queue
           Node<V, E> newNode = new Node<>(neigh, newDist);
           if (!queue.contains(newNode)) {
             queue.insert(newNode);
@@ -102,8 +103,7 @@ public class GraphHelper {
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
 
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
-    Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, source, max, queue);
+    Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, comp, max, source);
     Map<V, V> prevs = res.first;
     Map<V, E> distances = res.second;
 
@@ -157,28 +157,6 @@ public class GraphHelper {
       return (E) (Short) (short) 0;
     } else {
       return (E) (Integer) 0;
-    }
-  }
-
-  /**
-   * comparison of two generic objects extending {@code}Number{@code}
-   * 
-   * @param a first element of comparison
-   * @param b second element of comparison
-   * @return {@code}true{@code} if {@code}a < b{@code},
-   *         {@code}false{@code} otherwise
-   */
-  private static boolean isLower(Number a, Number b) {
-    if (a instanceof Double || b instanceof Double) {
-      return a.doubleValue() < b.doubleValue();
-    } else if (a instanceof Float || b instanceof Float) {
-      return a.floatValue() < b.floatValue();
-    } else if (a instanceof Long || b instanceof Long) {
-      return a.longValue() < b.longValue();
-    } else if (a instanceof Short) {
-      return a.shortValue() < b.shortValue();
-    } else {
-      return a.intValue() < b.intValue();
     }
   }
 
