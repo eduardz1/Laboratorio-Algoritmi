@@ -255,8 +255,7 @@ public class GraphTests {
 
   @Test
   public void getEdgesHandleExpectedResultDirectedGraph() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<>(true); // TODO text with undirected graphs
-
+    Graph<Integer, Double> g = new Graph<>(true);
     // Check for empty array
     assertNotNull(g.getEdges());
     assertEquals(0, g.getEdges().size());
@@ -285,8 +284,7 @@ public class GraphTests {
 
   @Test
   public void getEdgesHandleExpectedResultUndirectedGraph() throws GraphException, ElementNotFoundException {
-    Graph<Integer, Double> g = new Graph<>(false); // TODO text with undirected graphs
-
+    Graph<Integer, Double> g = new Graph<>(false);
     // Check for empty array
     assertNotNull(g.getEdges());
     assertEquals(0, g.getEdges().size());
