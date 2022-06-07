@@ -21,11 +21,11 @@ public class GraphHelper {
    *               must extend {@code}Number{@code}
    * @param graph  {@link Graph Graph} of generic type, can be either
    *               directed or undirected
-   * @param source source node for the path search
+   * @param comp   {@code}Comparator{@code} for the type E
    * @param max    {@code}MAX VALUE{@code} of the specified number type
-   * @param queue  {@link PriorityQueue PriorityQueue} to use
+   * @param source source node for the path search
    * @return {@link GraphHelper.Pair Pair} a {@code}Map{@code} of the shortest
-   *         path from {@code}source{@code} to each verted and a
+   *         path from {@code}source{@code} to each vertex and a
    *         {@code}Map{@code} of the distances from each vertex
    * @throws Exception when it encounters an edge with negative weight
    */
@@ -78,8 +78,7 @@ public class GraphHelper {
    *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comp        {@code}Comparator{@code} for a generic
-   *                    {@link Node Node} of vertices to edges
+   * @param comp        {@code}Comparator{@code} for the type E
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
    * @param destination destination of the path search
@@ -125,7 +124,7 @@ public class GraphHelper {
    * 
    * @param <E> Type of the element, must extend {@code}Number{@code}
    * @param a   first element
-   * @param b   ssecond element
+   * @param b   second element
    * @return sum of the two elements
    */
   @SuppressWarnings("unchecked")
