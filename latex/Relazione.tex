@@ -160,8 +160,31 @@ migliori notevolmente la costante di tempo.
 \chapter*{Esercizio 2}
 
 \section{Skip List}
-Dagli esperimenti effettuati i risultati dell'insertion mostrano come 
-all'aumentare dei livelli il tempo di inserimento decresce in maniera esponenziale.
+\subsection{Algoritmo per scegliere il numero di livelli}
+Dalla funzione utilizzata per scegliere il massimo numero di livelli per un dato
+nodo possiamo notare che la probabilità di scegliere un livello $k$ è $1/2^{k - 1}$, con
+il primo livello classificato come $k = 1$.
+
+\begin{lstlisting}
+    uint32_t random_level()
+    {
+        int lvl = 1;
+        while(rand() % 2 && lvl < MAX_HEIGHT) lvl++;
+        return lvl;
+    }
+\end{lstlisting}
+Ci aspettiamo quindi che il numero massimo di livelli, probabilisticamente, sia limitato da $O(log_{2}(n))$.
+Il vantaggio che possiamo notare nell'utilizzo di questo algoritmo deriva del fatto che
+la ricerca in una lista ordinata a due livelli, l'utilizzo di $\sqrt[]{n}$ livelli nel layer superiore
+al primo è ottimale se quest'ultimo è costituito da $n$ nodi. La time complexity in questo caso
+si riduce a $O(2\sqrt[2]{n}) = O(\sqrt[]{n})$.
+Nella skiplist il numero di livelli si stabilizza su $O(log_{2}(n))$ quindi il costo 
+diventa $log_{2}(n) \times \sqrt[log_{2}(n)]{n} = 2log_{2}(n)$, la complessità è 
+quindi $O(log(n))$.
+
+\clearpage
+Dagli esperimenti effettuati i risultati dell'insertion mostrano come all'aumentare 
+dei livelli il tempo di inserimento decresce in maniera esponenziale.
 \begin{figure}[H]
 \centering
     \include{figures/sklist_insert}
