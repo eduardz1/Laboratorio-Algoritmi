@@ -1,14 +1,12 @@
 package ex3.structures;
+
+import ex3.exceptions.ElementNotFoundException;
+import ex3.exceptions.MinHeapException;
 import org.junit.Test;
 
-import ex3.exceptions.*;
-import static org.junit.Assert.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import static org.junit.Assert.*;
 
 public class MinHeapTests {
 
@@ -47,14 +45,14 @@ public class MinHeapTests {
   @Test(expected = MinHeapException.class)
   public void insertNullElementThrowsException() throws MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
     heap.insert(null);
   }
 
   @Test()
   public void getParentOrChildrenOnInvalidKeyThrowsException() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
     
     assertThrows(ElementNotFoundException.class, () -> heap.parent(null));
     assertThrows(ElementNotFoundException.class, () -> heap.parent(""));
@@ -70,15 +68,15 @@ public class MinHeapTests {
   @Test
   public void isEmptyAfterCreate() throws MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
-    assertTrue(heap.size() == 0);
+    MinHeap<String> heap = new MinHeap<>(comp);
+    assertEquals(0, heap.size());
     assertTrue(heap.isEmpty());
   }
 
   @Test
   public void getParentReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     heap.insert("a");
     heap.insert("b");
@@ -94,7 +92,7 @@ public class MinHeapTests {
   @Test
   public void getLeftReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     heap.insert("a");
     heap.insert("b");
@@ -112,7 +110,7 @@ public class MinHeapTests {
   @Test
   public void getRightReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     heap.insert("a");
     heap.insert("b");
@@ -130,9 +128,9 @@ public class MinHeapTests {
   @Test
   public void peekReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
-    assertThrows(MinHeapException.class, () -> heap.peek());
+    assertThrows(MinHeapException.class, heap::peek);
     
     heap.insert("d");
     assertEquals("d", heap.peek());
@@ -142,7 +140,7 @@ public class MinHeapTests {
     heap.insert("e");
     assertEquals("b", heap.peek());
 
-    heap.increaseKey("b", "a");
+    heap.increaseKeyPriority("b", "a");
     assertEquals("a", heap.peek());
     
     heap.remove();
@@ -153,7 +151,7 @@ public class MinHeapTests {
   public void isMinHeapifiedAfterInsertSortedArray() throws MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     assertTrue(heap.isHeapified());
     String[] els = "abcdefghijklmnopqrstuvz".split("");
@@ -167,7 +165,7 @@ public class MinHeapTests {
   public void isMinHeapifiedAfterInsertUnsortedArray() throws MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     List<String> els = Arrays.asList("abcdefghijklmnopqrstuvz".split(""));
     Collections.shuffle(els);
@@ -183,7 +181,7 @@ public class MinHeapTests {
   public void isMinHeapifiedAfterRemove() throws MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     List<String> els = Arrays.asList("abcdefghijklmnopqrstuvz".split(""));
     Collections.shuffle(els);
@@ -202,7 +200,7 @@ public class MinHeapTests {
   @Test
   public void isMinHeapfiedAfterincreaseKey() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
 
     String[] els = {"aa", "bb", "cc", "dd", "ee"};
 
@@ -212,7 +210,7 @@ public class MinHeapTests {
 
     assertTrue(heap.isHeapified());
     for (String el : els) {
-      heap.increaseKey(el, el.substring(1));
+      heap.increaseKeyPriority(el, el.substring(1));
       assertTrue(heap.isHeapified());
     }
 
@@ -221,24 +219,24 @@ public class MinHeapTests {
   @Test 
   public void increaseKeyDecrementKeyValue() throws MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
     
     heap.insert("d");	
     
-    heap.increaseKey("d", "c");
+    heap.increaseKeyPriority("d", "c");
     assertEquals(0, comp.compare("c", heap.peek()));
 
-    heap.increaseKey("c", "b");
+    heap.increaseKeyPriority("c", "b");
     assertEquals(0, comp.compare("b", heap.peek()));
 
-    heap.increaseKey("b", "a");
+    heap.increaseKeyPriority("b", "a");
     assertEquals(0, comp.compare("a", heap.peek()));
   }
 
   @Test
   public void isEmptyAfterRemoveLastElement() throws MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
-    MinHeap<String> heap = new MinHeap<String>(comp);
+    MinHeap<String> heap = new MinHeap<>(comp);
     heap.insert("a");
     heap.remove();
     assertEquals(0, heap.size());
@@ -252,7 +250,7 @@ public class MinHeapTests {
     MinHeap<TestObject<String, Integer>> queue = new MinHeap<>(comparator);
 
     List<String> els = Arrays.asList("abcdefg".split(""));
-    List<TestObject<String, Integer>> objs = new ArrayList<TestObject<String,Integer>>();    
+    List<TestObject<String, Integer>> objs = new ArrayList<>();
     for (int i = 0; i < els.size(); i++) {
       TestObject<String, Integer> obj = new TestObject<>(els.get(i), i);
       objs.add(obj);
@@ -280,24 +278,24 @@ public class MinHeapTests {
     queue.insert(prev);	
 
     var newT = new TestObject<>("c", 3);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("c", queue.peek().field1);
-    assertTrue(queue.peek().field2 == 3);
+    assertEquals(3, (int) queue.peek().field2);
     prev = newT;
 
     newT = new TestObject<>("b", 2);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("b", queue.peek().field1);
-    assertTrue(queue.peek().field2 == 2);
+    assertEquals(2, (int) queue.peek().field2);
     prev = newT;
 
     newT = new TestObject<>("a", 1);
-    queue.increaseKey(prev, newT);
+    queue.increaseKeyPriority(prev, newT);
     assertEquals(0, comparator.compare(newT, queue.peek()));
     assertEquals("a", queue.peek().field1);
-    assertTrue(queue.peek().field2 == 1);
+    assertEquals(1, (int) queue.peek().field2);
 
   }
 }

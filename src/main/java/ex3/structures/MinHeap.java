@@ -140,7 +140,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
     if (this.heap.isEmpty()) 
       return res;
 
-      this.heap.set(0, newRoot);
+    this.heap.set(0, newRoot);
     this.lookup.put(newRoot, 0);
     topHeapify(0);
     return res;
@@ -187,20 +187,25 @@ public class MinHeap<T> implements PriorityQueue<T> {
    * @throws MinHeapException when {@code}newKey{@code} is not smaller than {@code}key{@code}
    */
   @Override
-  public void increaseKey(T key, T newKey) throws MinHeapException, ElementNotFoundException {
+  public void increaseKeyPriority(T key, T newKey) throws MinHeapException, ElementNotFoundException {
     if (!this.lookup.containsKey(key))
-      throw new ElementNotFoundException("increaseKey:" + key + " key not found in the heap");
+      throw new ElementNotFoundException("increaseKeyPriority:" + key + " key not found in the heap");
 
     int i = this.lookup.get(key);
     if(this.comparator.compare(newKey, this.heap.get(i)) > 0)
-      throw new MinHeapException(String.format("increaseKey:" + " new key {%s} is not smaller than current key {%s}", newKey, key));
+      throw new MinHeapException(String.format("increaseKeyPriority:" + " new key {%s} is not smaller than current key {%s}", newKey, key));
     
     this.heap.set(i, newKey);
     this.lookup.remove(key);
     this.lookup.put(newKey, i);
     botHeapify(i);
   }
-  
+
+  @Override
+  public boolean contains(T element) {
+    return this.lookup.containsKey(element);
+  }
+
   /**
    * Preserves min-heap property from the bottom to the top
    * 

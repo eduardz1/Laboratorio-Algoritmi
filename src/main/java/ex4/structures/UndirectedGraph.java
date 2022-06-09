@@ -1,6 +1,8 @@
 package ex4.structures;
+
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class that extends the AbstractGraph class to make it behave as an
@@ -10,8 +12,9 @@ public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
 
     /**
      * {@inheritDoc}
+     * 
      * @return
-     * Divides the result into two because a double edge counts as one
+     *         Divides the result into two because a double edge counts as one
      */
     @Override
     public int getEdgeCount() {
@@ -39,13 +42,15 @@ public class UndirectedGraph<V, E> extends DirectedGraph<V, E> {
         super.removeEdge(from, to);
         super.removeEdge(to, from);
     }
-    
+
     /**
      * {@inheritDoc}
      * Calls {@code}getEdges(){@code} and then filters out the ones that are equal
      */
     @Override
-    public ArrayList<Edge> getEdges() {
-        return super.getEdges().stream().filter(e -> !e.equals(e.getReverse())).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Edge<V, E>> getEdges() {
+        Set<Edge<V, E>> set = new HashSet<>();
+        super.getEdges().stream().filter(edge -> !set.contains(edge.getReverse())).forEach(set::add);
+        return new ArrayList<>(set);
     }
 }

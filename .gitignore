@@ -26,7 +26,6 @@ prof
 *.aux
 *.glo
 *.idx
-*.log
 *.toc
 *.ist
 *.acn
@@ -60,7 +59,6 @@ bin/**
 gen/**
 # project based files
 .idea/
-*.iml
 *.ipr
 *.iws
 .gradletasknamecache

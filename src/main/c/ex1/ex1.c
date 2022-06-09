@@ -71,9 +71,9 @@ void dispose_string_in_array(struct Record * a, int length)
 void checksum(struct Record * a, int length, Comp comp) 
 {
   bool flag = true;
-  for(int i = 0; i < length - 1 && flag; i++)
+  for(int i = 1; i < length && flag; i++)
   {
-    if(comp(&a[i], &a[i+1]) > 0) flag = false;
+    if(comp(&a[i - 1], &a[i]) > 0) flag = false;
   }
 
   if(flag)
