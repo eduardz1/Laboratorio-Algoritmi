@@ -21,8 +21,8 @@ public interface PriorityQueue<T> {
   void insert(T element) throws Exception;
 
   /**
-   * // TODO:
-   * @param elements
+   * inserts each {@code}element{@code} from {@code}collection{@code} to the queue
+   * @param elements collection of elements to be added to the queue
    * @throws Exception
    */
   void insertAll(Collection<T> elements) throws Exception;

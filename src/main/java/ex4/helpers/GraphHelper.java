@@ -8,8 +8,9 @@ import ex4.structures.Graph;
 
 import java.util.*;
 
+
 /**
- * // TODO
+ * Class that contains some useful methods for the Graph class. 
  */
 public class GraphHelper {
 

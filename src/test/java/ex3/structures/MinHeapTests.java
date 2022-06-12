@@ -1,5 +1,6 @@
 package ex3.structures;
 
+import ex3.exceptions.ArgumentException;
 import ex3.exceptions.ElementNotFoundException;
 import ex3.exceptions.MinHeapException;
 import org.junit.Test;
@@ -37,20 +38,20 @@ public class MinHeapTests {
     }
   }
   
-  @Test(expected = MinHeapException.class)
-  public void createHeapWithComparatorNullThrowsException() throws MinHeapException {
+  @Test(expected = ArgumentException.class)
+  public void createHeapWithComparatorNullThrowsException() throws ArgumentException {
     new MinHeap<String>(null);
   }
 
-  @Test(expected = MinHeapException.class)
-  public void insertNullElementThrowsException() throws MinHeapException {
+  @Test(expected = ArgumentException.class)
+  public void insertNullElementThrowsException() throws ArgumentException, MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
     heap.insert(null);
   }
 
   @Test()
-  public void getParentOrChildrenOnInvalidKeyThrowsException() throws MinHeapException, ElementNotFoundException {
+  public void getParentOrChildrenOnInvalidKeyThrowsException() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
     
@@ -66,7 +67,7 @@ public class MinHeapTests {
   } 
 
   @Test
-  public void isEmptyAfterCreate() throws MinHeapException {
+  public void isEmptyAfterCreate() throws ArgumentException, MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
     assertEquals(0, heap.size());
@@ -74,7 +75,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void getParentReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
+  public void getParentReturnsExpectedValue() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
 
@@ -90,7 +91,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void getLeftReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
+  public void getLeftReturnsExpectedValue() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
 
@@ -108,7 +109,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void getRightReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
+  public void getRightReturnsExpectedValue() throws  ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
 
@@ -126,7 +127,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void peekReturnsExpectedValue() throws MinHeapException, ElementNotFoundException {
+  public void peekReturnsExpectedValue() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
 
@@ -148,7 +149,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isMinHeapifiedAfterInsertSortedArray() throws MinHeapException, ElementNotFoundException {
+  public void isMinHeapifiedAfterInsertSortedArray() throws ArgumentException, MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
@@ -162,7 +163,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isMinHeapifiedAfterInsertUnsortedArray() throws MinHeapException, ElementNotFoundException {
+  public void isMinHeapifiedAfterInsertUnsortedArray() throws ArgumentException, MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
@@ -178,7 +179,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isMinHeapifiedAfterRemove() throws MinHeapException, ElementNotFoundException {
+  public void isMinHeapifiedAfterRemove() throws ArgumentException, MinHeapException, ElementNotFoundException {
 
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
@@ -198,7 +199,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isMinHeapfiedAfterincreaseKey() throws MinHeapException, ElementNotFoundException {
+  public void isMinHeapfiedAfterincreaseKey() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
 
@@ -217,7 +218,7 @@ public class MinHeapTests {
   }
 
   @Test 
-  public void increaseKeyDecrementKeyValue() throws MinHeapException, ElementNotFoundException {
+  public void increaseKeyDecrementKeyValue() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
     
@@ -234,7 +235,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isEmptyAfterRemoveLastElement() throws MinHeapException {
+  public void isEmptyAfterRemoveLastElement() throws ArgumentException, MinHeapException {
     Comparator<String> comp = Comparator.comparing((String x) -> x);
     MinHeap<String> heap = new MinHeap<>(comp);
     heap.insert("a");
@@ -244,7 +245,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void isMinHeapifiedAfterInsertObject() throws MinHeapException, ElementNotFoundException {
+  public void isMinHeapifiedAfterInsertObject() throws ArgumentException, MinHeapException, ElementNotFoundException {
     Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
     TestObjectComparator<String, Integer> comparator = new TestObjectComparator<>(comp);
     MinHeap<TestObject<String, Integer>> queue = new MinHeap<>(comparator);
@@ -268,7 +269,7 @@ public class MinHeapTests {
   }
 
   @Test
-  public void increaseKeyOfObjectHandleExpectedResult() throws MinHeapException, ElementNotFoundException {
+  public void increaseKeyOfObjectHandleExpectedResult() throws ArgumentException, MinHeapException, ElementNotFoundException {
 
     Comparator<Integer> comp = Comparator.comparingInt((Integer x) -> x);
     TestObjectComparator<String, Integer> comparator = new TestObjectComparator<>(comp);

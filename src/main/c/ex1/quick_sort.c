@@ -2,8 +2,6 @@
 #include "headers/binary_insert_sort.h"
 #include "headers/insert_sort.h"
 
-// TODO: implement a loading bar
-
 #define FALLBACK_CONST 8
 #define SWAP(a, b, size)       \
   do                           \
