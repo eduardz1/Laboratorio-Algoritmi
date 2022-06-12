@@ -24,6 +24,7 @@ test {
     useJUnit()
 }
 
-run {
+run { // run task with arguments: -q --console=plain
     standardInput = System.in
 }
+
