@@ -1,5 +1,6 @@
 package ex3.structures;
 
+import ex3.exceptions.ArgumentException;
 import ex3.exceptions.ElementNotFoundException;
 import ex3.exceptions.MinHeapException;
 
@@ -24,9 +25,9 @@ public class MinHeap<T> implements PriorityQueue<T> {
    * @param comparator: comparator implementing previous relation between T elements
    * @throws MinHeapException throws an Exception when comparator is null
    */
-  public MinHeap(Comparator<? super T> comparator) throws MinHeapException {
+  public MinHeap(Comparator<? super T> comparator) throws ArgumentException {
     if (comparator == null)
-      throw new MinHeapException("MinHeap:" + " parameter comparator cannot be null");
+      throw new ArgumentException("MinHeap:" + " parameter comparator cannot be null");
     this.heap = new ArrayList<>();
     this.comparator = comparator;
     this.lookup = new HashMap<>();
@@ -43,9 +44,9 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   @Override
-  public void insert(T elem) throws MinHeapException {
+  public void insert(T elem) throws ArgumentException, MinHeapException {
     if (elem == null)
-      throw new MinHeapException("insert:" + " elem cannot be null"); 
+      throw new ArgumentException("insert:" + " elem cannot be null"); 
     if (this.lookup.containsKey(elem))
       throw new MinHeapException("insert:" + " elem already present");
 
@@ -222,8 +223,9 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   /**
-   * // TODO
-   * @return
+   * Checks if min-heap property is preserved from top to bottom
+   * 
+   * @return if heap is a min-heap
    * @throws ElementNotFoundException
    */
   public boolean isHeapified() throws ElementNotFoundException {
@@ -236,9 +238,10 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   /**
-   * // TODO:
-   * @param node
-   * @return
+   * Checks if min-heap property is preserved from top to bottom
+   * 
+   * @param node node to be checked
+   * @return if node and his children have min property 
    * @throws ElementNotFoundException
    */
   private boolean isHeapified(T node) throws ElementNotFoundException {
@@ -268,7 +271,7 @@ public class MinHeap<T> implements PriorityQueue<T> {
   }
 
   @Override
-  public void insertAll(Collection<T> elements) throws MinHeapException {
+  public void insertAll(Collection<T> elements) throws ArgumentException, MinHeapException {
     if(elements == null)
       throw new MinHeapException("insertAll:" + " elements cannot be null");
     
