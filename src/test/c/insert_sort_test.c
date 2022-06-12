@@ -61,10 +61,10 @@ void test_double_array(void)
 
 void test_long_array(void)
 {
-  long actual[] = {LONG_MAX, 0}; // FIXME: test with more elements
-  long expected[] = {0, LONG_MAX};
-  insert_sort(actual, sizeof(actual[0]), 2, compare_long);
-  TEST_ASSERT_EQUAL_INT32_ARRAY(expected, actual, 2);
+  long actual[] = {LONG_MAX, 0, LONG_MIN, 40, 21, 18, 58, 118, 98};
+  long expected[] = {LONG_MIN, 0, 18, 21, 40, 58, 98, 118, LONG_MAX};
+  insert_sort(actual, sizeof(actual[0]), 9, compare_long);
+  TEST_ASSERT_EQUAL_INT32_ARRAY(expected, actual, 9);
 }
 
 void test_array_with_only_duplicated_elements(void)

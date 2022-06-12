@@ -1,7 +1,5 @@
 #include "headers/binary_insert_sort.h"
 
-// TODO: implement a loading bar
-
 void binary_insert_sort(void *const array, const size_t size, int length, const Comp comp)
 {
   assert(array != NULL && size > 0);

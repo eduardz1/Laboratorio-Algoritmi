@@ -145,7 +145,6 @@ void test_insert_char_skip_list()
   insert_skip_list(l, &actual[5]);
 
   char expected[6] = { '0', 'a', 'b', 'f', 'l', 'w'};
-  // FIXME: we don't have getter and setter methods 
   struct Node *tmp = l->head->next[0];
   for(int i = 0; tmp != NULL; tmp = tmp->next[0])
   {
