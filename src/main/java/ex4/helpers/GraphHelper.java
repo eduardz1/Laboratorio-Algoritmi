@@ -16,7 +16,7 @@ public class GraphHelper {
   /**
    * Dijkstra's algorithm.
    * 
-   * @param <V>    Tyype of the element in the graph
+   * @param <V>    Type of the element in the graph
    * @param <E>    Type of the edges in the graph (aka type of the weight),
    *               must extend {@code}Number{@code}
    * @param graph  {@link Graph Graph} of generic type, can be either
