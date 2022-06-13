@@ -7,7 +7,6 @@ import ex4.structures.Graph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
@@ -29,23 +28,29 @@ public class Main {
       return;
     }
 
-    System.out.println("Please enter the source city");
-    inputs[1] = input.nextLine().toLowerCase();
-    System.out.println("Please enter the destination city");
-    inputs[2] = input.nextLine().toLowerCase();
+    char c = 'y';
+
+    while(c == 'y') {
+      System.out.println("\nPlease enter the source city");
+      inputs[1] = input.nextLine().toLowerCase();
+      System.out.println("Please enter the destination city");
+      inputs[2] = input.nextLine().toLowerCase();
+
+      long start = System.currentTimeMillis();
+      GraphHelper.Pair<ArrayList<String>, Float> res = GraphHelper.findShortestPath(graph,
+          Float.MAX_VALUE,
+          inputs[1],
+          inputs[2]);
+      long end = System.currentTimeMillis();
+
+      System.out.println("\n\033[1mTIME:\033[0m " + (end - start) + " ms\n");
+      res.first().forEach(System.out::println);
+      System.out.println("\n\033[1mDISTANCE:\033[0m " + res.second() + " m\n");
+
+      System.out.println("\nCalculate new path? (y/n)");
+      c = input.nextLine().toLowerCase().charAt(0);
+    }
     input.close();
-
-    long start = System.currentTimeMillis();
-    GraphHelper.Pair<ArrayList<String>, Float> res = GraphHelper.findShortestPath(graph,
-        Comparator.comparing((Float x) -> x),
-        Float.MAX_VALUE,
-        inputs[1],
-        inputs[2]);
-    long end = System.currentTimeMillis();
-
-    System.out.println("\n\033[1mTIME:\033[0m " + (end - start) + " ms\n");
-    res.first().forEach(System.out::println);
-    System.out.println("\n\033[1mDISTANCE:\033[0m " + res.second() + " m\n");
   }
 
   private static Graph<String, Float> graphFromCsv(String[] inputs) // si potrebbe mettere in GraphBuilder maybe

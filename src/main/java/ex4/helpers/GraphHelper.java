@@ -13,6 +13,8 @@ import java.util.*;
  * Class that contains some useful methods for the Graph class. 
  */
 public class GraphHelper {
+  private static Graph<String, Float> currentGraphSF = null;
+  private static Pair<Map<String, String>, Map<String, Float>> currentPairSF = null;
 
   /**
    * Dijkstra's algorithm.
@@ -22,7 +24,6 @@ public class GraphHelper {
    *               must extend {@code}Number{@code}
    * @param graph  {@link Graph Graph} of generic type, can be either
    *               directed or undirected
-   * @param comp   {@code}Comparator{@code} for the type E
    * @param max    {@code}MAX VALUE{@code} of the specified number type
    * @param source source node for the path search
    * @return {@link GraphHelper.Pair Pair} a {@code}Map{@code} of the shortest
@@ -30,34 +31,34 @@ public class GraphHelper {
    *         {@code}Map{@code} of the distances from each vertex
    * @throws Exception when it encounters an edge with negative weight
    */
-  private static <V, E extends Number> Pair<Map<V, V>, Map<V, E>> dijkstra(
-      Graph<V, E> graph,
-      Comparator<? super E> comp,
-      E max,
-      V source) throws Exception {
+  private static Pair<Map<String, String>, Map<String, Float>> dijkstra(
+      Graph<String, Float> graph,
+      Float max,
+      String source) throws Exception {
 
-    PriorityQueue<Node<V, E>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
-    Map<V, E> distances = new HashMap<>(); // used to track distances from source to each node
-    Map<V, V> prevs = new HashMap<>(); // uses null to mark undefined
+    Comparator<Float> comp = Comparator.comparing((Float x) -> x);
+    PriorityQueue<Node<String, Float>> queue = new MinHeap<>((n1, n2) -> comp.compare(n1.key, n2.key));
+    Map<String, Float> distances = new HashMap<>(); // used to track distances from source to each node
+    Map<String, String> prevs = new HashMap<>(); // uses null to mark undefined
 
-    for (V v : graph.getVertices()) {
+    for (String v : graph.getVertices()) {
       distances.put(v, max);
       prevs.put(v, null);
     }
-    queue.insert(new Node<>(source, (getZero(max))));
-    distances.put(source, getZero(max));
+    queue.insert(new Node<>(source, 0f));
+    distances.put(source, 0f);
 
     while (!queue.isEmpty()) {
-      Node<V, E> u = queue.remove();
-      if(comp.compare(distances.get(u.item), u.key) < 0) continue; // ignores stale nodes when we already found a shorter path
+      Node<String, Float> u = queue.remove();
+      if(distances.get(u.item) < u.key) continue; // ignores stale nodes when we already found a shorter path
 
-      for (V neigh : graph.getNeighbors(u.item)) { // no need to check for visited given that the algorithm is greedy
-        E edgeWeight = graph.getEdge(u.item, neigh);
-        if(comp.compare(edgeWeight, getZero(max)) < 0) throw new GraphHelperException("Encountered an edge with a negative weight");
-        E newDist = addNumbers(distances.get(u.item), edgeWeight);
+      for (String neigh : graph.getNeighbors(u.item)) { // no need to check for visited given that the algorithm is greedy
+        Float edgeWeight = graph.getEdge(u.item, neigh);
+        if(edgeWeight < 0f) throw new GraphHelperException("Encountered an edge with a negative weight");
+        Float newDist = distances.get(u.item) + edgeWeight;
 
-        if (comp.compare(newDist, distances.get(neigh)) < 0) { // new shortest path found, relax the edge and update the queue
-          Node<V, E> newNode = new Node<>(neigh, newDist);
+        if (newDist < distances.get(neigh)) { // new shortest path found, relax the edge and update the queue
+          Node<String, Float> newNode = new Node<>(neigh, newDist);
           if (!queue.contains(newNode)) {
             queue.insert(newNode);
           } else {
@@ -74,12 +75,8 @@ public class GraphHelper {
   /**
    * Finds the shortest path in a graph starting from the shortest path tree return by {@code}dijkstra{@code}'s algorithm.
    * 
-   * @param <V>         Type of the elements in the graph
-   * @param <E>         Type of the edges in the graph (aka type of the weight),
-   *                    must extend {@code}Number{@code}
    * @param graph       {@link Graph Graph} of generic type, can be either
    *                    directed or undirected
-   * @param comp        {@code}Comparator{@code} for the type E
    * @param max         {@code}MAX VALUE{@code} of the specified number type
    * @param source      source node for the path search
    * @param destination destination of the path search
@@ -90,12 +87,11 @@ public class GraphHelper {
    * @throws ArgumentException when either graph is null, source and destination are the same or one of the former is not in the graph
    * @throws GraphHelperException when the graph contains an edge with negative weight
    */
-  public static <V, E extends Number> Pair<ArrayList<V>, E> findShortestPath(
-      Graph<V, E> graph,
-      Comparator<? super E> comp,
-      E max,
-      V source,
-      V destination) throws Exception {
+  public static Pair<ArrayList<String>, Float> findShortestPath(
+      Graph<String, Float> graph,
+      Float max,
+      String source,
+      String destination) throws Exception {
 
     if (graph == null)
       throw new ArgumentException("Graph is null");
@@ -103,60 +99,24 @@ public class GraphHelper {
       throw new ArgumentException("Source or destination are not in the graph");
     if (source.equals(destination))
       throw new ArgumentException("Source and destination are the same");
+    
+    if(currentGraphSF == null || !currentGraphSF.equals(graph)) {
+      currentGraphSF = graph;
+      currentPairSF = dijkstra(graph, max, source);
+    }
+    Map<String, String> prevs = currentPairSF.first;
+    Map<String, Float> distances = currentPairSF.second;
 
-    Pair<Map<V, V>, Map<V, E>> res = dijkstra(graph, comp, max, source);
-    Map<V, V> prevs = res.first;
-    Map<V, E> distances = res.second;
-
-    ArrayList<V> path = new ArrayList<>();
-    if(prevs.get(destination) == null) return new Pair<>(path, getZero(max));
+    ArrayList<String> path = new ArrayList<>();
+    if(prevs.get(destination) == null) return new Pair<>(path, 0f);
     path.add(destination);
 
-    for(V currentV = prevs.get(destination); currentV != null; currentV = prevs.get(currentV)) {
+    for(String currentV = prevs.get(destination); currentV != null; currentV = prevs.get(currentV)) {
       path.add(currentV);
     }
     Collections.reverse(path);
 
     return new Pair<>(path, distances.get(destination));
-  }
-
-  /**
-   * add two generic {@code}Number{@code} objects
-   * 
-   * @param <E> Type of the element, must extend {@code}Number{@code}
-   * @param a   first element
-   * @param b   second element
-   * @return sum of the two elements
-   */
-  @SuppressWarnings("unchecked")
-  private static <E extends Number> E addNumbers(E a, E b) {
-    if (a instanceof Double || b instanceof Double) {
-      return (E) (Double) (a.doubleValue() + b.doubleValue());
-    } else if (a instanceof Float || b instanceof Float) {
-      return (E) (Float) (a.floatValue() + b.floatValue());
-    } else if (a instanceof Long || b instanceof Long) {
-      return (E) (Long) (a.longValue() + b.longValue());
-    } else { // don't check for shorts because the addition of two shorts produces an int
-      return (E) (Integer) (a.intValue() + b.intValue());
-    }
-  }
-
-  /**
-   * @return zero as generic
-   */
-  @SuppressWarnings("unchecked")
-  private static <E extends Number> E getZero(E clazz) {
-    if (clazz instanceof Double) {
-      return (E) (Double) 0d;
-    } else if (clazz instanceof Float) {
-      return (E) (Float) 0f;
-    } else if (clazz instanceof Long) {
-      return (E) (Long) 0L;
-    } else if (clazz instanceof Short) {
-      return (E) (Short) (short) 0;
-    } else {
-      return (E) (Integer) 0;
-    }
   }
 
   /**
