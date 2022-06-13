@@ -1,5 +1,6 @@
 library(data.table)
 library(tikzDevice)
+library(ggplot2)
 log <- data.frame(fread(
        file = "time_log_skiplist.csv",
        sep = ";", header = T, na.strings = "NA"
@@ -14,7 +15,7 @@ getmode(log$MAX_LEVEL) # 20
 summary(log)
 
 # Insert #######################################################################
-tikz("latex/figures/sklist_insert.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_insert.tex", width = 5, height = 2)
 
 ggplot(log, aes(50)) + 
        geom_point(aes(y = INSERT, x = MAX_HEIGHT, color = "Reachable"), shape = 1, alpha = 0.5, show.legend = TRUE) + 
@@ -23,7 +24,7 @@ ggplot(log, aes(50)) +
 
 dev.off()
 ## Zoom in on insert ##
-tikz("latex/figures/sklist_zoommed_insert.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_zoommed_insert.tex", width = 5, height = 2)
 
 ggplot(log, aes(50)) + 
        geom_point(aes(y = INSERT, x = MAX_HEIGHT, color = "Reachable"), shape = 1, alpha = 0.5) + 
@@ -32,7 +33,7 @@ ggplot(log, aes(50)) +
 
 dev.off()
 ## Mean time of insert ##
-tikz("latex/figures/sklist_mean_insert.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_mean_insert.tex", width = 5, height = 2)
 
 levels <- c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 mean_time_insert <- c(
@@ -54,7 +55,7 @@ ggplot(df, aes(x = levels, y = mean_time_insert)) +
 dev.off()
 ################################################################################
 ## Search ######################################################################
-tikz("latex/figures/sklist_search.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_search.tex", width = 5, height = 2)
 
 ggplot(log, aes(50)) + 
        geom_point(aes(y = SEARCH, x = MAX_HEIGHT, color = "Reachable"), shape = 1, alpha = 0.5, show.legend = TRUE) + 
@@ -63,7 +64,7 @@ ggplot(log, aes(50)) +
 
 dev.off()
 ## Zoom in on search ##
-tikz("latex/figures/sklist_zoommed_search.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_zoommed_search.tex", width = 5, height = 2)
 ggplot(log, aes(50)) + 
        geom_point(aes(y = SEARCH, x = MAX_HEIGHT, color = "Reachable"), shape = 1, alpha = 0.5) + 
        geom_point(aes(y = SEARCH, x = MAX_LEVEL, color = "Reached"), shape = 1, alpha = 0.5) + 
@@ -71,7 +72,7 @@ ggplot(log, aes(50)) +
 
 dev.off()
 ## Mean time of search ##
-tikz("latex/figures/sklist_mean_search.tex", width = 5, height = 3)
+tikz("latex/figures/sklist_mean_search.tex", width = 5, height = 2)
 
 mean_time_search <- c(
        mean(log$SEARCH[log$MAX_LEVEL == 15]),

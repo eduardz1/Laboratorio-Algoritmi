@@ -80,13 +80,13 @@ possiamo notare che per questi il tempo cresce in maniera costante.
 \centering
     \include{figures/qs_plot_zoommed_pivot}
 \end{figure}
-In particolare \verb|MIDDLE| è chiaramente il pivot con perfomance migliori, 
+In particolare \verb|MIDDLE| è chiaramente il pivot con performance migliori, 
 il risultato è quello aspettato considerando che in questo contesto qui, 
 \verb|partition()| non deve praticamente effettuare \verb|SWAP|. 
 Possiamo comunque notare che il pivot \verb|RANDOM| si comporta discretamente, 
 con una variabilità maggiore rispetto agli altri. \verb|MEDIAN3|
-finirà per sceglire lo stesso pivot di \verb|MIDDLE| e quindi il tempo aggiuntivo
-è interamente introdotto dall'overhead causato dal confronto dell'elemento centrale
+finirà per scegliere lo stesso pivot di \verb|MIDDLE| e quindi il tempo aggiuntivo
+è interamente introdotto dal overhead causato dal confronto dell'elemento centrale
 con il first e last dell'array.
 
 \subsection{Fallback a Insertion Sort}
@@ -98,7 +98,7 @@ efficiente utilizzare il \verb|insert_sort()|. Il range di cutoff è stato impos
 Nel nostro dataset ogni \verb|record| è virtualmente univoco, la partition di Lomuto
 si comporta quindi molto bene ed anzi, secondo i nostri test, anche meglio di quella
 di Hoare, nonostante quest'ultima infatti effettua meno \verb|SWAP|, è più complessa a
-livello di codice e causa alla CPU una probabilità più alta di branch misprediction.
+livello di codice e causa alla CPU una probabilità più alta di branch mis-prediction.
 
 \begin{lstlisting}
     template <typename T>
@@ -149,7 +149,7 @@ elementi minori, uguali e maggiori del pivot.
 \section{Binary Insertion Sort}`
 Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che l'ordinamento dei 20 milioni di records 
 finisca in tempi sensati: facendo due calcoli sui nostri computer
-dovrebbe impiegarci approssimativmaente 2 anni.
+dovrebbe impiegarci approssimativamente 2 anni.
 Nel seguente schema possiamo però notare come la ricerca binaria del punto di inserimento
 migliori notevolmente la costante di tempo.
 \begin{figure}[H]
@@ -176,25 +176,26 @@ il primo livello classificato come $k = 1$.
 Ci aspettiamo quindi che il numero massimo di livelli, probabilisticamente, sia limitato da $O(log_{2}(n))$.
 Il vantaggio che possiamo notare nell'utilizzo di questo algoritmo deriva del fatto che
 la ricerca in una lista ordinata a due livelli, l'utilizzo di $\sqrt[]{n}$ livelli nel layer superiore
-al primo è ottimale se quest'ultimo è costituito da $n$ nodi. La time complexity in questo caso
-si riduce a $O(2\sqrt[2]{n}) = O(\sqrt[]{n})$.
+al primo è ottimale se quest'ultimo è costituito da $n$ nodi.\\
+La time complexity in questo caso si riduce a $O(2\sqrt[2]{n}) = O(\sqrt[]{n})$.\\
 Nella skiplist il numero di livelli si stabilizza su $O(log_{2}(n))$ quindi il costo 
 diventa $log_{2}(n) \times \sqrt[log_{2}(n)]{n} = 2log_{2}(n)$, la complessità è 
 quindi $O(log(n))$.
 
-\subsection{Analisi dei tempi di inserimento}
 \clearpage
-Dagli esperimenti effettuati i risultati dell'insertion mostrano come all'aumentare 
-dei livelli il tempo di inserimento decresce in maniera esponenziale.
+\subsection{Analisi dei tempi di inserimento}
+Dagli esperimenti effettuati i risultati dell'insertion mostrano come all' aumentare 
+dei livelli il tempo di inserimento decresce in maniera logaritmica.
 \begin{figure}[H]
 \centering
     \include{figures/sklist_insert}
 \end{figure}
-
-Dal grafico si nota come la distribuzione dei livelli raggiunti è concentrata 
+Ingrandiamo il grafico in maniera tale da meglio visualizzare la distribuzione dei
+tempi nei livelli più di nostro interesse.\\
+Notiamo come la distribuzione dei livelli raggiunti è concentrata 
 attorno a 20, inoltre dal livello 30 in poi i livelli non vengono quasi mai raggiunti: 
 difatti la probabilità di raggiungere ogni livello è $\frac{1}{2^n}$, e il livello
-32, il massimo raggiunto, aveva probabilità $2.32 \times 10^{-10}$.
+32, il massimo raggiunto, aveva probabilità $2.32 \times 10^{-10}$.\\
 % 🐖 (-(00)-) ewe TwT UwU  OwO B) :3 ywy 🐎 🦚 🐬 🦹
 % (._. ) 🤺  (^_^') (>__>) (^x^ ) :-p~ 
 % ⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕
@@ -224,7 +225,7 @@ Facendo un grafico delle medie dei tempi di inserimento notiamo che 18
 \end{figure}
 
 \subsection{Analisi dei tempi di ricerca}
-Analizzando i tempi di ricerca notiamo come all'aumentare dei livelli il search time decresca in maniera imporante
+Analizzando i tempi di ricerca notiamo come all'aumentare dei livelli il search time decresca in maniera importante
 \begin{figure}[H]
 \centering
     \include{figures/sklist_search}
@@ -247,22 +248,22 @@ Sorprendentemente il numero ottimale di livelli non coincide esattamente con $ln
 
 \chapter*{Esercizio 3}
 \section{Minimum Heap}
-Per grantire la complessità in $O(1)$ della restituzione del \verb|left|, \verb|right|
+Per garantire la complessità in $O(1)$ della restituzione del \verb|left|, \verb|right|
 e \verb|parent| di un elemento, a partire dal valore dello stesso, abbiamo usato 
 una struttura dati di supporto, una \verb|HashMap<>|, che memorizza i valori degli 
 elementi e li associa ai relativi indici nell' \verb|ArrayList| che rappresenta il 
 nostro heap.
 \newline
 \newline
-Abbiamo deciso di craere anche un'interfaccia \verb|PriorityQueue<>| che è la Abstract
+Abbiamo deciso di creare anche un'interfaccia \verb|PriorityQueue<>| che è la Abstract
 Data Structure sulla quale di basa il \verb|MinHeap<>|
 
 \chapter*{Esercizio 4}
 \section{Graph}
 Abbiamo deciso di considerare il grafo diretto come la struttura dati base di un 
 generico grafo, i grafi di tipo indiretto possono infatti essere visti come grafi diretti 
-nei quali ad ogni arco viene associato anche un arco oppposto. Abbiamo deciso quindi 
-di craere una classe \verb|UndirectGraph<>| che estende \verb|DirectGraph<>|, con 
+nei quali ad ogni arco viene associato anche un arco opposto. Abbiamo deciso quindi 
+di creare una classe \verb|UndirectGraph<>| che estende \verb|DirectGraph<>|, con 
 costruttori \verb|protected|, ed una classe \verb|Graph<>| che incapsula i due.
 \newline
 \newline
@@ -276,7 +277,7 @@ adiacenza ma offre in realtà tutti i vantaggi di una matrice di adiacenza.
 \newline
 \newline
 Per aiutare nell'inizializzazione di un grafo, abbiamo deciso anche di creare una 
-classe \verb|GraphBuilder<>| che sfruta il design pattern \verb|Builder|.
+classe \verb|GraphBuilder<>| che sfrutta il design pattern \verb|Builder|.
 
 \section{Dijkstra}
 Abbiamo implementato l' algoritmo di Dijkstra nella classe \verb|GraphHelper<>|, 
