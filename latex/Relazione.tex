@@ -67,8 +67,8 @@ La scelta del pivot diventa importante quando l'array in input risulta già
 parzialmente o totalmente ordinato.
 Il grafico sottostante riporta il tempo impiegato da \verb|quick_sort()| 
 per scorrere un array già ordinato. Come ci aspettiamo, l'algoritmo degenera ad
-$O(n^2)$, sia \verb|LAST| che \verb|FIRST| generano un grafico esponenziale ma con
-costanti diverse, fosse l'array ordinato in ordine inverso ci aspettiamo il comportamento
+$O(n^2)$ e sia \verb|LAST| che \verb|FIRST| generano un grafico esponenziale ma con
+costanti diverse: fosse stato l'array ordinato in ordine inverso ci saremmo aspettati il comportamento
 opposto tra questi due.
 \begin{figure}[H]
 \centering
@@ -118,8 +118,8 @@ livello di codice e causa alla CPU una probabilità più alta di branch mispredi
 \end{lstlisting}
 
 Nel caso però si lavorasse su un dataset con una quantità importante di elementi
-duplicati, la partition di Hoare inizia subito ad avere perfomance molto migliori,
-una buona alternativa è anche una partition di Lomuto modificata in maniera tale
+duplicati, la partition di Hoare inizierebbe subito ad avere perfomance molto migliori.
+Una buona alternativa è anche una partition di Lomuto modificata in maniera tale
 da restituire due indici, dividendo quindi il subarray in tre parti:
 elementi minori, uguali e maggiori del pivot.
 
@@ -147,9 +147,9 @@ elementi minori, uguali e maggiori del pivot.
 
 \newpage
 \section{Binary Insertion Sort}`
-Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che finisca in tempi
-sensati l'ordinamento dei 20 milioni di records, facendo due calcoli sui nostri computer
-dovrebbe metterci approssimativmaente 2 anni.
+Essendo l'algoritmo di complessità $O(n^2)$, non ci aspettiamo che l'ordinamento dei 20 milioni di records 
+finisca in tempi sensati: facendo due calcoli sui nostri computer
+dovrebbe impiegarci approssimativmaente 2 anni.
 Nel seguente schema possiamo però notare come la ricerca binaria del punto di inserimento
 migliori notevolmente la costante di tempo.
 \begin{figure}[H]
@@ -182,6 +182,7 @@ Nella skiplist il numero di livelli si stabilizza su $O(log_{2}(n))$ quindi il c
 diventa $log_{2}(n) \times \sqrt[log_{2}(n)]{n} = 2log_{2}(n)$, la complessità è 
 quindi $O(log(n))$.
 
+\subsection{Analisi dei tempi di inserimento}
 \clearpage
 Dagli esperimenti effettuati i risultati dell'insertion mostrano come all'aumentare 
 dei livelli il tempo di inserimento decresce in maniera esponenziale.
@@ -191,8 +192,8 @@ dei livelli il tempo di inserimento decresce in maniera esponenziale.
 \end{figure}
 
 Dal grafico si nota come la distribuzione dei livelli raggiunti è concentrata 
-attorno a 20, inoltre dal livello 30 in poi i livelli non vengono quasi mai raggiunti, 
-difatti la probabilità di raggiungere ogni livello è $\frac{1}{2^n}$, il livello
+attorno a 20, inoltre dal livello 30 in poi i livelli non vengono quasi mai raggiunti: 
+difatti la probabilità di raggiungere ogni livello è $\frac{1}{2^n}$, e il livello
 32, il massimo raggiunto, aveva probabilità $2.32 \times 10^{-10}$.
 % 🐖 (-(00)-) ewe TwT UwU  OwO B) :3 ywy 🐎 🦚 🐬 🦹
 % (._. ) 🤺  (^_^') (>__>) (^x^ ) :-p~ 
@@ -215,27 +216,28 @@ difatti la probabilità di raggiungere ogni livello è $\frac{1}{2^n}$, il livel
     \include{figures/sklist_zoommed_insert}
 \end{figure}
 
-Bla bla bla facendo un grafico delle medie dei tempi di inserimento notiamo che 18
+Facendo un grafico delle medie dei tempi di inserimento notiamo che 18
 è il numero ottimale di livelli
 \begin{figure}[H]
 \centering
     \include{figures/sklist_mean_insert}
 \end{figure}
 
-Bla bla bla search time decresce in maniera imporante
+\subsection{Analisi dei tempi di ricerca}
+Analizzando i tempi di ricerca notiamo come all'aumentare dei livelli il search time decresca in maniera imporante
 \begin{figure}[H]
 \centering
     \include{figures/sklist_search}
 \end{figure}
 
-Bla bla bla in particolare zoommando sui livelli più di interesse ci rendiamo conto
+In particolare zoommando sui livelli più di interesse ci rendiamo conto
 che la distribuzione è concentrata attorno a 19
 \begin{figure}[H]
 \centering
     \include{figures/sklist_zoommed_search}
 \end{figure}
 
-Fcendo un grafico delle medie dei tempi di inserimento notiamo che 17
+Facendo un grafico delle medie dei tempi notiamo che 17
 è il numero ottimale di livelli
 \begin{figure}[H]
 \centering
@@ -247,7 +249,7 @@ Sorprendentemente il numero ottimale di livelli non coincide esattamente con $ln
 \section{Minimum Heap}
 Per grantire la complessità in $O(1)$ della restituzione del \verb|left|, \verb|right|
 e \verb|parent| di un elemento, a partire dal valore dello stesso, abbiamo usato 
-una strttura dati di supporto, una \verb|HashMap<>|, che memorizza i valori degli 
+una struttura dati di supporto, una \verb|HashMap<>|, che memorizza i valori degli 
 elementi e li associa ai relativi indici nell' \verb|ArrayList| che rappresenta il 
 nostro heap.
 \newline
@@ -258,7 +260,7 @@ Data Structure sulla quale di basa il \verb|MinHeap<>|
 \chapter*{Esercizio 4}
 \section{Graph}
 Abbiamo deciso di considerare il grafo diretto come la struttura dati base di un 
-generico grafo, i grafi indiretto possono infatti essere visti come grafi diretti 
+generico grafo, i grafi di tipo indiretto possono infatti essere visti come grafi diretti 
 nei quali ad ogni arco viene associato anche un arco oppposto. Abbiamo deciso quindi 
 di craere una classe \verb|UndirectGraph<>| che estende \verb|DirectGraph<>|, con 
 costruttori \verb|protected|, ed una classe \verb|Graph<>| che incapsula i due.
@@ -278,27 +280,24 @@ classe \verb|GraphBuilder<>| che sfruta il design pattern \verb|Builder|.
 
 \section{Dijkstra}
 Abbiamo implementato l' algoritmo di Dijkstra nella classe \verb|GraphHelper<>|, 
-la classe contiene tutta una serie di methodi statici che possono essere di aiuto 
+che contiene tutta una serie di metodi statici che possono essere di aiuto 
 nell'utilizzo di un grafo. \newline
-Abbiamo deciso di implementare l'algoritmo di Dijkstra qausi completamente generica.
-Il itpo degli archi del grafo è limitatao a \verb|E extends Number| principalmente 
+Abbiamo implementato l'algoritmo di Dijkstra in maniera quasi completamente generica,
+assumendo però che l'etichette degli archi possano essere solamente di tipo numerico:
+il loro tipo infatti è limitato a \verb|E extends Number|, principalmente 
 per via dell'impossibilità in \verb|Java| di effettuare l'override degli \verb|operator|.
 \newline
-La funzione chiede che in input gli venga fornito, oltre all'oggetto grafo, l'elemento 
-source e l'elemento destination, anche un \verb|Comparator<? super E>| che 
-permetta di effettuare la comaprison tra i \verb|weight| degli archi ed un "max" che ci 
-permette di capire qual'è il valore massimo di E (Ad esempio per \verb|Integer| basta inserire 
-\verb|Integer.MAX_VALUE|). Il valore massimo è quello al quale inizializziamo i vertici del grafo. \newline
+La funzione chiede che in input gli venga fornito, oltre all'oggetto grafo e l'elemento 
+source, anche un \verb|Comparator<? super E>| che 
+permetta di effettuare la comparison tra i \verb|weight| degli archi ed un "max" che ci 
+permetta di capire qual'è il valore massimo di E (Ad esempio per \verb|Integer| basta inserire 
+\verb|Integer.MAX_VALUE|). Questo valore è quello al quale inizializziamo i vertici del grafo. \newline
 La priority queue utilizzata per tenere traccia delle distanze tra \verb|source| e
-i vari vertici è il \verb|MinHeap<>|, gli elementi della priority queue sono dei\newline 
+i vari vertici è il \verb|MinHeap<>|, i cui elementi sono dei\newline 
 \verb|Node<vertex, distance from source>|.
-Per memorizzare i predecessori e le distanze abbiamo deciso di usarre delle 
+Per memorizzare i predecessori e le distanze abbiamo deciso di usare delle 
 \verb|HashMap<>|. \newline
-Abbiamo inoltre istanziato una mappa di valori a oggetti nodo in maniera tale da 
-poter cercare in $O(1)$ gli elementi nella priority queue. \newline
 L'algoritmo restituisce un \verb|Pair<>| che è una coppia di elementi nel quale il
-primo rappresenta il percorso minimo tra \verb|source| e \verb|destination| e il 
-secondo contiene la distanza tra i due.
-
-
+primo rappresenta il percorso minimo tra \verb|source| e tutti i nodi del grafo, e il 
+secondo contiene la rispettiva distanza per ogni altro nodo.
 \end{document}
