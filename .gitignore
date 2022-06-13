@@ -50,7 +50,6 @@ prof
 
 # Build
 *.class
-*.jar
 *.war
 *.ear
 
