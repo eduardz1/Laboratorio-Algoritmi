@@ -43,7 +43,7 @@ public interface PriorityQueue<T> {
   T peek() throws Exception;
 
   /**
-   * incresease the priority of an element
+   * increase the priority of an element
    * 
    * @param key key to be increased in priority
    * @param newKey new value of {@code}key{@code}
