@@ -1,7 +1,6 @@
 package ex4.helpers;
 
 import ex4.exceptions.ArgumentException;
-import ex4.exceptions.GraphHelperException;
 import ex4.structures.Graph;
 import org.junit.Test;
 
